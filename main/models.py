@@ -16,7 +16,6 @@ class Utilisateur(models.Model):
         ('actif','Actif'),
         ('inactif','Inactif')
     ]
-    matricule= models.CharField(max_length=15)
     nom=models.CharField(max_length=50) 
     prenom = models.CharField(max_length=50, verbose_name="Prénom") 
     sexe = models.CharField(max_length=1, choices=SEXE_CHOISE)
@@ -41,7 +40,6 @@ class Utilisateur(models.Model):
 
 class Etudiant(Utilisateur):
     id = models.CharField(primary_key=True, blank=True, max_length=12)
-    anneebac = models.IntegerField(blank=True,verbose_name="année bac", null=True)
     CHOIX_SERIE = [('A', 'A'), ('C', 'C'), ('D', 'D'), ('E', 'E'), ('F1', 'F1'), ('F2', 'F2'), ('F3', 'F3'),
                    ('F4', 'F4'), ('G2', 'G2')]
     seriebac1 = models.CharField(blank=True,max_length=2, choices=CHOIX_SERIE, verbose_name="Série bac 1", null=True)
