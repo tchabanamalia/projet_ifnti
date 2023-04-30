@@ -237,6 +237,19 @@ class AnneeUniversitaire(models.Model):
 
 
 class Note(models.Model):
+    """
+    Ce modèle représente la note d'un étudiant dans un semestre et une matière donnée.
+
+    Attributes:
+        valeurNote (decimal): La valeur de la note.
+        etudiant (Etudiant): L'étudiant à qui cette note appartient.
+        semestre (Semestre): Le semestre au cours duquel l'étudiant a eu cette note.
+        matiere (Matiere): La matière dans laquelle l'étudiant a eu cette note. 
+    
+    Methods:
+        __str__() -> str: Renvoie une représentation en chaîne de caractères de l'objet Note.
+
+    """
     valeurNote = models.DecimalField(null=True, max_digits=4, decimal_places=2, verbose_name="note", validators=[MaxValueValidator(20), MinValueValidator(-0.01)])
     rattrapage = models.BooleanField(default=False)
     etudiant = models.ForeignKey('Etudiant', on_delete=models.CASCADE,verbose_name="Étudiant")
@@ -245,6 +258,12 @@ class Note(models.Model):
 
 
     def __str__(self):
+        """
+        Renvoie une représentation en chaîne de caractères de l'objet Note.
+
+        Returns:
+            str: La représentation en chaîne de caractères de l'objet Note.
+        """
         return str(self.etudiant) + " " + str(self.matiere) + " " + str(self.valeurNote)
 
 
