@@ -6,15 +6,12 @@ from django.contrib.auth.models import User
 from datetime import date
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.utils import timezone
+import datetime
 
 class Utilisateur(models.Model):  
     SEXE_CHOISE = [
         ('F','Feminin'),
         ('M','Masculin')
-    ]
-    ETAT_CHOISE = [
-        ('actif','Actif'),
-        ('inactif','Inactif')
     ]
     nom=models.CharField(max_length=50) 
     prenom = models.CharField(max_length=50, verbose_name="Prénom") 
@@ -25,7 +22,7 @@ class Utilisateur(models.Model):
     email=models.CharField(max_length=50, null=True)
     adresse=models.CharField(max_length=50)
     prefecture=models.CharField(max_length=50, null=True, verbose_name="Préfecture", default='tchaoudjo',blank=True)
-    etat = models.CharField(max_length=10, choices=ETAT_CHOISE)
+    is_active = models.BooleanField(default=True, verbose_name="Actif")    
     carte_identity = models.CharField(max_length=50, null=True,  verbose_name="Carte d'identité")
     nationalite = models.CharField(max_length=30, default='Togolaise', verbose_name='Nationalté',blank=True)
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
@@ -35,6 +32,15 @@ class Utilisateur(models.Model):
 
     def __str__(self):
         return str(self.nom) + ' ' + str(self.prenom) 
+    
+    def suspendre(self):
+        self.is_active = False
+        self.save()
+
+
+    def reactiver(self):
+        self.is_active = True
+        self.save()
 
 
 
@@ -82,19 +88,30 @@ class Etudiant(Utilisateur):
             list_etudiants = Etudiant.objects.filter(anneeentree=self.anneeentree)
             if list_etudiants:
                 n = 1
-                rang = "0" + str(len(list_etudiants) + n) if len(list_etudiants) + n < 10 else str(
+                rang = "0" + str(len(list_etudiants) + n) if len(
+                    list_etudiants) + n < 10 else str(
                     len(list_etudiants) + n)
                 val_id = self.nom[0] + self.prenom[0] + str(self.anneeentree) + rang
                 for i in [etud.id for etud in list_etudiants]:
                     if val_id == i:
                         n = n + 1
-                        rang = "0" + str(len(list_etudiants) + n) if len(list_etudiants + n) < 10 else str(
+                        rang = "0" + str(len(list_etudiants) + n) if len(
+                            list_etudiants + n) < 10 else str(
                             len(list_etudiants) + n)
                         val_id = self.nom[0] + self.prenom[0] + str(self.anneeentree) + rang
                 self.id = val_id
             else:
                 self.id = self.nom[0] + self.prenom[0] + str(self.anneeentree) + "0" + str(1)
+            # Création de l'utilisateur associé à l'instance de l'étudiant
+            username = (self.prenom[0] + self.nom).lower()
+            year = datetime.datetime.now().year
+            password = 'ifnti' + str(year) + '!'
+            user = User.objects.create_user(username=username, password=password)
+
+            self.user = user # association de l'utilisateur à l'instance de l'étudiant
         return super().save()
+
+
 
     def __str__(self):
         return self.id + " " + self.nom + " " + self.prenom
@@ -149,7 +166,6 @@ class Tuteur(models.Model):
         ("mere", "Mère"),
         ("tuteur", "Tuteur"),
     ]
-    id = models.CharField(primary_key=True, blank=True, max_length=12)
     nom = models.CharField(max_length=20)
     prenom = models.CharField(max_length=20)
     sexe = models.CharField(blank=True,max_length=1, choices=CHOIX_SEX)
@@ -163,7 +179,6 @@ class Tuteur(models.Model):
 
 
 class Ue(models.Model):
-    id = models.CharField(primary_key=True, blank=True, max_length=20)
     codeUE = models.CharField(max_length=50, verbose_name="Code de l'UE")
     libelle = models.CharField(max_length=100)
     nbreCredits = models.IntegerField(verbose_name="Nombre de crédit")
@@ -175,18 +190,23 @@ class Ue(models.Model):
         verbose_name_plural = 'UE'
 
 
+    def __str__(self):
+        return self.codeUE + " " + self.libelle
+
+
 
 
 class Matiere(models.Model):
     codematiere = models.CharField(max_length=50, verbose_name="Code de la matière")
     libelle = models.CharField(max_length=100)
-    ponderation = models.IntegerField(null=True,  verbose_name="Pondération")
+    coefficient = models.IntegerField(null=True,  verbose_name="Coefficient", default="1")    
     minValue = models.FloatField(null=True,  verbose_name="Valeur minimale")
     enseignant = models.ForeignKey('Enseignant', on_delete=models.CASCADE)
     ue = models.ForeignKey('Ue', on_delete=models.CASCADE)
 
     def __str__(self):
-        return str(self.libelle) 
+        return self.codematiere + " " + self.libelle    
+
     class Meta:
         verbose_name_plural = "Matières"
 
@@ -214,7 +234,7 @@ class Semestre(models.Model):
     libelle = models.CharField(max_length=30, choices=CHOIX_SEMESTRE)
     anneescolaire = models.ForeignKey('AnneeUniversitaire', on_delete=models.CASCADE, verbose_name="Année universitaire")
     credits = models.IntegerField(default=30) 
-    maquetteGenerique = models.ForeignKey('MaquetteGenerique', on_delete=models.CASCADE, verbose_name="Maquette générique")
+    #maquetteGenerique = models.ForeignKey('MaquetteGenerique', on_delete=models.CASCADE, verbose_name="Maquette générique")
    
 
     """clef Semestre"""
@@ -224,7 +244,7 @@ class Semestre(models.Model):
         return super().save()
 
     def __str__(self):
-        return self.nom + " " + self.anneescolaire
+        return self.libelle + " " + self.anneescolaire
 
     class Meta:
         unique_together = [["anneescolaire", "libelle"]]
