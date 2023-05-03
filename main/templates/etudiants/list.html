@@ -1,0 +1,141 @@
+{% extends 'index.html' %}
+
+
+{% block content %}
+
+<div class="block block-rounded m-5">
+    <div class="block-header">
+        <h3 class="block-title">Dynamic Table <small>Full pagination</small></h3>
+    </div>
+    <div class="block-content block-content-full">
+        <!-- DataTables init on table by adding .js-dataTable-full-pagination class, functionality is initialized in js/pages/be_tables_datatables.min.js which was auto compiled from _es6/pages/be_tables_datatables.js -->
+        <table class="table table-bordered table-striped table-vcenter js-dataTable-full-pagination">
+            <thead>
+                <tr>
+                    <th class="text-center" style="width: 80px;">Matricule</th>
+                    <th>Nom et Prénom</th>
+                    <th class="d-none d-sm-table-cell" style="width: 10%;">Sexe</th>
+                    <th style="width: 10%;">Niveau</th>
+                    <th class="d-none d-sm-table-cell" style="width: 15%;">Contact</th>
+                    <th style="width: 15%;">État</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="text-center font-size-sm">RM202415</td>
+                    <td class="font-w600 font-size-sm">Ralph Murray</td>
+                    <td class="d-none d-sm-table-cell font-size-sm">
+                        Masculin
+                    </td>
+                    <td class="d-none d-sm-table-cell">
+                        <span class="badge badge-info">L1</span>
+                    </td>
+                    <td>
+                        +228 93475128
+                    </td>
+                    <td>
+                        Actif
+                    </td>
+                    <td>
+                        <button type="button" class="btn btn-secondary dropdown-toggle" id="dropdown-default-secondary" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Dropdown
+                        </button>
+                        <div class="dropdown-menu font-size-sm" aria-labelledby="dropdown-default-secondary">
+                            <a class="dropdown-item" href="{% url 'main:certificat_scolaire' %}">Attestation de scolarité</a>
+                            <a class="dropdown-item" href="{% url 'main:carte_etudiant' %}">Carte étudiant</a>
+                            <a class="dropdown-item" href="{% url 'main:releve_notes' %}">Relevé de notes</a>
+                            <a class="dropdown-item" href="{% url 'main:diplome_etudiant' %}">Diplome</a>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="text-center font-size-sm">RM202415</td>
+                    <td class="font-w600 font-size-sm">Ralph Murray</td>
+                    <td class="d-none d-sm-table-cell font-size-sm">
+                        Masculin
+                    </td>
+                    <td class="d-none d-sm-table-cell">
+                        <span class="badge badge-info">L1</span>
+                    </td>
+                    <td>
+                        +228 93475128
+                    </td>
+                    <td>
+                        Actif
+                    </td>
+                    <td>
+                        <button type="button" class="btn btn-secondary dropdown-toggle" id="dropdown-default-secondary" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Dropdown
+                        </button>
+                        <div class="dropdown-menu font-size-sm" aria-labelledby="dropdown-default-secondary">
+                            <a class="dropdown-item" href="{% url 'main:certificat_scolaire' %}">Attestation de scolarité</a>
+                            <a class="dropdown-item" href="{% url 'main:carte_etudiant' %}">Carte étudiant</a>
+                            <a class="dropdown-item" href="{% url 'main:releve_notes' %}">Relevé de notes</a>
+                            <a class="dropdown-item" href="{% url 'main:diplome_etudiant' %}">Diplome</a>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="text-center font-size-sm">RM202415</td>
+                    <td class="font-w600 font-size-sm">Ralph Murray</td>
+                    <td class="d-none d-sm-table-cell font-size-sm">
+                        Masculin
+                    </td>
+                    <td class="d-none d-sm-table-cell">
+                        <span class="badge badge-info">L1</span>
+                    </td>
+                    <td>
+                        +228 93475128
+                    </td>
+                    <td>
+                        Actif
+                    </td>
+                    <td>
+                        <button type="button" class="btn btn-secondary dropdown-toggle" id="dropdown-default-secondary" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Dropdown
+                        </button>
+                        <div class="dropdown-menu font-size-sm" aria-labelledby="dropdown-default-secondary">
+                            <a class="dropdown-item" href="{% url 'main:certificat_scolaire' %}">Attestation de scolarité</a>
+                            <a class="dropdown-item" href="{% url 'main:carte_etudiant' %}">Carte étudiant</a>
+                            <a class="dropdown-item" href="{% url 'main:releve_notes' %}">Relevé de notes</a>
+                            <a class="dropdown-item" href="{% url 'main:diplome_etudiant' %}">Diplome</a>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="text-center font-size-sm">RM202415</td>
+                    <td class="font-w600 font-size-sm">Ralph Murray</td>
+                    <td class="d-none d-sm-table-cell font-size-sm">
+                        Masculin
+                    </td>
+                    <td class="d-none d-sm-table-cell">
+                        <span class="badge badge-info">L1</span>
+                    </td>
+                    <td>
+                        +228 93475128
+                    </td>
+                    <td>
+                        Actif
+                    </td>
+                    <td>
+                        <button type="button" class="btn btn-secondary dropdown-toggle" id="dropdown-default-secondary" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Dropdown
+                        </button>
+                        <div class="dropdown-menu font-size-sm" aria-labelledby="dropdown-default-secondary">
+                            <a class="dropdown-item" href="{% url 'main:certificat_scolaire' %}">Attestation de scolarité</a>
+                            <a class="dropdown-item" href="{% url 'main:carte_etudiant' %}">Carte étudiant</a>
+                            <a class="dropdown-item" href="{% url 'main:releve_notes' %}">Relevé de notes</a>
+                            <a class="dropdown-item" href="{% url 'main:diplome_etudiant' %}">Diplome</a>
+                        </div>
+                    </td>
+                </tr>
+                
+                
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+{% endblock %}

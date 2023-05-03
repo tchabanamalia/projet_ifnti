@@ -65,6 +65,8 @@ class Etudiant(Utilisateur):
     anglaisTerminale = models.DecimalField(max_digits=4, decimal_places=2, verbose_name="Note d'anglais Terminale")
     mathematiqueTerminale = models.DecimalField(max_digits=4, decimal_places=2, verbose_name="Note de mathématique Terminale")
 
+    semestre = models.ManyToManyField('Semestre')
+
 
 
     class Meta:
@@ -210,7 +212,7 @@ class Semestre(models.Model):
     id = models.CharField(primary_key=True, blank=True, max_length=14)
     CHOIX_SEMESTRE = [('S1', 'Semestre1'), ('S2', 'Semestre3'), ('S3', 'Semestre3'), ('S4', 'Semestre4'), ('S5', 'Semestre5'), ('S6', 'Semestre6')]
     libelle = models.CharField(max_length=30, choices=CHOIX_SEMESTRE)
-    anneescolaire = models.ForeignKey('AnneeUniversitaire', on_delete=models.CASCADE, verbose_name="An,née universitaire")
+    anneescolaire = models.ForeignKey('AnneeUniversitaire', on_delete=models.CASCADE, verbose_name="Année universitaire")
     credits = models.IntegerField(default=30) 
     maquetteGenerique = models.ForeignKey('MaquetteGenerique', on_delete=models.CASCADE, verbose_name="Maquette générique")
    
@@ -224,6 +226,8 @@ class Semestre(models.Model):
     def __str__(self):
         return self.nom + " " + self.anneescolaire
 
+    class Meta:
+        unique_together = [["anneescolaire", "libelle"]]
 
 
 
@@ -253,7 +257,7 @@ class Note(models.Model):
     valeurNote = models.DecimalField(null=True, max_digits=4, decimal_places=2, verbose_name="note", validators=[MaxValueValidator(20), MinValueValidator(-0.01)])
     rattrapage = models.BooleanField(default=False)
     etudiant = models.ForeignKey('Etudiant', on_delete=models.CASCADE,verbose_name="Étudiant")
-    semestre = models.ForeignKey('Semestre', on_delete=models.CASCADE, verbose_name="Semestre")
+    #semestre = models.ForeignKey('Semestre', on_delete=models.CASCADE, verbose_name="Semestre")
     matiere = models.ForeignKey('Matiere', on_delete=models.CASCADE, verbose_name="Matiere")
 
 

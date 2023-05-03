@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-y7o2lc)eq4=b@awtr9-8rx2ivxbyg3*17-p2-jqs7nti-%bmpv
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1']
+ALLOWED_HOSTS = []
 
 
 # Application definition
@@ -76,12 +76,12 @@ WSGI_APPLICATION = 'projet_ifnti.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'ENGINE': 'django.db.backends.sqlite3',
         'NAME': 'ifnti_db',
-        'USER': 'ifnti',
-        'PASSWORD': 'ifnti',
-        'HOST': 'localhost',
-        'PORT': '5432',
+        # 'USER': 'ifnti',
+        # 'PASSWORD': 'ifnti',
+        # 'HOST': 'localhost',
+        # 'PORT': '5432',
     }
 }
 
