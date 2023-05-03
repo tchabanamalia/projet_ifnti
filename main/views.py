@@ -56,7 +56,7 @@ def editNote(request, id):
     """
     note = get_object_or_404(Note, pk=id)
     data = {
-        'note_form' : NoteForm(),
+        'note_form' : NoteForm(request.POST, instance=Note),
         'etudiant' : note.etudiant,
         'matiere' :  note.matiere,
         'semestre' : note.semestre,
