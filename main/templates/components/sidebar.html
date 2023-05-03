@@ -115,6 +115,72 @@
                 </li>
 
                 <li class="nav-main-heading">GESTION ETUDIANT</li>
+
+                <li class="nav-main-item">
+                    <a class="nav-main-link nav-main-link-name" data-toggle="" aria-haspopup="true" aria-expanded="false" href="{% url 'main:liste_des_etudiants' %}">
+                        <i class="nav-main-link-icon "></i>
+                        <span class="nav-main-link-name">Liste des étudiants</span>
+                    </a>                   
+                </li>
+
+                <li class="nav-main-item">
+                    <a class="nav-main-link nav-main-link-name" data-toggle="" aria-haspopup="true" aria-expanded="false" href="{% url 'main:liste_des_tuteurs' %}">
+                        <i class="nav-main-link-icon "></i>
+                        <span class="nav-main-link-name">Liste des tuteurs</span>
+                    </a>                   
+                </li>
+
+                <li class="nav-main-item">
+                    <a class="nav-main-link nav-main-link-name" data-toggle="" aria-haspopup="true" aria-expanded="false" href="{% url 'main:liste_des_matieres' %}">
+                        <i class="nav-main-link-icon "></i>
+                        <span class="nav-main-link-name">Liste des matières</span>
+                    </a>                   
+                </li>
+
+                <li class="nav-main-item">
+                    <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="false" href="#">
+                        <i class="nav-main-link-icon "></i>
+                        <span class="nav-main-link-name">UEs par semestre</span>
+                    </a>
+                    <ul class="nav-main-submenu">
+                        <li class="nav-main-item">
+                            <a class="nav-main-link" href="{% url 'main:liste_des_ues' %}">
+                                <span class="nav-main-link-name">Semestre 1</span>
+                            </a>
+                        </li>
+                        <li class="nav-main-item">
+                            <a class="nav-main-link" href="{% url 'main:liste_des_ues' %}">
+                                <span class="nav-main-link-name">Semestre 2</span>
+                            </a>
+                        </li>
+                        <li class="nav-main-item">
+                            <a class="nav-main-link" href="{% url 'main:liste_des_ues' %}">
+                                <span class="nav-main-link-name">Semestre 3</span>
+                            </a>
+                        </li>
+                        <li class="nav-main-item">
+                            <a class="nav-main-link" href="{% url 'main:liste_des_ues' %}">
+                                <span class="nav-main-link-name">Semestre 4</span>
+                            </a>
+                        </li>
+                        <li class="nav-main-item">
+                            <a class="nav-main-link" href="{% url 'main:liste_des_ues' %}">
+                                <span class="nav-main-link-name">Semestre 5</span>
+                            </a>
+                        </li>
+                        <li class="nav-main-item">
+                            <a class="nav-main-link" href="{% url 'main:liste_des_ues' %}">
+                                <span class="nav-main-link-name">Semestre 6</span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+               
+
+
+
+
+
                 <li class="nav-main-item">
                     <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="false" href="#">
                         <i class="nav-main-link-icon "></i>
@@ -138,6 +204,9 @@
                         </li>
                     </ul>
                 </li>
+               
+
+
                 <li class="nav-main-heading">CAHIER DE TEXTE</li>
                 <li class="nav-main-heading">GESTION MAQUETTE</li>
                 <li class="nav-main-heading">GESTION EMPLOYÉ</li>

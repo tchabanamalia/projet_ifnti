@@ -5,7 +5,6 @@ app_name = 'main'
 
 urlpatterns = [
     path('', views.index, name='index'),
-    path('liste_des_etudiants', views.createEtudiant, name='liste_des_etudiants'),
     
     # touré-ydaou urls templates latex 30-04-2023
     path('etudiants-l1', views.etudiants_l1, name='etudiants_l1'),
@@ -19,5 +18,36 @@ urlpatterns = [
     path('add_note/<int:id_edudiant>/<int:id_matiere>/<int:id_semestre>', views.createNote, name='add-note'),
     path('edit_note/<int:id>', views.editNote, name='edit-note'),
     path('delete_note/<int:id>', views.deleteNote, name='delete-note'),
+
+
+                               #### Étudiants ####
+    path('liste_des_etudiants/', views.etudiants, name='liste_des_etudiants'),
+    path('detail_etudiant/(?P<id>[\w-]+)/', views.detailEtudiant, name='detail_etudiant'),
+    path('create_etudiant/', views.create_etudiant, name='create_etudiant'),
+    path('update_etudiant/(?P<id>[\w-]+)/', views.create_etudiant, name='update_etudiant'),
+   
+   
+                            #### Tuteurs ####
+    path('liste_des_tuteurs/', views.tuteurs, name='liste_des_tuteurs'),
+    path('detail_tuteur/<int:id>/', views.detailTuteur, name='detail_tuteur'),
+    path('create_tuteur/', views.create_tuteur, name='create_tuteur'),
+    path('update_tuteur/<int:id>/', views.create_tuteur, name='update_tuteur'),
+
+
+
+                            #### Matières ####
+    path('liste_des_matieres/', views.matieres, name='liste_des_matieres'),
+    path('detail_matiere/<int:id>/', views.detailMatiere, name='detail_matiere'),
+    path('create_matiere/', views.create_matiere, name='create_matiere'),
+    path('update_matiere/<int:id>/', views.create_matiere, name='update_matiere'),
+
+
+                            #### UEs ####
+    path('liste_des_ues/', views.ues, name='liste_des_ues'),
+    path('detail_ue/<int:id>/', views.detailUe, name='detail_ue'),
+    path('create_ue/', views.create_ue, name='create_ue'),
+    path('update_ue/<int:id>/', views.create_ue, name='update_ue'),
+
+
 
 ]

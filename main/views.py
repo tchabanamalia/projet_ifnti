@@ -1,24 +1,169 @@
 
 from django.http import HttpResponse
 from django.shortcuts import render
-
+from django import forms
+from main.forms import  EtudiantForm, TuteurForm, UeForm, MatiereForm
 from main.pdfMaker import generate_pdf
 from .models import Enseignant, Matiere, Etudiant, Competence, Note, Comptable, Semestre, Ue, AnneeUniversitaire, Personnel, Tuteur, MaquetteGenerique 
-
 from django.shortcuts import get_object_or_404, redirect, render
-
-
 from main.models_forms import NoteForm
-from .models import Enseignant, Matiere, Etudiant, Competence, Note, Comptable, Semestre, Ue, AnneeUniversitaire, Personnel, Tuteur, MaquetteGenerique 
+
+
 
 
 def index(request):
     return render(request, 'ui.html')
 
-def createEtudiant(request):
+
+ ##### Etudiants ####
+
+def etudiants(request):
     etudiants=Etudiant.objects.all()
     context={"etudiants":etudiants}
-    return render(request, 'etudiants/create.html', context)
+    return render(request, 'etudiants/etudiants.html', context)
+
+
+
+def detailEtudiant(request, id):
+	etudiant = get_object_or_404(Etudiant, id=id)
+	return render(request, "etudiants/detailEtudiant.html", {"etudiant":etudiant})
+
+
+def create_etudiant(request, id=0):
+    if request.method == "GET":
+        if id == 0:
+            form = EtudiantForm()
+        else:
+            etudiant = Etudiant.objects.get(pk=id)
+            form = EtudiantForm(instance=etudiant)   
+        return render(request, 'etudiants/create_etudiant.html',{'form':form})
+    else:
+        if id == 0:
+            form = EtudiantForm(request.POST)
+        else:
+            etudiant = Etudiant.objects.get(pk=id)
+            form = EtudiantForm(request.POST,instance= etudiant)
+        if form.is_valid():
+            form.save()
+            return redirect('/main/liste_des_etudiants/')
+
+
+
+
+
+
+
+
+        ##### Tuteurs ####
+
+def tuteurs(request):
+    tuteurs=Tuteur.objects.all()
+    context={"tuteurs":tuteurs}
+    return render(request, 'tuteurs/tuteurs.html', context)
+
+
+
+def detailTuteur(request, id):
+    tuteur = get_object_or_404(Tuteur, id=id)
+    return render(request, "tuteurs/detailTuteur.html", {"tuteur":tuteur})
+
+
+
+def create_tuteur(request, id=0):
+    if request.method == "GET":
+        if id == 0:
+            form = TuteurForm()
+        else:
+            tuteur = Tuteur.objects.get(pk=id)
+            form = TuteurForm(instance=tuteur)   
+        return render(request, 'tuteurs/create_tuteur.html',{'form':form})
+    else:
+        if id == 0:
+            form = TuteurForm(request.POST)
+        else:
+            tuteur = Tuteur.objects.get(pk=id)
+            form = TuteurForm(request.POST,instance= tuteur)
+        if form.is_valid():
+            form.save()
+            return redirect('/main/liste_des_tuteurs/')
+
+
+
+
+
+        ##### Matières ####
+
+def matieres(request):
+    matieres=Matiere.objects.all()
+    context={"matieres":matieres}
+    return render(request, 'matieres/matieres.html', context)
+
+
+
+def detailMatiere(request, id):
+	matiere = get_object_or_404(Matiere, id=id)
+	return render(request, "matieres/detailMatiere.html", {"matiere":matiere})
+
+
+
+def create_matiere(request, id=0):
+    if request.method == "GET":
+        if id == 0:
+            form = MatiereForm()
+        else:
+            matiere = Matiere.objects.get(pk=id)
+            form = MatiereForm(instance=matiere)   
+        return render(request, 'matieres/create_matiere.html',{'form':form})
+    else:
+        if id == 0:
+            form = MatiereForm(request.POST)
+        else:
+            matiere = Matiere.objects.get(pk=id)
+            form = MatiereForm(request.POST,instance= matiere)
+        if form.is_valid():
+            form.save()
+            return redirect('/main/liste_des_matieres/')
+
+
+
+        ##### UEs ####
+
+def ues(request):
+    ues=Ue.objects.all()
+    context={"ues":ues}
+    return render(request, 'ues/ues.html', context)
+
+
+def detailUe(request, id):
+	ue = get_object_or_404(Ue, id=id)
+	return render(request, "ues/detailUe.html", {"ue":ue})
+
+
+
+def create_ue(request, id=0):
+    if request.method == "GET":
+        if id == 0:
+            form = UeForm()
+        else:
+            ue = Ue.objects.get(pk=id)
+            form = UeForm(instance=ue)   
+        return render(request, 'ues/create_ue.html',{'form':form})
+    else:
+        if id == 0:
+            form = UeForm(request.POST)
+        else:
+            ue = Ue.objects.get(pk=id)
+            form = UeForm(request.POST,instance= ue)
+        if form.is_valid():
+            form.save()
+            return redirect('/main/liste_des_ues/')
+
+
+
+
+
+
+
 
 # methode qui normalement doit retourner sur le template affichant l'ensemble des élèves de L1
 def etudiants_l1(request):
