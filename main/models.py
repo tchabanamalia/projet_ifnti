@@ -246,7 +246,7 @@ class MaquetteGenerique(models.Model):
 
 class Semestre(models.Model):
     id = models.CharField(primary_key=True, blank=True, max_length=14)
-    CHOIX_SEMESTRE = [('S1', 'Semestre1'), ('S2', 'Semestre3'), ('S3', 'Semestre3'), ('S4', 'Semestre4'), ('S5', 'Semestre5'), ('S6', 'Semestre6')]
+    CHOIX_SEMESTRE = [('S1', 'Semestre1'), ('S2', 'Semestre2'), ('S3', 'Semestre3'), ('S4', 'Semestre4'), ('S5', 'Semestre5'), ('S6', 'Semestre6')]
     libelle = models.CharField(max_length=30, choices=CHOIX_SEMESTRE)
     anneescolaire = models.ForeignKey('AnneeUniversitaire', on_delete=models.CASCADE, verbose_name="Année universitaire")
     credits = models.IntegerField(default=30) 

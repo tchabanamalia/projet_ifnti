@@ -207,7 +207,27 @@ def ues_semestre6(request):
 
 # methode qui normalement doit retourner sur le template affichant l'ensemble des élèves de L1
 def etudiants_l1(request):
-    return render(request, 'etudiants/list.html')
+    # pour récupérer les étudiants de l1 il faut récupérer les étudiant en S1 et S2
+    semestres = Semestre.objects.filter(libelle="S1") | Semestre.objects.filter(libelle="S2") 
+    
+    etudiants = {'etudiants': [], 'niveau': 'L1', 's1' : semestres[0], 's2' : semestres[1]}
+    temp=[]
+
+    # récupération des étudiants de chaque semestres
+    for semestre in semestres:
+        print(semestre.etudiant_set.all())
+        for etudiant in semestre.etudiant_set.all():
+            #ajout de tout les étudiant du semestre dans un tableau temporaire
+            temp.append(etudiant)
+
+    # ajout des étudiants dans le dictionnaire
+    etudiants['etudiants'] = temp
+
+    return render(request, 'etudiants/list.html', etudiants)
+
+
+
+
 
 # methode qui normalement doit retourner sur le template affichant l'ensemble des élèves de L2
 def etudiants_l2(request):
@@ -300,15 +320,16 @@ def certificat_scolaire(request):
 
 
 #methode générant le relevé de notes de l'étudiant
-def releve_notes(request):
-    context = {}
+def releve_notes(request, id, id_semestre):
+    etudiant = get_object_or_404(Etudiant, id=id)
+    semestre = get_object_or_404(Semestre, id=id_semestre)
+    context = {'etudiant': etudiant, 'semestre' : semestre}
 
     # nom des fichiers d'entrée et de sortie
-    # ici pour les test le nom se termine en temp pour signifier temporaire
-    # ils seront donc à supprimer
-    latex_input = 'releve_notes_temp'
-    latex_ouput = 'generated_releve_notes_temp'
-    pdf_file = 'pdf_releve_notes_temp'
+
+    latex_input = 'releve_notes'
+    latex_ouput = 'generated_releve_notes'
+    pdf_file = 'pdf_releve_notes'
 
     #génération du pdf
     generate_pdf(context, latex_input, latex_ouput, pdf_file)
@@ -319,6 +340,35 @@ def releve_notes(request):
         response = HttpResponse(pdf_preview, content_type='application/pdf')
         response['Content-Disposition'] = 'inline;filename=pdf_file.pdf'
         return response
+    
+
+
+
+#methode générant le relevé de notes des étudiants de tout un semestre
+def releve_notes_semestre(request, id_semestre):
+    semestre = get_object_or_404(Semestre, id=id_semestre)
+    etudiants = semestre.etudiant_set.all()
+    context = {'etudiants': etudiants, 'semestre' : semestre}
+
+    # nom des fichiers d'entrée et de sortie
+
+    latex_input = 'releve_notes_semestre'
+    latex_ouput = 'generated_releve_notes_semestre'
+    pdf_file = 'pdf_releve_notes_semestre'
+
+    #génération du pdf
+    generate_pdf(context, latex_input, latex_ouput, pdf_file)
+
+    #visualisation du pdf dans le navigateur
+    with open('media/pdf/' + str(pdf_file) + '.pdf', 'rb') as f:
+        pdf_preview = f.read()
+        response = HttpResponse(pdf_preview, content_type='application/pdf')
+        response['Content-Disposition'] = 'inline;filename=pdf_file.pdf'
+        return response
+
+
+
+
 
 
 

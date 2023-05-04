@@ -13,7 +13,12 @@ urlpatterns = [
     path('carte-etudiant', views.carte_etudiant, name='carte_etudiant'),
     path('diplome', views.diplome_etudiant, name='diplome_etudiant'),
     path('certificat_scolaire', views.certificat_scolaire, name='certificat_scolaire'),
-    path('releve_notes', views.releve_notes, name='releve_notes'),
+    path('releve_notes/<str:id>/<str:id_semestre>', views.releve_notes, name='releve_notes'),
+
+    # urls permettant de générer les documents de manière groupée (pour un ensemble d'étudiants)
+    path('releve_notes/<str:id_semestre>', views.releve_notes_semestre, name='releve_notes'),
+
+
 
     path('add_note/<int:id_edudiant>/<int:id_matiere>/<int:id_semestre>', views.createNote, name='add-note'),
     path('edit_note/<int:id>', views.editNote, name='edit-note'),
