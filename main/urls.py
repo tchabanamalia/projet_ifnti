@@ -49,5 +49,10 @@ urlpatterns = [
     path('update_ue/<int:id>/', views.create_ue, name='update_ue'),
 
 
+                            #### Enseignant ####
+    path('create_enseignant/', views.create_enseignant, name='create_enseignant'),
+    path('enseignant_list/', views.enseignant_list, name='enseignant_list'),
+    path('enseignant_detail/(?P<id>[0-9]+)\\Z/', views.enseignant_detail, name='enseignant_detail'),
+    path('edit_enseignant/(?P<id>[0-9]+)\\Z/', views.edit_enseignant, name='edit_enseignant'),
 
 ]
