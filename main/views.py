@@ -2,7 +2,7 @@
 from django.http import HttpResponse
 from django.shortcuts import render
 from django import forms
-from main.forms import  EtudiantForm, TuteurForm, UeForm, MatiereForm
+from main.forms import  EnseignantForm, EtudiantForm, TuteurForm, UeForm, MatiereForm
 from main.pdfMaker import generate_pdf
 from .models import Enseignant, Matiere, Etudiant, Competence, Note, Comptable, Semestre, Ue, AnneeUniversitaire, Personnel, Tuteur, MaquetteGenerique 
 from django.shortcuts import get_object_or_404, redirect, render
@@ -350,3 +350,45 @@ def deleteNote(request, id):
     note.delete()
     return redirect('main:index')
 
+            ##### Enseignant #####
+
+def create_enseignant(request, id=0):
+    if request.method == "GET":
+        if id == 0:
+            form = EnseignantForm()
+
+        else:
+            enseignant = Enseignant.objects.get(pk=id)
+            form = EnseignantForm(instance=enseignant)
+        return render(request, "enseignants/create_enseignant.html", {'form': form})
+    else:
+        if id == 0:
+            form = EnseignantForm(request.POST)
+        else:
+            enseignant = Enseignant.objects.get(pk=id)
+            form = EnseignantForm(request.POST, instance=enseignant)
+        if form.is_valid():
+            form.save()
+            return redirect('/main/enseignant_list/')
+
+# Read
+def enseignant_list(request):
+    enseignants = Enseignant.objects.all()
+    return render(request, 'enseignants/enseignant_list.html', {'enseignants': enseignants})
+
+def enseignant_detail(request, id):
+    enseignant = Enseignant.objects.get(id=id)
+    return render(request, 'enseignants/enseignant_detail.html', {'enseignant': enseignant})
+
+# Update
+def edit_enseignant(request, id):
+    enseignant = Enseignant.objects.get(id=id)
+    if request.method == 'POST':
+        form = EnseignantForm(request.POST, request.FILES, instance=enseignant)
+        if form.is_valid():
+            enseignant = form.save(commit=False)
+            enseignant.save()
+            return redirect('/main/enseignant_list/')
+    else:
+        form = EnseignantForm(instance=enseignant)
+    return render(request, 'enseignants/edit_enseignant.html', {'form': form})

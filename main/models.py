@@ -16,7 +16,7 @@ class Utilisateur(models.Model):
     nom=models.CharField(max_length=50) 
     prenom = models.CharField(max_length=50, verbose_name="Prénom") 
     sexe = models.CharField(max_length=1, choices=SEXE_CHOISE)
-    datenaissance = models.DateField(blank=True,verbose_name="date de naissance",null=True)
+    datenaissance = models.DateField(blank=True,verbose_name="date de naissance",null=True, validators=[MaxValueValidator(limit_value=date(2006, 1,1), message="L'année de naissance doit être inférieure à 2006")])
     lieunaissance = models.CharField(blank=True,max_length=20, verbose_name="lieu de naissance")
     contact = models.CharField(max_length=25)
     email=models.CharField(max_length=50, null=True)
@@ -143,6 +143,10 @@ class Enseignant(Personnel):
                 self.id = "ENS" + str(rang_ens + 1)
             else:
                 self.id = "ENS" + str(1)
+            # Création de l'utilisateur associé à l'instance de l'enseignant
+            username = (self.prenom[0] + self.nom).lower()
+            user = User.objects.create_user(username=username, password="ifnti2023!")
+            self.user = user # On associe l'utilisateur à l'enseignant
         return super().save()
 
     def __str__(self):
@@ -203,12 +207,22 @@ class Matiere(models.Model):
     minValue = models.FloatField(null=True,  verbose_name="Valeur minimale")
     enseignant = models.ForeignKey('Enseignant', on_delete=models.CASCADE)
     ue = models.ForeignKey('Ue', on_delete=models.CASCADE)
+    is_active = models.BooleanField(default=True, verbose_name="Actif")
+
 
     def __str__(self):
         return self.codematiere + " " + self.libelle    
 
     class Meta:
         verbose_name_plural = "Matières"
+
+    def suspendre(self):
+        self.is_active = False
+        self.save()
+
+    def reactiver(self):
+        self.is_active = True
+        self.save()
 
 
 
