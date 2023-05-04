@@ -27,9 +27,9 @@ urlpatterns = [
 
                                #### Étudiants ####
     path('liste_des_etudiants/', views.etudiants, name='liste_des_etudiants'),
-    path('detail_etudiant/<str:id>', views.detailEtudiant, name='detail_etudiant'),
+    path('detail_etudiant/<str:id>/', views.detailEtudiant, name='detail_etudiant'),    
     path('create_etudiant/', views.create_etudiant, name='create_etudiant'),
-    path('update_etudiant/<str:id>', views.create_etudiant, name='update_etudiant'),
+    path('update_etudiant/<str:id>/', views.create_etudiant, name='update_etudiant'),   
    
    
                             #### Tuteurs ####
@@ -52,7 +52,18 @@ urlpatterns = [
     path('detail_ue/<int:id>/', views.detailUe, name='detail_ue'),
     path('create_ue/', views.create_ue, name='create_ue'),
     path('update_ue/<int:id>/', views.create_ue, name='update_ue'),
+    path('ues_semestre1/', views.ues_semestre1, name='ues_semestre1'), # Liste des UE du semestre 1
+    path('ues_semestre2/', views.ues_semestre2, name='ues_semestre2'), # Liste des UE du semestre 2
+    path('ues_semestre3/', views.ues_semestre3, name='ues_semestre3'), # Liste des UE du semestre 3
+    path('ues_semestre4/', views.ues_semestre4, name='ues_semestre4'), # Liste des UE du semestre 4
+    path('ues_semestre5/', views.ues_semestre5, name='ues_semestre5'), # Liste des UE du semestre 5
+    path('ues_semestre6/', views.ues_semestre6, name='ues_semestre6'), # Liste des UE du semestre 6
 
 
+                            #### Enseignant ####
+    path('create_enseignant/', views.create_enseignant, name='create_enseignant'),
+    path('enseignant_list/', views.enseignant_list, name='enseignant_list'),
+    path('enseignant_detail/(?P<id>[0-9]+)\\Z/', views.enseignant_detail, name='enseignant_detail'),
+    path('edit_enseignant/(?P<id>[0-9]+)\\Z/', views.edit_enseignant, name='edit_enseignant'),
 
 ]

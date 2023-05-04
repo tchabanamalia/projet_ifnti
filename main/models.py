@@ -7,6 +7,9 @@ from datetime import date
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.utils import timezone
 import datetime
+from django.core.exceptions import ValidationError
+from django.utils.translation import gettext_lazy as _
+
 
 class Utilisateur(models.Model):  
     SEXE_CHOISE = [
@@ -16,7 +19,7 @@ class Utilisateur(models.Model):
     nom=models.CharField(max_length=50) 
     prenom = models.CharField(max_length=50, verbose_name="Prénom") 
     sexe = models.CharField(max_length=1, choices=SEXE_CHOISE)
-    datenaissance = models.DateField(blank=True,verbose_name="date de naissance",null=True)
+    datenaissance = models.DateField(blank=True,verbose_name="date de naissance",null=True, validators=[MaxValueValidator(limit_value=date(2006, 1,1), message="L'année de naissance doit être inférieure à 2006")])
     lieunaissance = models.CharField(blank=True,max_length=20, verbose_name="lieu de naissance")
     contact = models.CharField(max_length=25)
     email=models.CharField(max_length=50, null=True)
@@ -29,6 +32,7 @@ class Utilisateur(models.Model):
     
     class Meta:
         abstract = True
+
 
     def __str__(self):
         return str(self.nom) + ' ' + str(self.prenom) 
@@ -51,25 +55,25 @@ class Etudiant(Utilisateur):
     seriebac1 = models.CharField(blank=True,max_length=2, choices=CHOIX_SERIE, verbose_name="Série bac 1", null=True)
     seriebac2 = models.CharField(blank=True,max_length=2, choices=CHOIX_SERIE, verbose_name="Série bac 2", null=True)
 
-    anneeentree = models.IntegerField(blank=True,verbose_name="année entrée", null=True)
+    anneeentree = models.IntegerField(blank=True,verbose_name="année entrée", null=False)
 
     anneebac1 = models.IntegerField(blank=True,verbose_name="Année d’obtention du BAC 1", null=True)
     anneebac2 = models.IntegerField(blank=True,verbose_name="Année d’obtention du BAC 2", null=True)
 
     etablissementSeconde = models.CharField(max_length=300, verbose_name="Nom d'établissement seconde", null=True, blank=True)
-    francaisSeconde = models.DecimalField(max_digits=4, decimal_places=2, verbose_name="Note de français Seconde")
-    anglaisSeconde = models.DecimalField(max_digits=4, decimal_places=2, verbose_name="Note d'anglais Seconde")
-    mathematiqueSeconde = models.DecimalField(max_digits=4, decimal_places=2, verbose_name="Note de mathématique Seconde")
+    francaisSeconde = models.DecimalField(max_digits=4, decimal_places=2, verbose_name="Note de français Seconde", default="0")
+    anglaisSeconde = models.DecimalField(max_digits=4, decimal_places=2, verbose_name="Note d'anglais Seconde", default="0")
+    mathematiqueSeconde = models.DecimalField(max_digits=4, decimal_places=2, verbose_name="Note de mathématique Seconde", default="0")
 
     etablissementPremiere = models.CharField(max_length=300, verbose_name="Nom d'établissement Première", null=True, blank=True)
-    francaisPremiere = models.DecimalField(max_digits=4, decimal_places=2, verbose_name="Note de français Première")
-    anglaisPremiere = models.DecimalField(max_digits=4, decimal_places=2, verbose_name="Note d'anglais Première")
-    mathematiquePremiere = models.DecimalField(max_digits=4, decimal_places=2, verbose_name="Note de mathématique Première")
+    francaisPremiere = models.DecimalField(max_digits=4, decimal_places=2, verbose_name="Note de français Première", default="0")
+    anglaisPremiere = models.DecimalField(max_digits=4, decimal_places=2, verbose_name="Note d'anglais Première", default="0")
+    mathematiquePremiere = models.DecimalField(max_digits=4, decimal_places=2, verbose_name="Note de mathématique Première", default="0")
 
     etablissementTerminale = models.CharField(max_length=300, verbose_name="Nom d'établissement Terminale", null=True, blank=True)
-    francaisTerminale = models.DecimalField(max_digits=4, decimal_places=2, verbose_name="Note de français Terminale")
-    anglaisTerminale = models.DecimalField(max_digits=4, decimal_places=2, verbose_name="Note d'anglais Terminale")
-    mathematiqueTerminale = models.DecimalField(max_digits=4, decimal_places=2, verbose_name="Note de mathématique Terminale")
+    francaisTerminale = models.DecimalField(max_digits=4, decimal_places=2, verbose_name="Note de français Terminale", default="0")
+    anglaisTerminale = models.DecimalField(max_digits=4, decimal_places=2, verbose_name="Note d'anglais Terminale", default="0")
+    mathematiqueTerminale = models.DecimalField(max_digits=4, decimal_places=2, verbose_name="Note de mathématique Terminale", default="0")
 
     semestre = models.ManyToManyField('Semestre')
 
@@ -78,7 +82,7 @@ class Etudiant(Utilisateur):
     class Meta:
         verbose_name = "Etudiant"
         verbose_name_plural = "Etudiants" 
-
+        unique_together = [["nom", "prenom", "datenaissance", "email"]]
 
 
     """ Cléf de l'étudiant"""
@@ -111,8 +115,6 @@ class Etudiant(Utilisateur):
             self.user = user # association de l'utilisateur à l'instance de l'étudiant
         return super().save()
 
-
-
     def __str__(self):
         return self.id + " " + self.nom + " " + self.prenom
 
@@ -143,6 +145,10 @@ class Enseignant(Personnel):
                 self.id = "ENS" + str(rang_ens + 1)
             else:
                 self.id = "ENS" + str(1)
+            # Création de l'utilisateur associé à l'instance de l'enseignant
+            username = (self.prenom[0] + self.nom).lower()
+            user = User.objects.create_user(username=username, password="ifnti2023!")
+            self.user = user # On associe l'utilisateur à l'enseignant
         return super().save()
 
     def __str__(self):
@@ -203,12 +209,22 @@ class Matiere(models.Model):
     minValue = models.FloatField(null=True,  verbose_name="Valeur minimale")
     enseignant = models.ForeignKey('Enseignant', on_delete=models.CASCADE)
     ue = models.ForeignKey('Ue', on_delete=models.CASCADE)
+    is_active = models.BooleanField(default=True, verbose_name="Actif")
+
 
     def __str__(self):
         return self.codematiere + " " + self.libelle    
 
     class Meta:
         verbose_name_plural = "Matières"
+
+    def suspendre(self):
+        self.is_active = False
+        self.save()
+
+    def reactiver(self):
+        self.is_active = True
+        self.save()
 
 
 
@@ -234,9 +250,7 @@ class Semestre(models.Model):
     libelle = models.CharField(max_length=30, choices=CHOIX_SEMESTRE)
     anneescolaire = models.ForeignKey('AnneeUniversitaire', on_delete=models.CASCADE, verbose_name="Année universitaire")
     credits = models.IntegerField(default=30) 
-    #maquetteGenerique = models.ForeignKey('MaquetteGenerique', on_delete=models.CASCADE, verbose_name="Maquette générique")
    
-
     """clef Semestre"""
 
     def save(self):
@@ -248,6 +262,7 @@ class Semestre(models.Model):
 
     class Meta:
         unique_together = [["anneescolaire", "libelle"]]
+
 
 
 

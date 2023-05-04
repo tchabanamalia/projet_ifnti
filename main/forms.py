@@ -2,6 +2,8 @@ from django import forms
 from .models import Utilisateur, Personnel, Enseignant, Etudiant, Matiere, AnneeUniversitaire, Ue, Tuteur, Semestre
 from django.core.exceptions import ValidationError
 from django.forms import DateField
+from django.utils.translation import gettext_lazy as _
+
 
 
 
@@ -40,6 +42,11 @@ class EtudiantForm(forms.ModelForm):
             'mathematiquePremiere': forms.TextInput(attrs={'class': 'form-control col-md-6'}),
             'mathematiqueTerminale': forms.TextInput(attrs={'class': 'form-control col-md-6'}),
         }
+
+
+   
+    
+
 
 
 
@@ -94,4 +101,31 @@ class MatiereForm(forms.ModelForm):
             'ue': forms.Select(),       
         }
 
+
+class EnseignantForm(forms.ModelForm):
+    datenaissance = DateField(widget=forms.SelectDateWidget(years=range(1990, 2006)), label='Date de naissance')
+
+    class Meta:
+        model = Enseignant
+        fields = ['nom', 'prenom', 'contact', 'sexe', 'email', 'adresse', 'datenaissance', 'lieunaissance', 'prefecture', 'carte_identity', 'nationalite', 'salaireBrut', 'dernierdiplome', 'nbreJrsCongesRestant', 'nbreJrsConsomme', 'type', 'specialite', 'is_active']
+        widgets = {
+            'nom': forms.TextInput(attrs={'class': 'form-control col-md-6'}),
+            'prenom': forms.TextInput(attrs={'class': 'form-control col-md-6'}),
+            'contact': forms.TextInput(attrs={'class': 'form-control col-md-6'}),
+            'sexe': forms.Select(attrs={'class': 'form-control col-md-6'}),
+            'email': forms.TextInput(attrs={'class': 'form-control col-md-6'}),
+            'adresse': forms.TextInput(attrs={'class': 'form-control col-md-6'}),
+            'datenaissance': DateField(widget=forms.SelectDateWidget(years=range(1990, 2006)), label='Date de naissance'),
+            'lieunaissance': forms.TextInput(attrs={'class': 'form-control col-md-6'}),
+            'prefecture': forms.TextInput(attrs={'class': 'form-control col-md-6'}),
+            'carte_identity': forms.TextInput(attrs={'class': 'form-control col-md-6'}),
+            'nationalite': forms.TextInput(attrs={'class': 'form-control col-md-6'}),
+            'salaireBrut': forms.NumberInput(attrs={'class': 'form-control col-md-6'}),
+            'dernierdiplome': forms.FileInput(attrs={'class': 'form-control col-md-6'}),
+            'nbreJrsCongesRestant': forms.NumberInput(attrs={'class': 'form-control col-md-6'}),
+            'nbreJrsConsomme': forms.NumberInput(attrs={'class': 'form-control col-md-6'}),
+            'type': forms.Select(attrs={'class': 'form-control col-md-6'}),
+            'specialite': forms.TextInput(attrs={'class': 'form-control col-md-6'}),
+            'is_active': forms.CheckboxInput(attrs={'class': 'form-control col-md-6'}),
+        }
 
