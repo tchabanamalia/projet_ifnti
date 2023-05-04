@@ -17,14 +17,14 @@ def index(request):
 
  ##### Etudiants ####
 
-def etudiants(request):
+def etudiants(request): # Retourne toute la liste des étudiants
     etudiants=Etudiant.objects.all()
     context={"etudiants":etudiants}
     return render(request, 'etudiants/etudiants.html', context)
 
 
 
-def detailEtudiant(request, id):
+def detailEtudiant(request, id): # Retourne le détail d'un etudiant donnée
 	etudiant = get_object_or_404(Etudiant, id=id)
 	return render(request, "etudiants/detailEtudiant.html", {"etudiant":etudiant})
 
@@ -54,22 +54,23 @@ def create_etudiant(request, id=0):
 
 
 
+
         ##### Tuteurs ####
 
-def tuteurs(request):
+def tuteurs(request): # Retourne toute la liste des tuteurs
     tuteurs=Tuteur.objects.all()
     context={"tuteurs":tuteurs}
     return render(request, 'tuteurs/tuteurs.html', context)
 
 
 
-def detailTuteur(request, id):
+def detailTuteur(request, id): # Retourne le détail d'un tuteur donnée
     tuteur = get_object_or_404(Tuteur, id=id)
     return render(request, "tuteurs/detailTuteur.html", {"tuteur":tuteur})
 
 
 
-def create_tuteur(request, id=0):
+def create_tuteur(request, id=0): # Création et modification d'un tuteur
     if request.method == "GET":
         if id == 0:
             form = TuteurForm()
@@ -159,6 +160,45 @@ def create_ue(request, id=0):
             return redirect('/main/liste_des_ues/')
 
 
+def ues_semestre1(request):
+    ues = Ue.objects.filter(semestre__libelle='S1')
+    context = {"ues": ues}
+    return render(request, 'ues/ues_semestre1.html', context)
+
+
+
+def ues_semestre2(request):
+    ues = Ue.objects.filter(semestre__libelle='S2')
+    context = {"ues": ues}
+    return render(request, 'ues/ues_semestre2.html', context)
+
+
+
+def ues_semestre3(request):
+    ues = Ue.objects.filter(semestre__libelle='S3')
+    context = {"ues": ues}
+    return render(request, 'ues/ues_semestre3.html', context)
+
+
+
+def ues_semestre4(request):
+    ues = Ue.objects.filter(semestre__libelle='S4')
+    context = {"ues": ues}
+    return render(request, 'ues/ues_semestre4.html', context)
+
+
+
+def ues_semestre5(request):
+    ues = Ue.objects.filter(semestre__libelle='S5')
+    context = {"ues": ues}
+    return render(request, 'ues/ues_semestre5.html', context)
+
+
+
+def ues_semestre6(request):
+    ues = Ue.objects.filter(semestre__libelle='S6')
+    context = {"ues": ues}
+    return render(request, 'ues/ues_semestre6.html', context)
 
 
 

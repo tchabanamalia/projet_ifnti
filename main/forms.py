@@ -2,6 +2,8 @@ from django import forms
 from .models import Utilisateur, Personnel, Enseignant, Etudiant, Matiere, AnneeUniversitaire, Ue, Tuteur, Semestre
 from django.core.exceptions import ValidationError
 from django.forms import DateField
+from django.utils.translation import gettext_lazy as _
+
 
 
 
@@ -40,6 +42,11 @@ class EtudiantForm(forms.ModelForm):
             'mathematiquePremiere': forms.TextInput(attrs={'class': 'form-control col-md-6'}),
             'mathematiqueTerminale': forms.TextInput(attrs={'class': 'form-control col-md-6'}),
         }
+
+
+   
+    
+
 
 
 
