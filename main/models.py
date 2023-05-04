@@ -180,7 +180,7 @@ class Tuteur(models.Model):
     profession = models.CharField(blank=True,max_length=20, verbose_name="Profession")
     type = models.CharField(blank=True,max_length=20, choices=CHOIX_TYPE)
     etudiants = models.ManyToManyField("Etudiant", verbose_name="Étudiants", blank=True)
-   
+
 
 
 

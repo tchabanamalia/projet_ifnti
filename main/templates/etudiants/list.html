@@ -65,7 +65,8 @@
             {% comment %} Génération des notes {% endcomment %}
             <li class="nav-main-item">
                 <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="false" href="#">
-                    <span class="nav-main-link-name">Relevé de notes du semestre</span>
+                    <i class="fa fa-file mr-1" aria-hidden="true"></i>
+                    <span class="nav-main-link-name">Relevés de notes du semestre</span>
                 </a>
                 <ul class="nav-main-submenu">
                     <li class="nav-main-item">
@@ -82,9 +83,15 @@
             </li>
             {% comment %} Fin génération des notes {% endcomment %}
 
-            <a class="dropdown-item" href="{% url 'main:releve_notes' s1.id %}">Another action</a>
-            <div class="dropdown-divider"></div>
-            <a class="dropdown-item" href="javascript:void(0)">Something else here</a>
+            {% comment %} Génération de la carte étudiant {% endcomment %}
+            <li class="nav-main-item">
+                <a class="nav-main-link nav-main-link-name" data-toggle="" aria-haspopup="true" aria-expanded="false" href="{% url 'main:carte_etudiant' niveau %}">
+                    <i class="fa fa-id-card mr-1" aria-hidden="true"></i>
+                    <span class="nav-main-link-name">Carte étudiant</span>
+                </a>                   
+            </li>
+            {% comment %} Fin génération carte étudiant {% endcomment %}
+
         </div>
 
     </div>
@@ -137,6 +144,7 @@
                             {% comment %} Génération des notes {% endcomment %}
                             <li class="nav-main-item">
                                 <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="false" href="#">
+                                    <i class="fa fa-file mr-1" aria-hidden="true"></i>
                                     <span class="nav-main-link-name">Relevé de notes</span>
                                 </a>
                                 <ul class="nav-main-submenu">
@@ -154,9 +162,34 @@
                             </li>
                             {% comment %} Fin génération des notes {% endcomment %}
 
-                            <a class="dropdown-item" href="javascript:void(0)">Another action</a>
-                            <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="javascript:void(0)">Something else here</a>
+
+                            {% comment %} Génération de la carte étudiant {% endcomment %}
+                            <li class="nav-main-item">
+                                <a class="nav-main-link nav-main-link-name" data-toggle="" aria-haspopup="true" aria-expanded="false" href="{% url 'main:carte_etudiant' etudiant.id niveau %}">
+                                    <i class="fa fa-id-card mr-1" aria-hidden="true"></i>
+                                    <span class="nav-main-link-name">Carte étudiant</span>
+                                </a>                   
+                            </li>
+                            {% comment %} Fin génération carte étudiant {% endcomment %}
+
+                            {% comment %} Génération du diplome étudiant {% endcomment %}
+                            <li class="nav-main-item">
+                                <a class="nav-main-link nav-main-link-name" data-toggle="" aria-haspopup="true" aria-expanded="false" href="{% url 'main:diplome_etudiant' etudiant.id %}">
+                                    <i class="fa fa-certificate mr-1" aria-hidden="true"></i>
+                                    <span class="nav-main-link-name">Diplome étudiant</span>
+                                </a>                   
+                            </li>
+                            {% comment %} Fin génération du diplome étudiant {% endcomment %}
+
+                            {% comment %} Génération du diplome étudiant {% endcomment %}
+                            <li class="nav-main-item">
+                                <a class="nav-main-link nav-main-link-name" data-toggle="" aria-haspopup="true" aria-expanded="false" href="{% url 'main:certificat_scolaire' etudiant.id niveau %}">
+                                    <i class="fa fa-certificate mr-1" aria-hidden="true"></i>
+                                    <span class="nav-main-link-name">Attestation</span>
+                                </a>                   
+                            </li>
+                            {% comment %} Fin génération du diplome étudiant {% endcomment %}
+
                         </div>
                     </td>
                 </tr>
