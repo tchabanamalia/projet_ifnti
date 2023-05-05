@@ -178,13 +178,14 @@ class Ue(models.Model):
 class Matiere(models.Model):
     codematiere = models.CharField(max_length=50, verbose_name="Code de la matière")
     libelle = models.CharField(max_length=100)
-    ponderation = models.IntegerField(null=True,  verbose_name="Pondération")
+    ponderation = models.IntegerField(default=1,  verbose_name="Pondération")
     minValue = models.FloatField(null=True,  verbose_name="Valeur minimale")
     enseignant = models.ForeignKey('Enseignant', on_delete=models.CASCADE)
     ue = models.ForeignKey('Ue', on_delete=models.CASCADE)
 
     def __str__(self):
         return str(self.libelle) 
+        
     class Meta:
         verbose_name_plural = "Matières"
 
@@ -212,7 +213,7 @@ class Semestre(models.Model):
     libelle = models.CharField(max_length=30, choices=CHOIX_SEMESTRE)
     anneescolaire = models.ForeignKey('AnneeUniversitaire', on_delete=models.CASCADE, verbose_name="Année universitaire")
     credits = models.IntegerField(default=30) 
-    maquetteGenerique = models.ForeignKey('MaquetteGenerique', on_delete=models.CASCADE, verbose_name="Maquette générique")
+    #maquetteGenerique = models.ForeignKey('MaquetteGenerique', on_delete=models.CASCADE, verbose_name="Maquette générique")
    
 
     """clef Semestre"""
@@ -222,7 +223,7 @@ class Semestre(models.Model):
         return super().save()
 
     def __str__(self):
-        return self.nom + " " + self.anneescolaire
+        return self.libelle
 
 
 

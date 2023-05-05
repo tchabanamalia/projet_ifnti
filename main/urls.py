@@ -7,6 +7,12 @@ urlpatterns = [
     path('', views.index, name='index'),
     path('liste_des_etudiants', views.createEtudiant, name='liste_des_etudiants'),
     
+    
+    path('dashboard', views.dashboard, name='dashboard'),
+    path('prof', views.liste_matieres_professeur, name='liste_matieres_professeur'),
+    path('retirer_prof/<int:pk>', views.retirer_prof, name='retirer_prof'),
+    
+
     # touré-ydaou urls templates latex 30-04-2023
     path('etudiants-l1', views.etudiants_l1, name='etudiants_l1'),
     path('etudiants-l2', views.etudiants_l2, name='etudiants_l2'),
