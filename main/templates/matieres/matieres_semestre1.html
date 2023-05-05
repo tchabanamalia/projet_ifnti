@@ -3,7 +3,7 @@
 {% block content %}
 <div class="block block-rounded">
     <div class="block-header">
-        <h3 class="block-title">Liste des matières</h3>
+        <h3 class="block-title">Liste des matières du semestre 1 </h3>
         <a href="{% url 'main:create_matiere' %}" class="btn btn-outline-primary">
             <i class="fas fa-plus"></i> Ajout Matière
         </a>
@@ -21,7 +21,7 @@
                 </tr>
             </thead>
             <tbody>
-                {% for matiere in matieres %}
+                {% for matiere in matieres_par_semestre %}
                 <tr>
                     <td class="text-center font-size-sm">{{matiere.codematiere}}</td>
                     <td class="text-center font-size-sm">{{matiere.libelle}}</td>                  
