@@ -1,0 +1,50 @@
+{% extends 'index.html' %}
+{% block content_title %} Matiere : {{ matiere }}  {% endblock content_title %}
+{% block content_title_description %} Saisir les notes de chaque élèves {% endblock content_title_description %}
+{% block content %} 
+<div class="block block-rounded">
+    <form action="" method="POST">
+        {% csrf_token %}
+        {{ note_form_set.management_form }}
+        <div class="block-content block-content-full">
+            <!-- DataTables init on table by adding .js-dataTable-full-pagination class, functionality is initialized in js/pages/be_tables_datatables.min.js which was auto compiled from _es6/pages/be_tables_datatables.js -->
+            <table class="table table-bordered table-striped table-vcenter js-dataTable-full-pagination">
+                <thead>
+                    <tr>
+                        <th class="text-center" style="width: 80px;">Id</th>
+                        <th class="text-center" style="width: 80px;">Etudiant</th>
+                        <th class="text-center" >Note</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for form in note_form_set %}
+                    <tr>
+                        <td>
+                            
+                        </td>
+                        <td>
+                            {{ form.matiere }}
+                            {{ form.etudiant }}
+                            {{ form.etudiant.errors }}
+                        </td>
+                        <td>
+                            {{ form.valeurNote }}
+                            {{ form.valeurNote.errors }}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td>
+                            <button type="submit" class="btn btn-primary w-100">
+                                Enregistrer
+                            </button> 
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </form>
+</div>
+{% endblock content %}

@@ -16,8 +16,10 @@ urlpatterns = [
     path('certificat_scolaire', views.certificat_scolaire, name='certificat_scolaire'),
     path('releve_notes', views.releve_notes, name='releve_notes'),
 
-    path('add_note/<int:id_edudiant>/<int:id_matiere>/<int:id_semestre>', views.createNote, name='add-note'),
-    path('edit_note/<int:id>', views.editNote, name='edit-note'),
-    path('delete_note/<int:id>', views.deleteNote, name='delete-note'),
+    # Abdoul-Malik urls notes
+    path('matieres', views.matieres, name='matieres'),
+    path('add_notes/<int:id_matiere>', views.createNotesByMatiere, name='add_notes'),
+    path('edit_note/<int:id>', views.editeNoteByMatiere, name='edit_note'),
+    path('delete_note/<int:id>', views.deleteNote, name='delete_note'),
 
 ]

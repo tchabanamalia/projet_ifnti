@@ -1,4 +1,5 @@
 
+from django import forms
 from django.http import HttpResponse
 from django.shortcuts import render
 
@@ -136,10 +137,27 @@ def releve_notes(request):
         return response
 
 
-
-def createNote(request, id_etudiant, id_matiere, id_semestre):
+def matieres(request):
     """
-    Affiche un formulaire de création d'une note :model:`main.Note`.
+    Affiche la liste des matiers dans l'actuelle semestre :model:`main.Matiere`.
+
+    **Context**
+
+    **Template:**
+
+    :template:`main/matieres/index.html`
+    """
+    # Détérminier le semestrer courrant
+    # Rechercher les Ues et pour chaque Ue les matières selon le semèstre courrant 
+    data = {
+        'matieres' : Matiere.objects.all(),
+    }
+    
+    return render(request, 'matieres/index.html', data)
+
+def createNotesByMatiere(request, id_matiere=1):
+    """
+    Affiche un formulaire de création d'une note :model:`main.Note` par matiere.
 
     **Context**
 
@@ -149,22 +167,47 @@ def createNote(request, id_etudiant, id_matiere, id_semestre):
     **Template:**
 
     :template:`main/notes/create_or_edit_note.html`
-    """
-    data = {
-        'note_form' : NoteForm(),
-        'etudiant' : get_object_or_404(Etudiant, pk=id_etudiant),
-        'matiere' : get_object_or_404(Matiere, pk=id_matiere),
-        'semestre' : get_object_or_404(Semestre, pk=id_semestre),
-    }
+    """    
+    matiere = get_object_or_404(Matiere, pk=id_matiere)
+    ues = get_object_or_404(Ue, pk=matiere.ue.id)
+    semestre = get_object_or_404(Semestre, pk=ues.semestre.id)
+    students = semestre.etudiant_set.all()
+    
+    NoteByStudentByMatiereFormSet = forms.modelformset_factory(
+        model=Note,
+        form=NoteForm,
+        extra=0,
+        can_delete=True,
+        min_num=len(students),
+        validate_min=True,
+    )
     if request.method == 'POST':
-        noteForm = NoteForm(request.POST)
-        if noteForm.is_valid():
-            noteForm.save()
+        formset = NoteByStudentByMatiereFormSet(request.POST)
+        print(formset.is_valid())
+        if formset.is_valid():
+            formset.save()
             return redirect('main:index')
-        data['note_form'] = noteForm
+        print(formset.errors)
+    else:
+        students_data = []
+        print(students)
+        for student in students:
+            student_data = {
+                'etudiant' : student.id,
+                'matiere' : matiere.__str__(),
+            }
+            students_data.append(student_data)
+            
+        formset = NoteByStudentByMatiereFormSet(initial=students_data)
+        
+    data = {
+        'note_form_set' : formset,
+        'matiere' : matiere,
+    }
+            
     return render(request, 'notes/create_or_edit_note.html', context=data)
 
-def editNote(request, id):
+def editeNoteByMatiere(request, id):
     """
     Affiche un formulaire d'édition d'une note :model:`main.Note`.
 
@@ -182,7 +225,6 @@ def editNote(request, id):
         'note_form' : NoteForm(request.POST, instance=Note),
         'etudiant' : note.etudiant,
         'matiere' :  note.matiere,
-        'semestre' : note.semestre,
     }
     if request.method == 'POST':
         noteForm = NoteForm(request.POST)

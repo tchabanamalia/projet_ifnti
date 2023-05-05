@@ -180,7 +180,7 @@ class Ue(models.Model):
 class Matiere(models.Model):
     codematiere = models.CharField(max_length=50, verbose_name="Code de la matière")
     libelle = models.CharField(max_length=100)
-    ponderation = models.IntegerField(null=True,  verbose_name="Pondération")
+    ponderation = models.IntegerField(null=True,  verbose_name="Pondération", default=1)
     minValue = models.FloatField(null=True,  verbose_name="Valeur minimale")
     enseignant = models.ForeignKey('Enseignant', on_delete=models.CASCADE)
     ue = models.ForeignKey('Ue', on_delete=models.CASCADE)
@@ -224,7 +224,7 @@ class Semestre(models.Model):
         return super().save()
 
     def __str__(self):
-        return self.nom + " " + self.anneescolaire
+        return self.libelle + " " + self.anneescolaire.__str__()
 
     class Meta:
         unique_together = [["anneescolaire", "libelle"]]
@@ -247,14 +247,13 @@ class Note(models.Model):
     Attributes:
         valeurNote (decimal): La valeur de la note.
         etudiant (Etudiant): L'étudiant à qui cette note appartient.
-        semestre (Semestre): Le semestre au cours duquel l'étudiant a eu cette note.
         matiere (Matiere): La matière dans laquelle l'étudiant a eu cette note. 
     
     Methods:
         __str__() -> str: Renvoie une représentation en chaîne de caractères de l'objet Note.
-
+ni
     """
-    valeurNote = models.DecimalField(null=True, max_digits=4, decimal_places=2, verbose_name="note", validators=[MaxValueValidator(20), MinValueValidator(-0.01)])
+    valeurNote = models.DecimalField(null=True, max_digits=4, decimal_places=2, verbose_name="note", validators=[MaxValueValidator(20), MinValueValidator(0.0)])
     rattrapage = models.BooleanField(default=False)
     etudiant = models.ForeignKey('Etudiant', on_delete=models.CASCADE,verbose_name="Étudiant")
     #semestre = models.ForeignKey('Semestre', on_delete=models.CASCADE, verbose_name="Semestre")
@@ -268,9 +267,10 @@ class Note(models.Model):
         Returns:
             str: La représentation en chaîne de caractères de l'objet Note.
         """
-        return str(self.etudiant) + " " + str(self.matiere) + " " + str(self.valeurNote)
+        return str(self.id) + " " + str(self.matiere) + " " + str(self.valeurNote)
 
-
+    def save(self):
+        super().save(self)
 
 
 class Salaire(models.Model):
