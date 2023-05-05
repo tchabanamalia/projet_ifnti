@@ -127,6 +127,65 @@ def create_matiere(request, id=0):
 
 
 
+# Vue pour récupérer la liste des matières par semestre
+
+
+def matieres_semestre_1(request):
+    # Récupération du semestre 1
+    semestre_1 = get_object_or_404(Semestre, libelle='S1')
+    matieres = Matiere.objects.filter(ue__semestre=semestre_1)
+    context = {'matieres': matieres}
+    return render(request, 'matieres/matiere_semestre1.html', context)
+
+
+
+def matieres_semestre_2(request):
+    semestre_2 = get_object_or_404(Semestre, libelle='S2')
+    matieres = Matiere.objects.filter(ue__semestre=semestre_2)
+    context = {'matieres': matieres}
+    return render(request, 'matieres/matiere_semestre2.html', context)
+
+
+
+def matieres_semestre_3(request):
+    # Récupération du semestre 3
+    semestre_3 = get_object_or_404(Semestre, libelle='S3')
+    matieres = Matiere.objects.filter(ue__semestre=semestre_3)
+    context = {'matieres': matieres}
+    return render(request, 'matieres/matiere_semestre3.html', context)
+
+
+
+def matieres_semestre_4(request):
+    # Récupération du semestre 4
+    semestre_4 = get_object_or_404(Semestre, libelle='S3')
+    matieres = Matiere.objects.filter(ue__semestre=semestre_4)
+    context = {'matieres': matieres}
+    return render(request, 'matieres/matiere_semestre4.html', context)
+
+
+
+def matieres_semestre_5(request):
+    # Récupération du semestre 5
+    semestre_5 = get_object_or_404(Semestre, libelle='S3')
+    matieres = Matiere.objects.filter(ue__semestre=semestre_5)
+    context = {'matieres': matieres}
+    return render(request, 'matieres/matiere_semestre5.html', context)
+
+
+
+def matieres_semestre_6(request):
+    # Récupération du semestre 1
+    semestre_6 = get_object_or_404(Semestre, libelle='S3')
+    matieres = Matiere.objects.filter(ue__semestre=semestre_6)
+    context = {'matieres': matieres}
+    return render(request, 'matieres/matiere_semestre6.html', context)
+
+
+
+
+
+
         ##### UEs ####
 
 def ues(request):
@@ -159,6 +218,8 @@ def create_ue(request, id=0):
             form.save()
             return redirect('/main/liste_des_ues/')
 
+
+# Vue pour récupérer la liste des UEs par semestre
 
 def ues_semestre1(request):
     ues = Ue.objects.filter(semestre__libelle='S1')
