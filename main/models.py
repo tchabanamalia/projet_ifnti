@@ -180,7 +180,7 @@ class Tuteur(models.Model):
     profession = models.CharField(blank=True,max_length=20, verbose_name="Profession")
     type = models.CharField(blank=True,max_length=20, choices=CHOIX_TYPE)
     etudiants = models.ManyToManyField("Etudiant", verbose_name="Étudiants", blank=True)
-   
+
 
 
 
@@ -213,6 +213,7 @@ class Matiere(models.Model):
 
 
     def __str__(self):
+
         return self.codematiere + " " + self.libelle    
 
     class Meta:
@@ -246,10 +247,11 @@ class MaquetteGenerique(models.Model):
 
 class Semestre(models.Model):
     id = models.CharField(primary_key=True, blank=True, max_length=14)
-    CHOIX_SEMESTRE = [('S1', 'Semestre1'), ('S2', 'Semestre3'), ('S3', 'Semestre3'), ('S4', 'Semestre4'), ('S5', 'Semestre5'), ('S6', 'Semestre6')]
+    CHOIX_SEMESTRE = [('S1', 'Semestre1'), ('S2', 'Semestre2'), ('S3', 'Semestre3'), ('S4', 'Semestre4'), ('S5', 'Semestre5'), ('S6', 'Semestre6')]
     libelle = models.CharField(max_length=30, choices=CHOIX_SEMESTRE)
     anneescolaire = models.ForeignKey('AnneeUniversitaire', on_delete=models.CASCADE, verbose_name="Année universitaire")
     credits = models.IntegerField(default=30) 
+
    
     """clef Semestre"""
 
@@ -258,10 +260,12 @@ class Semestre(models.Model):
         return super().save()
 
     def __str__(self):
+
         return self.libelle + " " + str(self.anneescolaire)
 
     class Meta:
         unique_together = [["anneescolaire", "libelle"]]
+
 
 
 

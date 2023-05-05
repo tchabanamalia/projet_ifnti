@@ -1,8 +1,11 @@
 
 from django.http import HttpResponse
 from django.shortcuts import render
+
 from django import forms
 from main.forms import  EnseignantForm, EtudiantForm, TuteurForm, UeForm, MatiereForm
+
+import datetime
 from main.pdfMaker import generate_pdf
 from .models import Enseignant, Matiere, Etudiant, Competence, Note, Comptable, Semestre, Ue, AnneeUniversitaire, Personnel, Tuteur, MaquetteGenerique 
 from django.shortcuts import get_object_or_404, redirect, render
@@ -268,16 +271,70 @@ def ues_semestre6(request):
 
 # methode qui normalement doit retourner sur le template affichant l'ensemble des élèves de L1
 def etudiants_l1(request):
-    return render(request, 'etudiants/list.html')
+    # pour récupérer les étudiants de l1 il faut récupérer les étudiant en S1 et S2
+    semestres = Semestre.objects.filter(libelle="S1") | Semestre.objects.filter(libelle="S2") 
+    
+    etudiants = {'etudiants': [], 'niveau': 'L1', 's1' : semestres[0], 's2' : semestres[1]}
+    temp=[]
+
+    # récupération des étudiants de chaque semestres
+    for semestre in semestres:
+        print(semestre.etudiant_set.all())
+        for etudiant in semestre.etudiant_set.all():
+            #ajout de tout les étudiant du semestre dans un tableau temporaire
+            temp.append(etudiant)
+
+    # ajout des étudiants dans le dictionnaire
+    etudiants['etudiants'] = temp
+
+    return render(request, 'etudiants/list.html', etudiants)
+
+
+
+
 
 # methode qui normalement doit retourner sur le template affichant l'ensemble des élèves de L2
 def etudiants_l2(request):
-    return render(request, 'etudiants/list.html')
+    # pour récupérer les étudiants de l1 il faut récupérer les étudiant en S3 et S4
+    semestres = Semestre.objects.filter(libelle="S3") | Semestre.objects.filter(libelle="S4") 
+    
+    etudiants = {'etudiants': [], 'niveau': 'L2', 's1' : semestres[0], 's2' : semestres[1]}
+    temp=[]
+
+    # récupération des étudiants de chaque semestres
+    for semestre in semestres:
+        print(semestre.etudiant_set.all())
+        for etudiant in semestre.etudiant_set.all():
+            #ajout de tout les étudiant du semestre dans un tableau temporaire
+            temp.append(etudiant)
+
+    # ajout des étudiants dans le dictionnaire
+    etudiants['etudiants'] = temp
+
+    return render(request, 'etudiants/list.html', etudiants)
 
 
 # methode qui normalement doit retourner sur le template affichant l'ensemble des élèves de L3
 def etudiants_l3(request):
-    return render(request, 'etudiants/list.html')
+    # pour récupérer les étudiants de l1 il faut récupérer les étudiant en S1 et S2
+    semestres = Semestre.objects.filter(libelle="S5") | Semestre.objects.filter(libelle="S6") 
+
+
+    
+    etudiants = {'etudiants': [], 'niveau': 'L3', 's1' : semestres[0], 's2' : semestres[1]}
+    temp=[]
+
+    # récupération des étudiants de chaque semestres
+    for semestre in semestres:
+        print(semestre.etudiant_set.all())
+        for etudiant in semestre.etudiant_set.all():
+            #ajout de tout les étudiant du semestre dans un tableau temporaire
+            temp.append(etudiant)
+
+    # ajout des étudiants dans le dictionnaire
+    etudiants['etudiants'] = temp
+
+    return render(request, 'etudiants/list.html', etudiants)
 
 
 
@@ -294,15 +351,17 @@ def etudiants_l3(request):
 """
 
 #methode générant la carte de l'étudiant
-def carte_etudiant(request):
-    context = {}
+def carte_etudiant(request, id, niveau):
+    etudiant = get_object_or_404(Etudiant, id=id)
 
-    # nom des fichiers d'entrée et de sortie
-    # ici pour les test le nom se termine en temp pour signifier temporaire
-    # ils seront donc à supprimer
-    latex_input = 'carte_etudiant_temp'
-    latex_ouput = 'generated_carte_etudiant_temp'
-    pdf_file = 'pdf_carte_etudiant_temp'
+    print(etudiant.tuteur_set.all())
+
+    context = {'etudiant' : etudiant, 'niveau' : niveau}
+
+
+    latex_input = 'carte_etudiant'
+    latex_ouput = 'generated_carte_etudiant'
+    pdf_file = 'pdf_carte_etudiant'
 
     #génération du pdf
     generate_pdf(context, latex_input, latex_ouput, pdf_file)
@@ -313,18 +372,57 @@ def carte_etudiant(request):
         response = HttpResponse(pdf_preview, content_type='application/pdf')
         response['Content-Disposition'] = 'inline;filename=pdf_file.pdf'
         return response
+
+
+
+
+#methode générant la carte des étudiants d'un niveau
+def carte_etudiant_all(request, niveau):
     
+
+    if niveau == 'L1':
+        semestres = Semestre.objects.filter(libelle="S1") | Semestre.objects.filter(libelle="S2") 
+        temp=[]
+
+        # récupération des étudiants de chaque semestres
+        for semestre in semestres:
+            print(semestre.etudiant_set.all())
+            for etudiant in semestre.etudiant_set.all():
+                #ajout de tout les étudiant du semestre dans un tableau temporaire
+                temp.append(etudiant)
+
+        # ajout des étudiants dans le dictionnaire
+        context = {'etudiants' : temp, 'niveau' : niveau}
+
+
+    latex_input = 'carte_etudiant_all'
+    latex_ouput = 'generated_carte_etudiant_all'
+    pdf_file = 'pdf_carte_etudiant_all'
+
+    #génération du pdf
+    generate_pdf(context, latex_input, latex_ouput, pdf_file)
+
+    #visualisation du pdf dans le navigateur
+    with open('media/pdf/' + str(pdf_file) + '.pdf', 'rb') as f:
+        pdf_preview = f.read()
+        response = HttpResponse(pdf_preview, content_type='application/pdf')
+        response['Content-Disposition'] = 'inline;filename=pdf_file.pdf'
+        return response
+
+
+
+
+
 
 #methode générant le diplome de l'étudiant
-def diplome_etudiant(request):
-    context = {}
+def diplome_etudiant(request, id):
+    etudiant = get_object_or_404(Etudiant, id=id)
 
-    # nom des fichiers d'entrée et de sortie
-    # ici pour les test le nom se termine en temp pour signifier temporaire
-    # ils seront donc à supprimer
-    latex_input = 'diplome_temp'
-    latex_ouput = 'generated_diplome_temp'
-    pdf_file = 'pdf_diplome_temp'
+    context = {'etudiant' : etudiant}
+
+    latex_input = 'diplome'
+    latex_ouput = 'generated_diplome'
+    pdf_file = 'pdf_diplome'
 
     #génération du pdf
     generate_pdf(context, latex_input, latex_ouput, pdf_file)
@@ -336,10 +434,46 @@ def diplome_etudiant(request):
         response['Content-Disposition'] = 'inline;filename=pdf_file.pdf'
         return response
     
+    
+#methode générant le diplome de l'étudiant
+def diplome_etudiant_all(request):
+    semestres = Semestre.objects.filter(libelle="S1") | Semestre.objects.filter(libelle="S2") 
+    temp=[]
+
+        # récupération des étudiants de chaque semestres
+    for semestre in semestres:
+        for etudiant in semestre.etudiant_set.all():
+            #ajout de tout les étudiant du semestre dans un tableau temporaire
+            temp.append(etudiant)
+
+    # ajout des étudiants dans le dictionnaire
+    context = {'etudiants' : temp}
+
+   
+
+    latex_input = 'diplome_all'
+    latex_ouput = 'generated_diplome_all'
+    pdf_file = 'pdf_diplome_all'
+
+    #génération du pdf
+    generate_pdf(context, latex_input, latex_ouput, pdf_file)
+
+    #visualisation du pdf dans le navigateur
+    with open('media/pdf/' + str(pdf_file) + '.pdf', 'rb') as f:
+        pdf_preview = f.read()
+        response = HttpResponse(pdf_preview, content_type='application/pdf')
+        response['Content-Disposition'] = 'inline;filename=pdf_file.pdf'
+        return response
+
+
+
+
 
 #methode générant le certificat scolaire de l'étudiant
-def certificat_scolaire(request):
-    context = {}
+def certificat_scolaire(request, id, niveau):
+    etudiant = get_object_or_404(Etudiant, id=id)
+
+    context = {'etudiant' : etudiant, 'niveau' : niveau}
 
     # nom des fichiers d'entrée et de sortie
     # ici pour les test le nom se termine en temp pour signifier temporaire
@@ -361,15 +495,16 @@ def certificat_scolaire(request):
 
 
 #methode générant le relevé de notes de l'étudiant
-def releve_notes(request):
-    context = {}
+def releve_notes(request, id, id_semestre):
+    etudiant = get_object_or_404(Etudiant, id=id)
+    semestre = get_object_or_404(Semestre, id=id_semestre)
+    context = {'etudiant': etudiant, 'semestre' : semestre}
 
     # nom des fichiers d'entrée et de sortie
-    # ici pour les test le nom se termine en temp pour signifier temporaire
-    # ils seront donc à supprimer
-    latex_input = 'releve_notes_temp'
-    latex_ouput = 'generated_releve_notes_temp'
-    pdf_file = 'pdf_releve_notes_temp'
+
+    latex_input = 'releve_notes'
+    latex_ouput = 'generated_releve_notes'
+    pdf_file = 'pdf_releve_notes'
 
     #génération du pdf
     generate_pdf(context, latex_input, latex_ouput, pdf_file)
@@ -380,6 +515,35 @@ def releve_notes(request):
         response = HttpResponse(pdf_preview, content_type='application/pdf')
         response['Content-Disposition'] = 'inline;filename=pdf_file.pdf'
         return response
+    
+
+
+
+#methode générant le relevé de notes des étudiants de tout un semestre
+def releve_notes_semestre(request, id_semestre):
+    semestre = get_object_or_404(Semestre, id=id_semestre)
+    etudiants = semestre.etudiant_set.all()
+    context = {'etudiants': etudiants, 'semestre' : semestre}
+
+    # nom des fichiers d'entrée et de sortie
+
+    latex_input = 'releve_notes_semestre'
+    latex_ouput = 'generated_releve_notes_semestre'
+    pdf_file = 'pdf_releve_notes_semestre'
+
+    #génération du pdf
+    generate_pdf(context, latex_input, latex_ouput, pdf_file)
+
+    #visualisation du pdf dans le navigateur
+    with open('media/pdf/' + str(pdf_file) + '.pdf', 'rb') as f:
+        pdf_preview = f.read()
+        response = HttpResponse(pdf_preview, content_type='application/pdf')
+        response['Content-Disposition'] = 'inline;filename=pdf_file.pdf'
+        return response
+
+
+
+
 
 
 
@@ -451,6 +615,63 @@ def deleteNote(request, id):
     note.delete()
     return redirect('main:index')
 
+
+def annee_academique(date):
+
+    annee = date.year
+    mois = date.month
+    
+    if mois < 8:
+        annee -= 1
+        
+    
+    return {"annee_academique": f"{annee}-{annee+1}"}
+
+date = datetime.date.today()
+result = annee_academique(date)
+annee_univ = AnneeUniversitaire(anneeUniv=result["annee_academique"])
+annee_univ.save()
+
+def dashboard(request):
+    return render(request, 'dashboard/be_pages_dashboard.html',context=result)
+
+
+def liste_matieres_professeur(request):
+    enseignants_filtrer = Enseignant.objects.exclude(nom="Pas")
+    matieres=Matiere.objects.all()
+
+    
+    if request.method == "POST":
+        enseignant_id = request.POST.get("enseignant")
+        enseignant_choisi=Enseignant.objects.get(id=enseignant_id)
+        matieres_selectionnees = request.POST.getlist("matieres[]")
+        ponderation_choisi=request.POST.getlist("ponderations[]")
+
+        for index, matiere in enumerate(matieres_selectionnees):
+            matiere_obj = Matiere.objects.get(libelle=matiere)
+            ponderation = float(ponderation_choisi[index])
+            matiere_obj.enseignant=enseignant_choisi
+            matiere_obj.ponderation =ponderation
+            matiere_obj.save()
+        
+        return render(request, "dashboard/confirmation.html", {"matieres":matieres })
+    
+    else:
+        enseignant_null = Enseignant.objects.get(nom='Pas')
+        matieres_filtrer = Matiere.objects.filter(enseignant=enseignant_null)
+        context = {'enseignants': enseignants_filtrer, 'matieres': matieres_filtrer}
+        return render(request, "dashboard/affectation_prof.html", context)
+
+
+def retirer_prof(request,pk):
+    enseignants_null = Enseignant.objects.get(nom="Pas")
+    matiere = Matiere.objects.get(id=pk)
+    matiere.enseignant = enseignants_null
+    matiere.save()
+    return redirect('confirmation_affectation')
+
+
+
             ##### Enseignant #####
 
 def create_enseignant(request, id=0):
@@ -493,3 +714,4 @@ def edit_enseignant(request, id):
     else:
         form = EnseignantForm(instance=enseignant)
     return render(request, 'enseignants/edit_enseignant.html', {'form': form})
+

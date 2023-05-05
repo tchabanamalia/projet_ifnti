@@ -6,14 +6,30 @@ app_name = 'main'
 urlpatterns = [
     path('', views.index, name='index'),
     
+    
+    path('dashboard', views.dashboard, name='dashboard'),
+    path('prof', views.liste_matieres_professeur, name='liste_matieres_professeur'),
+    path('retirer_prof/<int:pk>', views.retirer_prof, name='retirer_prof'),
+    
+
     # touré-ydaou urls templates latex 30-04-2023
+
     path('etudiants-l1', views.etudiants_l1, name='etudiants_l1'),
     path('etudiants-l2', views.etudiants_l2, name='etudiants_l2'),
     path('etudiants-l3', views.etudiants_l3, name='etudiants_l3'),
-    path('carte-etudiant', views.carte_etudiant, name='carte_etudiant'),
-    path('diplome', views.diplome_etudiant, name='diplome_etudiant'),
-    path('certificat_scolaire', views.certificat_scolaire, name='certificat_scolaire'),
-    path('releve_notes', views.releve_notes, name='releve_notes'),
+
+
+    path('carte-etudiant/<str:id>/<str:niveau>', views.carte_etudiant, name='carte_etudiant'),
+    path('diplome/<str:id>', views.diplome_etudiant, name='diplome_etudiant'),
+    path('certificat_scolaire/<str:id>/<str:niveau>', views.certificat_scolaire, name='certificat_scolaire'),
+    path('releve_notes/<str:id>/<str:id_semestre>', views.releve_notes, name='releve_notes'),
+
+    # urls permettant de générer les documents de manière groupée (pour un ensemble d'étudiants)
+    path('releve_notes/<str:id_semestre>', views.releve_notes_semestre, name='releve_notes'),
+    path('carte-etudiant/<str:niveau>', views.carte_etudiant_all, name='carte_etudiant'),
+    path('diplomes', views.diplome_etudiant_all, name='diplome_etudiant'),
+
+
 
     path('add_note/<int:id_edudiant>/<int:id_matiere>/<int:id_semestre>', views.createNote, name='add-note'),
     path('edit_note/<int:id>', views.editNote, name='edit-note'),
