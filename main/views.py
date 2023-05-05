@@ -190,13 +190,13 @@ def createNotesByMatiere(request, id_matiere=1):
         print(formset.errors)
     else:
         students_data = []
-        print(students)
+        """print(students)
         for student in students:
             student_data = {
                 'etudiant' : student.id,
                 'matiere' : matiere.__str__(),
             }
-            students_data.append(student_data)
+            students_data.append(student_data)"""
             
         formset = NoteByStudentByMatiereFormSet(initial=students_data)
         
