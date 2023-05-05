@@ -12,20 +12,22 @@
         <table class="table table-bordered table-striped table-vcenter js-dataTable-full-pagination">
             <thead>
                 <tr>
-                    <th class="text-center" style="width: 80px;">ID</th>
-                    <th class="text-center" style="width: 30%;">Code UE</th>
-                    <th class="text-center" style="width: 80px;">Libelle</th>
+                    <th class="text-center" style="width: 14%;">Code UE</th>
+                    <th class="text-center" style="width: 20%;">Libelle</th>
                     <th class="text-center" style="width: 15%;">Crédits</th>
+                    <th class="text-center" style="width: 15%;">Semestre</th>
+                    <th class="text-center" style="width: 20%;">Enseignant</th>
                     <th scope="col" class="bg-warning" style="width: 15%;">Actions</th>
                 </tr>
             </thead>
             <tbody>
                 {% for ue in ues %}
                 <tr>
-                    <td class="text-center font-size-sm">{{ue.id}}</td>
                     <td class="text-center font-size-sm">{{ue.codeUE}}</td>
                     <td class="text-center font-size-sm">{{ue.libelle}}</td>
                     <td class="text-center font-size-sm">{{ue.nbreCredits}}</td>
+                    <td class="text-center font-size-sm">{{ue.semestre}}</td>
+                    <td class="text-center font-size-sm">{{ue.enseignant}}</td>
                     <td style="text-align: center;">                                       
                         <button type="button" class="bs-modal read-book btn btn-sm btn-primary">
                             <a style="color: blanchedalmond;" href="{% url 'main:detail_ue' ue.id %}">
