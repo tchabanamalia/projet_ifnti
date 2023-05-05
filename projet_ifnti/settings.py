@@ -83,7 +83,7 @@ DATABASES = {
         # 'PASSWORD': 'ifnti',
         # 'HOST': 'localhost',
         # 'PORT': '5432',
-    }sssssssssssssssssssssssssssssssssssssssssssssss
+    }
 }
 
 

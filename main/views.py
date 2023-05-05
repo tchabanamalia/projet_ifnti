@@ -568,6 +568,8 @@ def annee_academique(date):
 
 date = datetime.date.today()
 result = annee_academique(date)
+annee_univ = AnneeUniversitaire(anneeUniv=result["annee_academique"])
+annee_univ.save()
 
 def dashboard(request):
     return render(request, 'dashboard/be_pages_dashboard.html',context=result)
