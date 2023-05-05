@@ -213,6 +213,7 @@ class Matiere(models.Model):
 
 
     def __str__(self):
+
         return self.codematiere + " " + self.libelle    
 
     class Meta:
@@ -250,6 +251,7 @@ class Semestre(models.Model):
     libelle = models.CharField(max_length=30, choices=CHOIX_SEMESTRE)
     anneescolaire = models.ForeignKey('AnneeUniversitaire', on_delete=models.CASCADE, verbose_name="Année universitaire")
     credits = models.IntegerField(default=30) 
+
    
     """clef Semestre"""
 
@@ -258,10 +260,12 @@ class Semestre(models.Model):
         return super().save()
 
     def __str__(self):
+
         return self.libelle + " " + str(self.anneescolaire)
 
     class Meta:
         unique_together = [["anneescolaire", "libelle"]]
+
 
 
 

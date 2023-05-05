@@ -1,8 +1,11 @@
 
 from django.http import HttpResponse
 from django.shortcuts import render
+
 from django import forms
 from main.forms import  EnseignantForm, EtudiantForm, TuteurForm, UeForm, MatiereForm
+
+import datetime
 from main.pdfMaker import generate_pdf
 from .models import Enseignant, Matiere, Etudiant, Competence, Note, Comptable, Semestre, Ue, AnneeUniversitaire, Personnel, Tuteur, MaquetteGenerique 
 from django.shortcuts import get_object_or_404, redirect, render
@@ -551,6 +554,61 @@ def deleteNote(request, id):
     note.delete()
     return redirect('main:index')
 
+
+def annee_academique(date):
+
+    annee = date.year
+    mois = date.month
+    
+    if mois < 8:
+        annee -= 1
+        
+    
+    return {"annee_academique": f"{annee}-{annee+1}"}
+
+date = datetime.date.today()
+result = annee_academique(date)
+
+def dashboard(request):
+    return render(request, 'dashboard/be_pages_dashboard.html',context=result)
+
+
+def liste_matieres_professeur(request):
+    enseignants_filtrer = Enseignant.objects.exclude(nom="Pas")
+    matieres=Matiere.objects.all()
+
+    
+    if request.method == "POST":
+        enseignant_id = request.POST.get("enseignant")
+        enseignant_choisi=Enseignant.objects.get(id=enseignant_id)
+        matieres_selectionnees = request.POST.getlist("matieres[]")
+        ponderation_choisi=request.POST.getlist("ponderations[]")
+
+        for index, matiere in enumerate(matieres_selectionnees):
+            matiere_obj = Matiere.objects.get(libelle=matiere)
+            ponderation = float(ponderation_choisi[index])
+            matiere_obj.enseignant=enseignant_choisi
+            matiere_obj.ponderation =ponderation
+            matiere_obj.save()
+        
+        return render(request, "dashboard/confirmation.html", {"matieres":matieres })
+    
+    else:
+        enseignant_null = Enseignant.objects.get(nom='Pas')
+        matieres_filtrer = Matiere.objects.filter(enseignant=enseignant_null)
+        context = {'enseignants': enseignants_filtrer, 'matieres': matieres_filtrer}
+        return render(request, "dashboard/affectation_prof.html", context)
+
+
+def retirer_prof(request,pk):
+    enseignants_null = Enseignant.objects.get(nom="Pas")
+    matiere = Matiere.objects.get(id=pk)
+    matiere.enseignant = enseignants_null
+    matiere.save()
+    return redirect('confirmation_affectation')
+
+
+
             ##### Enseignant #####
 
 def create_enseignant(request, id=0):
@@ -593,3 +651,4 @@ def edit_enseignant(request, id):
     else:
         form = EnseignantForm(instance=enseignant)
     return render(request, 'enseignants/edit_enseignant.html', {'form': form})
+
