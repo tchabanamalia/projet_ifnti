@@ -15,6 +15,7 @@
                 <label for="{{ form.nom.id_for_label }}" class="col-md-2 col-form-label">Nom</label>
                 <div class="col-md-10">
                     {{ form.nom }}
+                    {{ form.nom.errors }}
                 </div>
             </div>
 
@@ -22,6 +23,7 @@
                 <label for="{{ form.prenom.id_for_label }}" class="col-md-2 col-form-label">Prénom</label>
                 <div class="col-md-10">
                     {{ form.prenom }}
+                    {{ form.prenom.errors }}
                 </div>
             </div>
 
