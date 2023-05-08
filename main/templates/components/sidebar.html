@@ -94,7 +94,7 @@
             <ul class="nav-main">
 
                 <li class="nav-main-item">
-                    <a class="nav-main-link" href="be_pages_dashboard.html">
+                    <a class="nav-main-link" href="dashboard">
                         <i class="nav-main-link-icon si si-speedometer"></i>
                         <span class="nav-main-link-name">Dashboard</span>
                     </a>
@@ -119,7 +119,7 @@
                 <li class="nav-main-item">
                     <a class="nav-main-link nav-main-link-name" data-toggle="" aria-haspopup="true" aria-expanded="false" href="{% url 'main:liste_des_etudiants' %}">
                         <i class="nav-main-link-icon "></i>
-                        <span class="nav-main-link-name">Étudiants IFNTI</span>
+                        <span class="nav-main-link-name">Liste des étudiants</span>
                     </a>                   
                 </li>
 
@@ -130,43 +130,22 @@
                     </a>                   
                 </li>
 
-                               
-
-
-
-
-
-                <li class="nav-main-item">
-                    <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="false" href="#">
-                        <i class="nav-main-link-icon "></i>
-                        <span class="nav-main-link-name">Relevés de notes</span>
-                    </a>
-                    <ul class="nav-main-submenu">
-                        <li class="nav-main-item">
-                            <a class="nav-main-link" href="{% url 'main:etudiants_l1' %}">
-                                <span class="nav-main-link-name">L1</span>
-                            </a>
-                        </li>
-                        <li class="nav-main-item">
-                            <a class="nav-main-link" href="{% url 'main:etudiants_l2' %}">
-                                <span class="nav-main-link-name">L2</span>
-                            </a>
-                        </li>
-                        <li class="nav-main-item">
-                            <a class="nav-main-link" href="{% url 'main:etudiants_l3' %}">
-                                <span class="nav-main-link-name">L3</span>
-                            </a>
-                        </li>
-                    </ul>
-                </li>
                
+               
+
                 <li class="nav-main-heading">GESTION PROGRAMMES</li>
+
+
                 <li class="nav-main-item">
-                    <a class="nav-main-link nav-main-link-name" data-toggle="" aria-haspopup="true" aria-expanded="false" href="{% url 'main:liste_des_matieres' %}">
-                        <i class="nav-main-link-icon "></i>
-                        <span class="nav-main-link-name">Liste des matières</span>
-                    </a>                   
+
+                    <li class="nav-main-item">
+                        <a class="nav-main-link nav-main-link-name" data-toggle="" aria-haspopup="true" aria-expanded="false" href="{% url 'main:liste_des_ues' %}">
+                            <i class="nav-main-link-icon "></i>
+                            <span class="nav-main-link-name">Liste des UEs</span>
+                        </a>                   
+                    </li>
                 </li>
+                   
 
                 <li class="nav-main-item">
                     <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="false" href="#">
@@ -206,6 +185,56 @@
                         </li>
                     </ul>
                 </li>
+
+                <li class="nav-main-item">
+                    <a class="nav-main-link nav-main-link-name" data-toggle="" aria-haspopup="true" aria-expanded="false" href="{% url 'main:liste_des_matieres' %}">
+                        <i class="nav-main-link-icon "></i>
+                        <span class="nav-main-link-name">Liste des matières</span>
+                    </a>                   
+                </li>
+
+
+                <li class="nav-main-item">
+                    <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="false" href="#">
+                        <i class="nav-main-link-icon "></i>
+                        <span class="nav-main-link-name">Matières par semestre</span>
+                    </a>
+                    <ul class="nav-main-submenu">
+                        <li class="nav-main-item">
+                            <a class="nav-main-link" href="{% url 'main:matiere_semestre1' %}">
+                                <span class="nav-main-link-name">Semestre 1</span>
+                            </a>
+                        </li>
+                        <li class="nav-main-item">
+                            <a class="nav-main-link" href="{% url 'main:matiere_semestre2' %}">
+                                <span class="nav-main-link-name">Semestre 2</span>
+                            </a>
+                        </li>
+                        <li class="nav-main-item">
+                            <a class="nav-main-link" href="{% url 'main:matiere_semestre3' %}">
+                                <span class="nav-main-link-name">Semestre 3</span>
+                            </a>
+                        </li>
+                        <li class="nav-main-item">
+                            <a class="nav-main-link" href="{% url 'main:matiere_semestre4' %}">
+                                <span class="nav-main-link-name">Semestre 4</span>
+                            </a>
+                        </li>
+                        <li class="nav-main-item">
+                            <a class="nav-main-link" href="{% url 'main:matiere_semestre5' %}">
+                                <span class="nav-main-link-name">Semestre 5</span>
+                            </a>
+                        </li>
+                        <li class="nav-main-item">
+                            <a class="nav-main-link" href="{% url 'main:matiere_semestre6' %}">
+                                <span class="nav-main-link-name">Semestre 6</span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
+
+
 
 
                 <li class="nav-main-item">
