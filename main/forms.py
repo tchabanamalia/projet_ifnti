@@ -237,31 +237,6 @@ class EnseignantForm(forms.ModelForm):
             if not 'carte_identity' in self._errors:
                 self._errors['carte_identity'] = ErrorDict()
             self._errors['carte_identity'] = 'La carte d\'identité ne doit pas contenir des lettres minuscules'
-
-        if salaireBrut < 0:
-            if not 'salaireBrut' in self._errors:
-                self._errors['salaireBrut'] = ErrorDict()
-            self._errors['salaireBrut'] = 'Le salaire ne doit pas être inférieur à 0'
-
-        if nbreJrsCongesRestant > 30:
-            if not 'nbreJrsCongesRestant' in self._errors:
-                self._errors['nbreJrsCongesRestant'] = ErrorDict()
-            self._errors['nbreJrsCongesRestant'] = 'Le nombre de jours de congés restant ne doit pas être supérieur à 30'
-
-        if nbreJrsCongesRestant < 0:
-            if not 'nbreJrsCongesRestant' in self._errors:
-                self._errors['nbreJrsCongesRestant'] = ErrorDict()
-            self._errors['nbreJrsCongesRestant'] = 'Le nombre de jours de congés restant ne doit pas être inférieur à 0'
-
-        if nbreJrsConsomme > 30:
-            if not 'nbreJrsConsomme' in self._errors:
-                self._errors['nbreJrsConsomme'] = ErrorDict()
-            self._errors['nbreJrsConsomme'] = 'Le nombre de jours de congés consommés ne doit pas être supérieur à 30'
-
-        if nbreJrsConsomme < 0:
-            if not 'nbreJrsConsomme' in self._errors:
-                self._errors['nbreJrsConsomme'] = ErrorDict()
-            self._errors['nbreJrsConsomme'] = 'Le nombre de jours de congés consommés ne doit pas être inférieur à 0'
         
         if type.find(';') != -1 or type.find(':') != -1 or type.find('!') != -1 or type.find('?') != -1 or type.find('.') != -1 or type.find(',') != -1 or type.find('/') != -1 or type.find('§') != -1 or type.find('*') != -1 or type.find('+') != -1 or type.find('-') != -1 or type.find('=') != -1 or type.find('\'') != -1 or type.find('\"') != -1 or type.find('[') != -1 or type.find(']') != -1 or type.find('{') != -1 or type.find('}') != -1 or type.find('(') != -1 or type.find(')') != -1 or type.find('°') != -1 or type.find('€') != -1 or type.find('$') != -1 or type.find('£') != -1 or type.find('¤') != -1 or type.find('`') != -1 or type.find('²') != -1 or type.find('³') != -1 or type.find('£') != -1 or type.find('%') != -1 or type.find('µ') != -1 or type.find('§') != -1 or type.find('!') != -1 or type.find(':') != -1 or type.find('/') != -1 or type.find('§') != -1 or type.find(' ') != -1:
             if not 'type' in self._errors:
@@ -282,6 +257,33 @@ class EnseignantForm(forms.ModelForm):
             if not 'specialite' in self._errors:
                 self._errors['specialite'] = ErrorDict()
             self._errors['specialite'] = 'La spécialité ne doit pas contenir des chiffres'
+
+        if nbreJrsCongesRestant > 30:
+            if not 'nbreJrsCongesRestant' in self._errors:
+                self._errors['nbreJrsCongesRestant'] = ErrorDict()
+            self._errors['nbreJrsCongesRestant'] = 'Le nombre de jours de congés restant ne doit pas dépasser 30'
+
+        if nbreJrsCongesRestant < 0:
+            if not 'nbreJrsCongesRestant' in self._errors:
+                self._errors['nbreJrsCongesRestant'] = ErrorDict()
+            self._errors['nbreJrsCongesRestant'] = 'Le nombre de jours de congés restant ne doit pas être négatif'
+
+        if nbreJrsConsomme < 0:
+            if not 'nbreJrsConsommes' in self._errors:
+                self._errors['nbreJrsConsommes'] = ErrorDict()
+            self._errors['nbreJrsConsommes'] = 'Le nombre de jours de congés consommés ne doit pas être négatif'
+
+        if nbreJrsConsomme > 30:
+            if not 'nbreJrsConsommes' in self._errors:
+                self._errors['nbreJrsConsommes'] = ErrorDict()
+            self._errors['nbreJrsConsommes'] = 'Le nombre de jours de congés consommés ne doit pas dépasser 30'
+
+        #salaireBrut ne doit pas être négatif
+
+
+
+         
+        
         
         
 
