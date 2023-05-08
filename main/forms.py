@@ -7,6 +7,7 @@ from django.core.exceptions import ValidationError
 from django.forms import DateField
 from django.forms.utils import ErrorList,ErrorDict
 from django.forms.utils import ErrorList,ErrorDict
+from django.utils.translation import gettext_lazy as _
 
 
 class EvaluationForm(forms.ModelForm):
