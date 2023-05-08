@@ -9,6 +9,14 @@ from django.utils import timezone
 import datetime
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+from django.db import models
+from datetime import datetime
+import datetime
+
+
+
 
 
 class Utilisateur(models.Model):  
@@ -55,10 +63,10 @@ class Etudiant(Utilisateur):
     seriebac1 = models.CharField(blank=True,max_length=2, choices=CHOIX_SERIE, verbose_name="Série bac 1", null=True)
     seriebac2 = models.CharField(blank=True,max_length=2, choices=CHOIX_SERIE, verbose_name="Série bac 2", null=True)
 
-    anneeentree = models.IntegerField(blank=True,verbose_name="année entrée", null=False)
+    anneeentree = models.IntegerField(default=datetime.date.today().year, blank=True, verbose_name="année entrée", null=False)
 
     anneebac1 = models.IntegerField(blank=True,verbose_name="Année d’obtention du BAC 1", null=True)
-    anneebac2 = models.IntegerField(blank=True,verbose_name="Année d’obtention du BAC 2", null=True)
+    anneebac2 = models.IntegerField(blank=True,verbose_name="Année d’obtention du BAC 2", null=True, default=datetime.date.today().year)
 
     etablissementSeconde = models.CharField(max_length=300, verbose_name="Nom d'établissement seconde", null=True, blank=True)
     francaisSeconde = models.DecimalField(max_digits=4, decimal_places=2, verbose_name="Note de français Seconde", default="0")
@@ -107,8 +115,8 @@ class Etudiant(Utilisateur):
             else:
                 self.id = self.nom[0] + self.prenom[0] + str(self.anneeentree) + "0" + str(1)
             # Création de l'utilisateur associé à l'instance de l'étudiant
-            username = (self.prenom[0] + self.nom).lower()
-            year = datetime.datetime.now().year
+            username = (self.prenom + self.nom).lower()
+            year = date.today().year
             password = 'ifnti' + str(year) + '!'
             user = User.objects.create_user(username=username, password=password)
 
@@ -189,7 +197,7 @@ class Ue(models.Model):
     libelle = models.CharField(max_length=100)
     nbreCredits = models.IntegerField(verbose_name="Nombre de crédit")
     heures = models.DecimalField(blank=True, max_digits=4, decimal_places=1)
-    enseignant = models.ForeignKey('Enseignant', on_delete=models.CASCADE,verbose_name="Enseignant",null=True,blank=True)
+    enseignant = models.ForeignKey('Enseignant', on_delete=models.CASCADE,verbose_name="Enseignant",null=True, blank=True)
     semestre = models.ForeignKey('Semestre', on_delete=models.CASCADE, verbose_name="Semestre")
  
     class Meta:
@@ -200,15 +208,17 @@ class Ue(models.Model):
         return self.codeUE + " " + self.libelle
 
 
-
-
 class Matiere(models.Model):
     codematiere = models.CharField(max_length=50, verbose_name="Code de la matière")
     libelle = models.CharField(max_length=100)
     coefficient = models.IntegerField(null=True,  verbose_name="Coefficient", default="1")    
     minValue = models.FloatField(null=True,  verbose_name="Valeur minimale",  default="7")  
+<<<<<<< HEAD
+    enseignant = models.ForeignKey('Enseignant', on_delete=models.CASCADE,verbose_name="Enseignant",null=True, blank=True)
+=======
     minValue = models.FloatField(null=True,  verbose_name="Valeur minimale", default="7")
     enseignant = models.ForeignKey('Enseignant', on_delete=models.CASCADE)
+>>>>>>> main
     ue = models.ForeignKey('Ue', on_delete=models.CASCADE)
     is_active = models.BooleanField(default=True, verbose_name="Actif")
 

@@ -40,6 +40,7 @@ urlpatterns = [
 
                                #### Étudiants ####
     path('liste_des_etudiants/', views.etudiants, name='liste_des_etudiants'),
+    path('liste_des_etudiants_suspendu/', views.etudiants_suspendu, name='liste_des_etudiants_suspendu'),
     path('detail_etudiant/<str:id>/', views.detailEtudiant, name='detail_etudiant'),    
     path('create_etudiant/', views.create_etudiant, name='create_etudiant'),
     path('update_etudiant/<str:id>/', views.create_etudiant, name='update_etudiant'),   
