@@ -678,7 +678,6 @@ def create_enseignant(request, id=0):
     if request.method == "GET":
         if id == 0:
             form = EnseignantForm()
-
         else:
             enseignant = Enseignant.objects.get(pk=id)
             form = EnseignantForm(instance=enseignant)
@@ -690,8 +689,13 @@ def create_enseignant(request, id=0):
             enseignant = Enseignant.objects.get(pk=id)
             form = EnseignantForm(request.POST, instance=enseignant)
         if form.is_valid():
+            exit
             form.save()
             return redirect('/main/enseignant_list/')
+        else:
+            print(form.errors)
+            return render(request, "enseignants/create_enseignant.html", {'form': form})
+
 
 # Read
 def enseignant_list(request):
