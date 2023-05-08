@@ -77,6 +77,7 @@ WSGI_APPLICATION = 'projet_ifnti.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
+
         'NAME': 'ifnti_db',
         # 'USER': 'ifnti',
         # 'PASSWORD': 'ifnti',
