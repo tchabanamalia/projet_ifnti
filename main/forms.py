@@ -278,7 +278,6 @@ class EnseignantForm(forms.ModelForm):
                 self._errors['nbreJrsConsommes'] = ErrorDict()
             self._errors['nbreJrsConsommes'] = 'Le nombre de jours de congés consommés ne doit pas dépasser 30'
 
-        #salaireBrut ne doit pas être négatif
 
 
 
