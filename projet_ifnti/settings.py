@@ -78,7 +78,8 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
 
-        'NAME': 'ifnti_db',
+        #'NAME': 'ifnti_db',
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
         # 'USER': 'ifnti',
         # 'PASSWORD': 'ifnti',
         # 'HOST': 'localhost',
