@@ -228,6 +228,13 @@ class Matiere(models.Model):
         self.save()
 
 
+class Evaluation(models.Model):
+    libelle = models.CharField(max_length=258, verbose_name="Nom")
+    ponderation = models.IntegerField(default=1, verbose_name="Pondération (%)", validators=[MinValueValidator(1), MaxValueValidator(100)])
+    date = models.DateField(verbose_name="Date")
+    matiere = models.ForeignKey(Matiere, on_delete=models.CASCADE, verbose_name='Matiere')
+    
+    
 
 class Competence(models.Model):
     id = models.CharField(primary_key=True, blank=True, max_length=30)
@@ -251,7 +258,7 @@ class Semestre(models.Model):
     libelle = models.CharField(max_length=30, choices=CHOIX_SEMESTRE)
     anneescolaire = models.ForeignKey('AnneeUniversitaire', on_delete=models.CASCADE, verbose_name="Année universitaire")
     credits = models.IntegerField(default=30) 
-
+    semestreCourrant = models.BooleanField(default=False, verbose_name="Semestre acutuelle", null=True)
    
     """clef Semestre"""
 
@@ -273,7 +280,8 @@ class Semestre(models.Model):
 
 class AnneeUniversitaire(models.Model):
     anneeUniv = models.CharField(max_length=300, verbose_name="Année universitaire")
-
+    anneeUnivCourrante = models.BooleanField(default=False, verbose_name="Année universitaire acutuelle", null=True)
+    
     def __str__(self):
         return str(self.anneeUniv)
 
@@ -286,18 +294,15 @@ class Note(models.Model):
     Attributes:
         valeurNote (decimal): La valeur de la note.
         etudiant (Etudiant): L'étudiant à qui cette note appartient.
-        semestre (Semestre): Le semestre au cours duquel l'étudiant a eu cette note.
         matiere (Matiere): La matière dans laquelle l'étudiant a eu cette note. 
     
     Methods:
         __str__() -> str: Renvoie une représentation en chaîne de caractères de l'objet Note.
-
     """
-    valeurNote = models.DecimalField(null=True, max_digits=4, decimal_places=2, verbose_name="note", validators=[MaxValueValidator(20), MinValueValidator(-0.01)])
+    valeurNote = models.DecimalField(default=0.0, blank=False,max_digits=4, decimal_places=2, verbose_name="note", validators=[MaxValueValidator(20), MinValueValidator(0.0)])
     rattrapage = models.BooleanField(default=False)
-    etudiant = models.ForeignKey('Etudiant', on_delete=models.CASCADE,verbose_name="Étudiant")
-    #semestre = models.ForeignKey('Semestre', on_delete=models.CASCADE, verbose_name="Semestre")
-    matiere = models.ForeignKey('Matiere', on_delete=models.CASCADE, verbose_name="Matiere")
+    etudiant = models.ForeignKey(Etudiant, on_delete=models.CASCADE,verbose_name="Étudiant")
+    evaluation = models.ForeignKey(Evaluation, on_delete=models.CASCADE, verbose_name="Evaluation")
 
 
     def __str__(self):
@@ -307,9 +312,10 @@ class Note(models.Model):
         Returns:
             str: La représentation en chaîne de caractères de l'objet Note.
         """
-        return str(self.etudiant) + " " + str(self.matiere) + " " + str(self.valeurNote)
+        return str(self.id) + " " + str(self.evaluation) + " " + str(self.valeurNote)
 
-
+    def save(self):
+        super().save(self)
 
 
 class Salaire(models.Model):

@@ -1,0 +1,63 @@
+{% extends 'index.html' %}
+{% block content_title %} Matiere : {{ matiere }}  {% endblock content_title %}
+{% block content_title_description %} Saisir les notes de chaque élèves {% endblock content_title_description %}
+{% block content %} 
+<form action="" method="POST">
+    {% csrf_token %}
+    <div class="block block-rounded">
+        {{ note_form_set.management_form }}
+        <div class="block-content block-content-full">
+            <h1>Créer une evaluation</h1>
+            <div class="">
+                {{ evaluation_form.libelle.label_tag }}
+                {{ evaluation_form.libelle }}
+                {{ evaluation_form.libelle.errors }}
+                {{ evaluation_form.ponderation.label_tag }}
+                {{ evaluation_form.ponderation }}
+                {{ evaluation_form.ponderation.errors }}
+                {{ evaluation_form.date.label_tag }}
+                {{ evaluation_form.date }}
+                {{ evaluation_form.date.errors }}
+                <input type="text" id="id_matiere" name="matiere" value="{{ matiere.id }}" hidden/>
+            </div>
+        </div>
+    </div>
+    <div class="block block-rounded">
+        {{ note_form_set.management_form }}
+        <div class="block-content block-content-full">
+            <h1>Assigner les notes </h1>
+            <div class="">
+                {% if not etudiants %}
+                    <span>Aucun étuidant ne suit cette matière</span>
+                {% else %}
+                {{ notes_formset.management_form }}
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Étudiant</th>
+                            <th>Note</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for note_forme in notes_formset %}
+                            <tr>
+                                <td>
+                                    {{ note_forme.etudiant }}
+                                    {{ note_forme.etudiant_full_name }}
+                                    {{ note_forme.etudiant.errors }}
+                                </td>
+                                <td>
+                                    {{ note_forme.valeurNote }}
+                                    {{ note_forme.valeurNote.errors }}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                {% endif %}
+            </div>
+            <input type='submit' name="" value="Enregistrer">
+        </div>
+    </div>
+</form>
+{% endblock content %}
