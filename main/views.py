@@ -20,10 +20,17 @@ def index(request):
 
  ##### Etudiants ####
 
-def etudiants(request): # Retourne toute la liste des étudiants
-    etudiants=Etudiant.objects.all()
+def etudiants(request): # Retourne toute la liste des étudiants actif
+    #etudiants=Etudiant.objects.all()
+    etudiants = Etudiant.objects.filter(is_active=True)
     context={"etudiants":etudiants}
     return render(request, 'etudiants/etudiants.html', context)
+
+
+def etudiants_suspendu(request): # Retourne toute la liste des étudiants suspendu
+    etudiants = Etudiant.objects.filter(is_active=False)
+    context={"etudiants":etudiants}
+    return render(request, 'etudiants/etudiants_suspendu.html', context)
 
 
 
@@ -49,6 +56,10 @@ def create_etudiant(request, id=0):
         if form.is_valid():
             form.save()
             return redirect('/main/liste_des_etudiants/')
+        else:
+            print(form.errors)
+            return render(request, 'etudiants/create_etudiant.html',{'form':form})
+
 
 
 
