@@ -2,9 +2,11 @@
 *.log
 *.pot
 *.pyc
-__pycache__
+main/__pycache__
+main/migrations/__pycache__
 db.sqlite3
-media
+ifnti_db
+
 
 # Documentation
 docs/*
