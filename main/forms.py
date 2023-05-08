@@ -1,11 +1,26 @@
 from django import forms
-from .models import Utilisateur, Personnel, Enseignant, Etudiant, Matiere, AnneeUniversitaire, Ue, Tuteur, Semestre
+from .models import Evaluation, Note, Utilisateur, Personnel, Enseignant, Etudiant, Matiere, AnneeUniversitaire, Ue, Tuteur, Semestre
 from django.core.exceptions import ValidationError
 from django.forms import DateField
 from django.utils.translation import gettext_lazy as _
 
 
+class EvaluationForm(forms.ModelForm):
+    class Meta:
+        model = Evaluation
+        fields = '__all__'
 
+class NoteForm(forms.ModelForm):
+    etudiant = forms.CharField(max_length=255, widget=forms.TextInput(attrs={'autocomplete': 'off', 'required': True, 'hidden' : False}))
+    etudiant_full_name = forms.CharField(max_length=255, widget=forms.TextInput(attrs={'autocomplete': 'off', 'required': True}))
+    class Meta:
+        model = Note
+        fields = ['etudiant', 'valeurNote']
+        
+    def clean_etudiant(self):
+        etudiant_nom = self.cleaned_data.get('etudiant')
+        etudiant = Etudiant.objects.get(id=etudiant_nom)
+        return etudiant
 
 class EtudiantForm(forms.ModelForm):
     datenaissance = DateField(widget=forms.SelectDateWidget(years=range(1900, 2006)), label="Date de naissance")

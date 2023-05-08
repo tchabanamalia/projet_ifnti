@@ -4,14 +4,12 @@ from django.http import HttpResponse
 from django.shortcuts import render
 
 from django import forms
-from main.forms import  EnseignantForm, EtudiantForm, TuteurForm, UeForm, MatiereForm
+from main.forms import  EnseignantForm, EtudiantForm, EvaluationForm, NoteForm, TuteurForm, UeForm, MatiereForm
 
 import datetime
 from main.pdfMaker import generate_pdf
 from .models import Enseignant, Matiere, Etudiant, Competence, Note, Comptable, Semestre, Ue, AnneeUniversitaire, Personnel, Tuteur, MaquetteGenerique 
 from django.shortcuts import get_object_or_404, redirect, render
-from main.models_forms import NoteForm
-
 
 
 
@@ -543,13 +541,9 @@ def releve_notes_semestre(request, id_semestre):
         return response
 
 
-
-
-
-
 def matieres(request):
     """
-    Affiche la liste des matiers dans l'actuelle semestre :model:`main.Matiere`.
+    Affiche la liste des matiers de l'année et du semestre actuelle :model:`main.Matiere`.
 
     **Context**
 
@@ -557,64 +551,60 @@ def matieres(request):
 
     :template:`main/matieres/index.html`
     """
-    # Détérminier le semestrer courrant
-    # Rechercher les Ues et pour chaque Ue les matières selon le semèstre courrant 
+    # Déterminer l'année courrante
+    annee_academique = AnneeUniversitaire.objects.filter(anneeUnivCourrante=True)
+    # Détérminier les semestres courrants : il sont toujours trois : s1, s3, s5 ou s2, s4, s6
+    # Rechercher les Ues selon les semèstre
+    # Rechercher la liste des matières pour chaque Ue
+    #  
     data = {
-        'matieres' : Matiere.objects.all(),
+        'annee_courrante': '',
+        'semestres_courrant': [],
+        'annees_semestres_matieres' : [],
     }
     
     return render(request, 'matieres/index.html', data)
 
-def createNotesByMatiere(request, id_matiere=1):
+def createNotesByMatiere(request, id_matiere):
     """
-    Affiche un formulaire de création d'une note :model:`main.Note` par matiere.
+    Affiche un formulaire de création d'une évaluation et ensuite d'une note :model:`main.Note` selon la matière.
 
     **Context**
-
-    ``Note``
-        une instance du :model:`main.Note`.
+        'evaluation_form' : formulaire de saisi d'une evaluation,
+        'etudiants' : liste des etudiants suivant la matière,
+        'notes_formset' : l'ensemble de formulaire,
+        'matiere' : matiere,
 
     **Template:**
 
     :template:`main/notes/create_or_edit_note.html`
     """    
     matiere = get_object_or_404(Matiere, pk=id_matiere)
-    ues = get_object_or_404(Ue, pk=matiere.ue.id)
-    semestre = get_object_or_404(Semestre, pk=ues.semestre.id)
-    students = semestre.etudiant_set.all()
-    
-    NoteByStudentByMatiereFormSet = forms.modelformset_factory(
-        model=Note,
-        form=NoteForm,
-        extra=0,
-        can_delete=True,
-        min_num=len(students),
-        validate_min=True,
-    )
+    etudiants = matiere.ue.semestre.etudiant_set.all()
+    NoteFormSet = forms.modelformset_factory(Note, form=NoteForm, extra=len(etudiants))
     if request.method == 'POST':
-        formset = NoteByStudentByMatiereFormSet(request.POST)
-        print(formset.is_valid())
-        if formset.is_valid():
-            formset.save()
-            return redirect('main:index')
-        print(formset.errors)
-    else:
-        students_data = []
-        """print(students)
-        for student in students:
-            student_data = {
-                'etudiant' : student.id,
-                'matiere' : matiere.__str__(),
-            }
-            students_data.append(student_data)"""
-            
-        formset = NoteByStudentByMatiereFormSet(initial=students_data)
-        
+        evaluation_form = EvaluationForm(request.POST)
+        note_form_set = NoteFormSet(request.POST)
+        if evaluation_form.is_valid() and note_form_set.is_valid():
+            evaluation = evaluation_form.save(commit=False)
+            evaluation.matiere = matiere
+            evaluation.save()
+            notes = note_form_set.save(commit=False)
+            for note in notes:
+                note.evaluation = evaluation
+                note.save()
+            return redirect('success')
+    else :
+        evaluation_form = EvaluationForm()
+        initial_etudiant_note_data = [{'etudiant' : etudiant.id, 'etudiant_full_name': etudiant} for etudiant in etudiants]
+        note_form_set = NoteFormSet(initial=initial_etudiant_note_data)
+    
     data = {
-        'note_form_set' : formset,
+        'evaluation_form' : evaluation_form,
+        'etudiants' : etudiants,
+        'notes_formset' : note_form_set,
         'matiere' : matiere,
     }
-            
     return render(request, 'notes/create_or_edit_note.html', context=data)
 
 def editeNoteByMatiere(request, id):
