@@ -276,6 +276,8 @@ class EnseignantForm(forms.ModelForm):
             if not 'specialite' in self._errors:
                 self._errors['specialite'] = ErrorDict()
             self._errors['specialite'] = 'La spécialité ne doit pas contenir des chiffres'
+        
+        
 
         
 
