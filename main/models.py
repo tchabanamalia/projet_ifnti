@@ -213,12 +213,7 @@ class Matiere(models.Model):
     libelle = models.CharField(max_length=100)
     coefficient = models.IntegerField(null=True,  verbose_name="Coefficient", default="1")    
     minValue = models.FloatField(null=True,  verbose_name="Valeur minimale",  default="7")  
-<<<<<<< HEAD
     enseignant = models.ForeignKey('Enseignant', on_delete=models.CASCADE,verbose_name="Enseignant",null=True, blank=True)
-=======
-    minValue = models.FloatField(null=True,  verbose_name="Valeur minimale", default="7")
-    enseignant = models.ForeignKey('Enseignant', on_delete=models.CASCADE)
->>>>>>> main
     ue = models.ForeignKey('Ue', on_delete=models.CASCADE)
     is_active = models.BooleanField(default=True, verbose_name="Actif")
 
@@ -291,7 +286,7 @@ class Semestre(models.Model):
 
 class AnneeUniversitaire(models.Model):
     anneeUniv = models.CharField(max_length=300, verbose_name="Année universitaire")
-    anneeUnivCourrante = models.BooleanField(default=False, verbose_name="Année universitaire acutuelle", null=True)
+    #anneeUnivCourante1 = models.BooleanField(default=False, verbose_name="Année universitaire acutuelle", null=True)
     
     def __str__(self):
         return str(self.anneeUniv)

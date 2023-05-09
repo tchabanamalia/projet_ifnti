@@ -142,59 +142,94 @@ def create_matiere(request, id=0):
 
 # Vue pour récupérer la liste des matières par semestre
 
+def matiere_semestre1(request):
+    try:
+        semestre = Semestre.objects.get(libelle='S1')
+        matieres_semestre1 = Matiere.objects.filter(ue__semestre=semestre)
+    except Semestre.DoesNotExist:
+        matieres_semestre1 = []
 
-def matieres_semestre_1(request):
-    # Récupération du semestre 1
-    semestre_1 = get_object_or_404(Semestre, libelle='S1')
-    matieres = Matiere.objects.filter(ue__semestre=semestre_1)
-    context = {'matieres': matieres}
+    context = {
+        'matieres_semestre6': matieres_semestre1
+    }
     return render(request, 'matieres/matiere_semestre1.html', context)
 
 
 
-def matieres_semestre_2(request):
-    semestre_2 = get_object_or_404(Semestre, libelle='S2')
-    matieres = Matiere.objects.filter(ue__semestre=semestre_2)
-    context = {'matieres': matieres}
+
+def matiere_semestre2(request):
+    try:
+        semestre = Semestre.objects.get(libelle='S2')
+        matieres_semestre2 = Matiere.objects.filter(ue__semestre=semestre)
+    except Semestre.DoesNotExist:
+        matieres_semestre2 = []
+
+    context = {
+        'matieres_semestre2': matieres_semestre2
+    }
     return render(request, 'matieres/matiere_semestre2.html', context)
 
 
 
-def matieres_semestre_3(request):
-    # Récupération du semestre 3
-    semestre_3 = get_object_or_404(Semestre, libelle='S3')
-    matieres = Matiere.objects.filter(ue__semestre=semestre_3)
-    context = {'matieres': matieres}
+
+def matiere_semestre3(request):
+    try:
+        semestre = Semestre.objects.get(libelle='S3')
+        matiere_semestre3 = Matiere.objects.filter(ue__semestre=semestre)
+    except Semestre.DoesNotExist:
+        matiere_semestre3 = []
+
+    context = {
+        'matiere_semestre3': matiere_semestre3
+    }
     return render(request, 'matieres/matiere_semestre3.html', context)
 
 
 
-def matieres_semestre_4(request):
-    # Récupération du semestre 4
-    semestre_4 = get_object_or_404(Semestre, libelle='S3')
-    matieres = Matiere.objects.filter(ue__semestre=semestre_4)
-    context = {'matieres': matieres}
+
+def matiere_semestre4(request):
+    try:
+        semestre = Semestre.objects.get(libelle='S4')
+        matiere_semestre4 = Matiere.objects.filter(ue__semestre=semestre)
+    except Semestre.DoesNotExist:
+        matiere_semestre4 = []
+
+    context = {
+        'matiere_semestre4': matiere_semestre4
+    }
     return render(request, 'matieres/matiere_semestre4.html', context)
 
 
 
-def matieres_semestre_5(request):
-    # Récupération du semestre 5
-    semestre_5 = get_object_or_404(Semestre, libelle='S3')
-    matieres = Matiere.objects.filter(ue__semestre=semestre_5)
-    context = {'matieres': matieres}
+
+
+def matiere_semestre5(request):
+    try:
+        semestre = Semestre.objects.get(libelle='S5')
+        matiere_semestre5 = Matiere.objects.filter(ue__semestre=semestre)
+    except Semestre.DoesNotExist:
+        matiere_semestre5 = []
+
+    context = {
+        'matiere_semestre5': matiere_semestre5
+    }
     return render(request, 'matieres/matiere_semestre5.html', context)
 
 
 
-def matieres_semestre_6(request):
-    # Récupération du semestre 1
-    semestre_6 = get_object_or_404(Semestre, libelle='S3')
-    matieres = Matiere.objects.filter(ue__semestre=semestre_6)
-    context = {'matieres': matieres}
+
+
+def matiere_semestre6(request):
+    try:
+        semestre = Semestre.objects.get(libelle='S6')
+        matieres_semestre6 = Matiere.objects.filter(ue__semestre=semestre)
+    except Semestre.DoesNotExist:
+        matieres_semestre6 = []
+
+    context = {
+        'matieres_semestre6': matieres_semestre6
+    }
     return render(request, 'matieres/matiere_semestre6.html', context)
-
-
 
 
 
@@ -233,8 +268,6 @@ def create_ue(request, id=0):
 
 # Vue pour récupérer la liste des UE par semestre
 
-# Vue pour récupérer la liste des UEs par semestre
-
 def ues_semestre1(request):
     ues = Ue.objects.filter(semestre__libelle='S1')
     context = {"ues": ues}
@@ -269,6 +302,7 @@ def ues_semestre6(request):
     ues = Ue.objects.filter(semestre__libelle='S6')
     context = {"ues": ues}
     return render(request, 'ues/ues_semestre6.html', context)
+
 
 
 
@@ -575,7 +609,7 @@ def matieres(request):
     :template:`main/matieres/index.html`
     """
     # Déterminer l'année courrante
-    annee_academique = AnneeUniversitaire.objects.filter(anneeUnivCourrante=True)
+    # annee_academique = AnneeUniversitaire.objects.filter(anneeUnivCourante=True)
     # Détérminier les semestres courrants : il sont toujours trois : s1, s3, s5 ou s2, s4, s6
     # Rechercher les Ues selon les semèstre
     # Rechercher la liste des matières pour chaque Ue
