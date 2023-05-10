@@ -71,12 +71,12 @@
                 <ul class="nav-main-submenu">
                     <li class="nav-main-item">
                         <a class="nav-main-link" href="{% url 'main:releve_notes' s1.id %}">
-                            <span class="nav-main-link-name">S1</span>
+                            <span class="nav-main-link-name">{{s1.libelle}}</span>
                         </a>
                     </li>
                     <li class="nav-main-item">
                         <a class="nav-main-link" href="{% url 'main:releve_notes' s2.id %}">
-                            <span class="nav-main-link-name">S2</span>
+                            <span class="nav-main-link-name">{{s2.libelle}}</span>
                         </a>
                     </li>
                 </ul>
@@ -87,10 +87,19 @@
             <li class="nav-main-item">
                 <a class="nav-main-link nav-main-link-name" data-toggle="" aria-haspopup="true" aria-expanded="false" href="{% url 'main:carte_etudiant' niveau %}">
                     <i class="fa fa-id-card mr-1" aria-hidden="true"></i>
-                    <span class="nav-main-link-name">Carte étudiant</span>
+                    <span class="nav-main-link-name">Cartes étudiants</span>
                 </a>                   
             </li>
             {% comment %} Fin génération carte étudiant {% endcomment %}
+
+            {% comment %} Génération du diplome étudiant {% endcomment %}
+            <li class="nav-main-item">
+                <a class="nav-main-link nav-main-link-name" data-toggle="" aria-haspopup="true" aria-expanded="false" href="{% url 'main:diplome_etudiant' %}">
+                    <i class="fa fa-certificate mr-1" aria-hidden="true"></i>
+                    <span class="nav-main-link-name">Diplomes étudiants</span>
+                </a>                   
+            </li>
+            {% comment %} Fin génération du diplome étudiant {% endcomment %}
 
         </div>
 
