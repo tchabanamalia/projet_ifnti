@@ -31,13 +31,16 @@ urlpatterns = [
 
 
 
-    path('add_note/<int:id_edudiant>/<int:id_matiere>/<int:id_semestre>', views.createNote, name='add-note'),
-    path('edit_note/<int:id>', views.editNote, name='edit-note'),
-    path('delete_note/<int:id>', views.deleteNote, name='delete-note'),
+    # Abdoul-Malik urls notes
+    path('matieres', views.matieres, name='matieres'),
+    path('add_notes/<int:id_matiere>', views.createNotesByMatiere, name='add_notes'),
+    path('edit_note/<int:id>', views.editeNoteByMatiere, name='edit_note'),
+    path('delete_note/<int:id>', views.deleteNote, name='delete_note'),
 
 
                                #### Étudiants ####
     path('liste_des_etudiants/', views.etudiants, name='liste_des_etudiants'),
+    path('liste_des_etudiants_suspendu/', views.etudiants_suspendu, name='liste_des_etudiants_suspendu'),
     path('detail_etudiant/<str:id>/', views.detailEtudiant, name='detail_etudiant'),    
     path('create_etudiant/', views.create_etudiant, name='create_etudiant'),
     path('update_etudiant/<str:id>/', views.create_etudiant, name='update_etudiant'),   
@@ -57,12 +60,21 @@ urlpatterns = [
     path('create_matiere/', views.create_matiere, name='create_matiere'),
     path('update_matiere/<int:id>/', views.create_matiere, name='update_matiere'),
 
+    path('matiere_semestre1/', views.matiere_semestre1, name='matiere_semestre1'), # Liste des matières du semestre 1
+    path('matiere_semestre2/', views.matiere_semestre2, name='matiere_semestre2'), # Liste des matières du semestre 2
+    path('matiere_semestre3/', views.matiere_semestre3, name='matiere_semestre3'), # Liste des matières du semestre 3
+    path('matiere_semestre4/', views.matiere_semestre4, name='matiere_semestre4'), # Liste des matières du semestre 4
+    path('matiere_semestre5/', views.matiere_semestre5, name='matiere_semestre5'), # Liste des matières du semestre 5
+    path('matiere_semestre6/', views.matiere_semestre6, name='matiere_semestre6'), # Liste des matières du semestre 6
+
+
 
                             #### UEs ####
     path('liste_des_ues/', views.ues, name='liste_des_ues'),
     path('detail_ue/<int:id>/', views.detailUe, name='detail_ue'),
     path('create_ue/', views.create_ue, name='create_ue'),
     path('update_ue/<int:id>/', views.create_ue, name='update_ue'),
+
     path('ues_semestre1/', views.ues_semestre1, name='ues_semestre1'), # Liste des UE du semestre 1
     path('ues_semestre2/', views.ues_semestre2, name='ues_semestre2'), # Liste des UE du semestre 2
     path('ues_semestre3/', views.ues_semestre3, name='ues_semestre3'), # Liste des UE du semestre 3

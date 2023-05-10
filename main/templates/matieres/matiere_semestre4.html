@@ -1,10 +1,9 @@
 {% extends '../index.html' %}
 
 {% block content %}
-
 <div class="block block-rounded m-5">
     <div class="block-header p-4">
-        <h3 class="block-title">Liste des matières</h3>
+        <h3 class="block-title">Liste des matières du semestre 4</h3>
         <a href="{% url 'main:create_matiere' %}" class="btn btn-outline-primary">
             <i class="fas fa-plus"></i> Ajout Matière
         </a>
@@ -18,16 +17,11 @@
                     <th class="text-center" style="width: 40px;">Coefficient</th>
                     <th class="text-center" style="width: 50px;">Valeur minimale</th>
                     <th class="text-center" style="width: 20%;">Enseignant</th>
-                    <th class="text-center" style="width: 14%;">Code matière</th>
-                    <th class="text-center" style="width: 20%;">Libéllé</th>
-                    <th class="text-center" style="width: 40px;">Coefficient</th>
-                    <th class="text-center" style="width: 50px;">Valeur minimale</th>
-                    <th class="text-center" style="width: 20%;">Enseignant</th>
                     <th scope="col" class="bg-warning" style="width: 15%;">Actions</th>
                 </tr>
             </thead>
             <tbody>
-                {% for matiere in matieres %}
+                {% for matiere in matiere_semestre4 %}
                 <tr>
                     <td class="text-center font-size-sm">{{matiere.codematiere}}</td>
                     <td class="text-center font-size-sm">{{matiere.libelle}}</td>                  
