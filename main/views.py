@@ -325,6 +325,10 @@ def matieres_par_semestre(request):
 
 
 
+
+
+
+
 # methode qui normalement doit retourner sur le template affichant l'ensemble des élèves de L1
 def etudiants_l1(request):
     # pour récupérer les étudiants de l1 il faut récupérer les étudiant en S1 et S2
@@ -534,9 +538,9 @@ def certificat_scolaire(request, id, niveau):
     # nom des fichiers d'entrée et de sortie
     # ici pour les test le nom se termine en temp pour signifier temporaire
     # ils seront donc à supprimer
-    latex_input = 'template_certificat_scolarite_temp'
-    latex_ouput = 'generated_template_certificat_scolarite_temp'
-    pdf_file = 'pdf_template_certificat_scolarite_temp'
+    latex_input = 'template_certificat_scolarite'
+    latex_ouput = 'generated_template_certificat_scolarite'
+    pdf_file = 'pdf_template_certificat_scolarite'
 
     #génération du pdf
     generate_pdf(context, latex_input, latex_ouput, pdf_file)
