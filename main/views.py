@@ -1,15 +1,16 @@
-
+import datetime
 from django import forms
 from django.http import HttpResponse
 from django.shortcuts import render
 
 from django import forms
 from main.forms import  EnseignantForm, EtudiantForm, EvaluationForm, NoteForm, TuteurForm, UeForm, MatiereForm
-
-import datetime
-from main.pdfMaker import generate_pdf
-from .models import Enseignant, Matiere, Etudiant, Competence, Note, Comptable, Semestre, Ue, AnneeUniversitaire, Personnel, Tuteur, MaquetteGenerique 
+from .models import Enseignant, Evaluation, Matiere, Etudiant, Competence, Note, Comptable, Semestre, Ue, AnneeUniversitaire, Personnel, Tuteur, MaquetteGenerique 
 from django.shortcuts import get_object_or_404, redirect, render
+
+from main.helpers import *
+from main.pdfMaker import generate_pdf
+
 
 
 
@@ -551,13 +552,45 @@ def certificat_scolaire(request, id, niveau):
         response = HttpResponse(pdf_preview, content_type='application/pdf')
         response['Content-Disposition'] = 'inline;filename=pdf_file.pdf'
         return response
-    
+
+
+
+
 
 
 #methode générant le relevé de notes de l'étudiant
 def releve_notes(request, id, id_semestre):
     etudiant = get_object_or_404(Etudiant, id=id)
     semestre = get_object_or_404(Semestre, id=id_semestre)
+
+    semestre_ues = get_semester_ues(semestre)
+
+    # récupération et assignation des matières à chacune des UEs
+    ues_matieres = get_all_ues_matieres(semestre_ues)
+
+    # récupération et assignation des evaluations au matières des UEs
+    for ue in ues_matieres:
+        matieres = ue['matieres']
+        # parcours des matières de chaque UEs
+        for ue_matieres in matieres:
+            matiere = get_object_or_404(Matiere, id=ue_matieres['id'])
+            ue_matieres['evaluations'] = get_all_matiere_evaluations(matiere)
+    
+    # récupération et assignation des notes de chacune des évaluations d'une matière
+    for ue in ues_matieres:
+        matieres = ue['matieres']
+        # parcours des matières de chaque UEs
+        for ue_matieres in matieres:
+            for evaluation in ue_matieres['evaluations']:
+                temp_evalution = get_object_or_404(Evaluation, id=evaluation['id'])
+                evaluation['note'] = get_evaluation_note(temp_evalution,etudiant)
+    
+    print(ues_matieres)
+
+
+
+
+
     context = {'etudiant': etudiant, 'semestre' : semestre}
 
     # nom des fichiers d'entrée et de sortie
@@ -600,6 +633,23 @@ def releve_notes_semestre(request, id_semestre):
         response = HttpResponse(pdf_preview, content_type='application/pdf')
         response['Content-Disposition'] = 'inline;filename=pdf_file.pdf'
         return response
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 def matieres(request):
