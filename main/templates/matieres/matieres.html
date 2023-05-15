@@ -1,8 +1,9 @@
 {% extends '../index.html' %}
 
 {% block content %}
-<div class="block block-rounded">
-    <div class="block-header">
+
+<div class="block block-rounded m-5">
+    <div class="block-header p-4">
         <h3 class="block-title">Liste des matières</h3>
         <a href="{% url 'main:create_matiere' %}" class="btn btn-outline-primary">
             <i class="fas fa-plus"></i> Ajout Matière
@@ -12,6 +13,11 @@
         <table class="table table-bordered table-striped table-vcenter js-dataTable-full-pagination">
             <thead>
                 <tr>
+                    <th class="text-center" style="width: 14%;">Code matière</th>
+                    <th class="text-center" style="width: 20%;">Libéllé</th>
+                    <th class="text-center" style="width: 40px;">Coefficient</th>
+                    <th class="text-center" style="width: 50px;">Valeur minimale</th>
+                    <th class="text-center" style="width: 20%;">Enseignant</th>
                     <th class="text-center" style="width: 14%;">Code matière</th>
                     <th class="text-center" style="width: 20%;">Libéllé</th>
                     <th class="text-center" style="width: 40px;">Coefficient</th>

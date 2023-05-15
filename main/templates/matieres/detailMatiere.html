@@ -23,10 +23,10 @@
     }
 </style>
 
-<div class="block block-rounded">
-    <div class="block-header">
+<div class="block block-rounded m-5">
+    <div class="block-header p-4">
         <h3 class="block-title">Détail de la matière {{matiere.libelle}}</h3>
-        <a class="btn btn-sm btn-success" href="#" style="padding: 8px; float: right; background-color: blue; color: white;"><i class="fas fa-chevron-left fa-lg"></i>
+        <a class="btn btn-sm btn-success" href="{% url 'main:liste_des_matieres' %}" style="padding: 8px; float: right; background-color: blue; color: white;"><i class="fas fa-chevron-left fa-lg"></i>
             Retour</a>
     </div>
     <div class="block-content block-content-full">

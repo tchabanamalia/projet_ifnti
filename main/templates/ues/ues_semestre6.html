@@ -1,8 +1,8 @@
 {% extends '../index.html' %}
 
 {% block content %}
-<div class="block block-rounded">
-    <div class="block-header">
+<div class="block block-rounded m-5">
+    <div class="block-header p-4">
         <h3 class="block-title">Liste des UEs du semestre 6</h3>
         <a href="{% url 'main:create_ue' %}" class="btn btn-outline-primary">
             <i class="fas fa-plus"></i> Ajout UE
@@ -38,7 +38,6 @@
                         <button type="button" class="update-book btn btn-sm btn-warning">
                             <a style="color: blanchedalmond;" href="{% url 'main:update_ue' ue.id %}">
                                 <span><i class="far fa-edit fa-lg"></i></span>
-                        </button>  lass="fa fa-pencil"> Modifier</span>
                     </td> 
                 </tr>
                 {% endfor%}
