@@ -32,10 +32,10 @@ urlpatterns = [
 
 
     # Abdoul-Malik urls notes
-    path('matieres', views.matieres, name='matieres'),
-    path('add_notes/<int:id_matiere>', views.createNotesByMatiere, name='add_notes'),
-    path('edit_note/<int:id>', views.editeNoteByMatiere, name='edit_note'),
-    path('delete_note/<int:id>', views.deleteNote, name='delete_note'),
+    path('evaluations/<int:id_matiere>', views.evaluations, name='evaluations'),
+    path('add_evaluation/<int:id_matiere>', views.createNotesByEvaluation, name='add_evaluation'),
+    path('edit_evaluation/<int:id>', views.editeNoteByEvaluation, name='edit_evaluation'),
+    path('delete_evaluation/<int:id>', views.deleteEvaluation, name='delete_evaluation'),
 
 
                                #### Étudiants ####
