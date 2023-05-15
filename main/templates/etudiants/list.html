@@ -157,16 +157,43 @@
                                     <span class="nav-main-link-name">Relevé de notes</span>
                                 </a>
                                 <ul class="nav-main-submenu">
+                                    
                                     <li class="nav-main-item">
-                                        <a class="nav-main-link" href="{% url 'main:releve_notes' etudiant.id  s1.id %}">
-                                            <span class="nav-main-link-name">S1</span>
+                                        <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="false" href="#">
+                                            <span class="nav-main-link-name">Relevé synthétique</span>
                                         </a>
+                                        <ul class="nav-main-submenu">
+                                            <li class="nav-main-item">
+                                                <a class="nav-main-link" href= "{% url 'main:releve_notes' etudiant.id s1.id %}">
+                                                    <span class="nav-main-link-name">{{s1.libelle}}</span>
+                                                </a>
+                                            </li>
+                                            <li class="nav-main-item">
+                                                <a class="nav-main-link" href="#">
+                                                    <span class="nav-main-link-name">{{s2.libelle}}</span>
+                                                </a>
+                                            </li>
+                                        </ul>
                                     </li>
+
                                     <li class="nav-main-item">
-                                        <a class="nav-main-link" href="{% url 'main:releve_notes' etudiant.id  s2.id %}">
-                                            <span class="nav-main-link-name">S2</span>
+                                        <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="false" href="#">
+                                            <span class="nav-main-link-name">Relevé détaillé</span>
                                         </a>
+                                        <ul class="nav-main-submenu">
+                                            <li class="nav-main-item">
+                                                <a class="nav-main-link" href="#">
+                                                    <span class="nav-main-link-name">{{s1.libelle}}</span>
+                                                </a>
+                                            </li>
+                                            <li class="nav-main-item">
+                                                <a class="nav-main-link" href="#">
+                                                    <span class="nav-main-link-name">{{s2.libelle}}</span>
+                                                </a>
+                                            </li>
+                                        </ul>
                                     </li>
+
                                 </ul>
                             </li>
                             {% comment %} Fin génération des notes {% endcomment %}
