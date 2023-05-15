@@ -1,5 +1,5 @@
 from django.shortcuts import get_object_or_404
-from main.models import Etudiant, Note, Ue
+from main.models import Etudiant, Evaluation, Note, Ue
 
 
 
@@ -79,7 +79,7 @@ def get_all_matiere_evaluations(matiere):
     evaluations_tab = []
     for evaluation in evaluations:
         # création d'un dictionnaire temporaire et ajout de celui-ci au tableau d'évaluations
-        temp_dict_evalution = {'id' : evaluation.id, 'libelle' : evaluation.libelle, 'date' : evaluation.date}
+        temp_dict_evalution = {'id' : evaluation.id, 'libelle' : evaluation.libelle, 'date' : evaluation.date, 'ponderation' : evaluation.ponderation}
         evaluations_tab.append(temp_dict_evalution)
     return evaluations_tab
 
@@ -96,7 +96,83 @@ def get_all_matiere_evaluations(matiere):
 
 def get_evaluation_note(evaluation, etudiant):
     note = Note.objects.filter(etudiant=etudiant, evaluation=evaluation)
+    # si pour l'étudiant donné il n'y a pas de note on lui assigne la valeur 0
     if note:
         return note[0].valeurNote
     return 0
 
+
+
+# cette fonction permet de calculer la moyenne d'un étudiant dans une matière
+
+"""
+    paramètre(s) : Matiere matiere
+    retour : Integer moyenne
+"""
+
+def get_matiere_moy(matiere, etudiant):
+    # récupération de toutes évaluations de la matière 
+    evaluations = get_all_matiere_evaluations(matiere)
+    #print(evaluations)
+    notes = []
+    # récupération de toutes les notes des évaluation de l'étudiant avec leur podération associée
+    # si la matière ne compte pas d'évaluation la moyenne est de zéro par défaut
+    if evaluations :
+        for evaluation in evaluations:
+            temp_dict_note = {}
+            temp_dict_note['valeur'] = get_evaluation_note(get_object_or_404(Evaluation, id=evaluation['id']), etudiant)
+            temp_dict_note['ponderation'] = evaluation['ponderation']
+            notes.append(temp_dict_note)
+    else:
+        return 0
+    
+    # print(" ------------" + str(etudiant.nom) + '-----------')
+    # print('matiere  ' + matiere.libelle)
+    
+
+
+    # calcul de la moyenne
+    somme_notes = 0
+    somme_ponderations = 0
+    for note in notes:
+        #somme des notes pondérées
+        somme_notes += note['valeur'] * note['ponderation']
+        # somme des pondérations
+        somme_ponderations += note['ponderation']
+    return round(somme_notes / somme_ponderations, 2)
+
+
+
+# vérification si l'ue est validée par l'étudiant ou non 
+
+"""
+    paramètre(s) ; dict UE
+    retour : boolean 
+"""
+# IMPORTANT : le paramètre en entrée correspond à un format de donnée bien défini dans la vue releve_notes()
+
+def valid_UE(ue):
+    for matiere in ue['matieres']:
+        if matiere['moyenne'] < matiere['minValue']:
+            return False
+    return True
+
+
+
+
+# calcul de la moyenne de l'UE
+
+"""
+    paramètre(s) : dict UE
+    retour : None
+"""
+
+# IMPORTANT : le paramètre en entrée correspond à un format de donnée bien défini dans la vue releve_notes()
+
+def get_ue_moy(ue):
+    somme_moyenne = 0
+    somme_coef = 0
+    for matiere in ue['matieres']:
+        somme_moyenne += matiere['moyenne'] * matiere['coefficient']
+        somme_coef += matiere['coefficient']
+    ue['moyenne'] = round(somme_moyenne / somme_coef, 2)

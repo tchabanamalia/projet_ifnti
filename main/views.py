@@ -340,7 +340,6 @@ def etudiants_l1(request):
 
     # récupération des étudiants de chaque semestres
     for semestre in semestres:
-        print(semestre.etudiant_set.all())
         for etudiant in semestre.etudiant_set.all():
             #ajout de tout les étudiant du semestre dans un tableau temporaire
             temp.append(etudiant)
@@ -568,30 +567,44 @@ def releve_notes(request, id, id_semestre):
     # récupération et assignation des matières à chacune des UEs
     ues_matieres = get_all_ues_matieres(semestre_ues)
 
-    # récupération et assignation des evaluations au matières des UEs
+
+    # récupération et assignation des evaluations au matières des UEs et calcul de la moyenne de l'étudiant dans la matière
     for ue in ues_matieres:
         matieres = ue['matieres']
         # parcours des matières de chaque UEs
         for ue_matieres in matieres:
             matiere = get_object_or_404(Matiere, id=ue_matieres['id'])
+            #assignation des evaluations à chaque 
             ue_matieres['evaluations'] = get_all_matiere_evaluations(matiere)
-    
-    # récupération et assignation des notes de chacune des évaluations d'une matière
+            # calcul des moyennes dans chaque matières
+            ue_matieres['moyenne'] = get_matiere_moy(matiere, etudiant)
+
+
+    # calcul de la moyenne de chaque UE
     for ue in ues_matieres:
-        matieres = ue['matieres']
-        # parcours des matières de chaque UEs
-        for ue_matieres in matieres:
-            for evaluation in ue_matieres['evaluations']:
-                temp_evalution = get_object_or_404(Evaluation, id=evaluation['id'])
-                evaluation['note'] = get_evaluation_note(temp_evalution,etudiant)
+        get_ue_moy(ue)
     
-    print(ues_matieres)
+    # vérification de la validation des ue par l'étudiant
+    for ue in ues_matieres:
+        if valid_UE(ue):
+            ue['validation'] = 'Validé'
+        else:
+            ue['validation'] =  'Échec'
+        
+        
 
 
+    # #récupération et assignation des notes de chacune des évaluations d'une matière
+    # for ue in ues_matieres:
+    #     matieres = ue['matieres']
+    #     # parcours des matières de chaque UEs
+    #     for ue_matieres in matieres:
+    #         for evaluation in ue_matieres['evaluations']:
+    #             temp_evalution = get_object_or_404(Evaluation, id=evaluation['id'])
+    #             evaluation['note'] = get_evaluation_note(temp_evalution,etudiant)
 
 
-
-    context = {'etudiant': etudiant, 'semestre' : semestre}
+    context = {'etudiant': etudiant, 'semestre' : semestre, 'ues' : ues_matieres}
 
     # nom des fichiers d'entrée et de sortie
 

@@ -211,8 +211,8 @@ class Ue(models.Model):
 class Matiere(models.Model):
     codematiere = models.CharField(max_length=50, verbose_name="Code de la matière")
     libelle = models.CharField(max_length=100)
-    coefficient = models.IntegerField(null=True,  verbose_name="Coefficient", default="1")    
-    minValue = models.FloatField(null=True,  verbose_name="Valeur minimale",  default="7")  
+    coefficient = models.IntegerField(null=True,  verbose_name="Coefficient", default="1")
+    minValue = models.FloatField(null=True,  verbose_name="Valeur minimale",  default="7")
     enseignant = models.ForeignKey('Enseignant', on_delete=models.CASCADE,verbose_name="Enseignant",null=True, blank=True)
     ue = models.ForeignKey('Ue', on_delete=models.CASCADE)
     is_active = models.BooleanField(default=True, verbose_name="Actif")
