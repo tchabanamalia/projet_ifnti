@@ -8,7 +8,7 @@ from main.forms import  EnseignantForm, EtudiantForm, EvaluationForm, NoteForm, 
 
 import datetime
 from main.pdfMaker import generate_pdf
-from .models import Enseignant, Matiere, Etudiant, Competence, Note, Comptable, Semestre, Ue, AnneeUniversitaire, Personnel, Tuteur, MaquetteGenerique 
+from .models import Enseignant, Evaluation, Matiere, Etudiant, Competence, Note, Comptable, Semestre, Ue, AnneeUniversitaire, Personnel, Tuteur, MaquetteGenerique 
 from django.shortcuts import get_object_or_404, redirect, render
 
 
@@ -541,31 +541,27 @@ def releve_notes_semestre(request, id_semestre):
         return response
 
 
-def matieres(request):
+def evaluations(request, id_matiere):
     """
-    Affiche la liste des matiers de l'année et du semestre actuelle :model:`main.Matiere`.
+    Affiche la liste des évaluations d'une matière donnée :model:`main.Matiere`.
 
     **Context**
 
     **Template:**
 
-    :template:`main/matieres/index.html`
+    :template:`main/evaluations/index.html`
     """
-    # Déterminer l'année courrante
-    annee_academique = AnneeUniversitaire.objects.filter(anneeUnivCourrante=True)
-    # Détérminier les semestres courrants : il sont toujours trois : s1, s3, s5 ou s2, s4, s6
-    # Rechercher les Ues selon les semèstre
-    # Rechercher la liste des matières pour chaque Ue
-    #  
+    matiere = get_object_or_404(Matiere, pk=id_matiere)
+    evaluations = Evaluation.objects.filter(matiere=matiere)
     data = {
         'annee_courrante': '',
-        'semestres_courrant': [],
-        'annees_semestres_matieres' : [],
+        'matiere' : matiere,
+        'evaluations' : evaluations,
     }
     
-    return render(request, 'matieres/index.html', data)
+    return render(request, 'evaluations/index.html', data)
 
-def createNotesByMatiere(request, id_matiere):
+def createNotesByEvaluation(request, id_matiere):
     """
     Affiche un formulaire de création d'une évaluation et ensuite d'une note :model:`main.Note` selon la matière.
 
@@ -582,9 +578,12 @@ def createNotesByMatiere(request, id_matiere):
     matiere = get_object_or_404(Matiere, pk=id_matiere)
     etudiants = matiere.ue.semestre.etudiant_set.all()
     NoteFormSet = forms.modelformset_factory(Note, form=NoteForm, extra=len(etudiants))
+    queryset=Note.objects.none()
     if request.method == 'POST':
         evaluation_form = EvaluationForm(request.POST)
         note_form_set = NoteFormSet(request.POST)
+        print(evaluation_form.is_valid())
+        print(note_form_set.is_valid())
         if evaluation_form.is_valid() and note_form_set.is_valid():
             evaluation = evaluation_form.save(commit=False)
             evaluation.matiere = matiere
@@ -593,21 +592,22 @@ def createNotesByMatiere(request, id_matiere):
             for note in notes:
                 note.evaluation = evaluation
                 note.save()
-            return redirect('success')
+            return redirect('main:evaluations', id_matiere=matiere.id)
     else :
         evaluation_form = EvaluationForm()
         initial_etudiant_note_data = [{'etudiant' : etudiant.id, 'etudiant_full_name': etudiant} for etudiant in etudiants]
-        note_form_set = NoteFormSet(initial=initial_etudiant_note_data)
+        note_form_set = NoteFormSet(initial=initial_etudiant_note_data, queryset=queryset)
     
     data = {
         'evaluation_form' : evaluation_form,
         'etudiants' : etudiants,
         'notes_formset' : note_form_set,
         'matiere' : matiere,
+        'ponderation_possible' : matiere.ponderation_restante(),
     }
     return render(request, 'notes/create_or_edit_note.html', context=data)
 
-def editeNoteByMatiere(request, id):
+def editeNoteByEvaluation(request, id):
     """
     Affiche un formulaire d'édition d'une note :model:`main.Note`.
 
@@ -620,32 +620,50 @@ def editeNoteByMatiere(request, id):
 
     :template:`main/notes/create_or_edit_note.html`
     """
-    note = get_object_or_404(Note, pk=id)
-    data = {
-        'note_form' : NoteForm(request.POST, instance=Note),
-        'etudiant' : note.etudiant,
-        'matiere' :  note.matiere,
-    }
+    evaluation = get_object_or_404(Evaluation, pk=id)
+    matiere = evaluation.matiere
+    etudiants = matiere.ue.semestre.etudiant_set.all()
+    NoteFormSet = forms.modelformset_factory(Note, form=NoteForm, extra=0)
+    queryset=Note.objects.filter(evaluation=evaluation)
     if request.method == 'POST':
-        noteForm = NoteForm(request.POST)
-        if noteForm.is_valid():
-            noteForm.save()
-            return redirect('main:index')
-        data['note_form'] = noteForm
+        evaluation_form = EvaluationForm(request.POST, instance=evaluation)
+        note_form_set = NoteFormSet(request.POST)
+        if evaluation_form.is_valid() and note_form_set.is_valid():
+            evaluation = evaluation_form.save(commit=False)
+            evaluation.matiere = matiere
+            evaluation.save()
+            notes = note_form_set.save(commit=False)
+            for note in notes:
+                note.evaluation = evaluation
+                note.save()
+            return redirect('main:evaluations', id_matiere=matiere.id)
+    else :
+        evaluation_form = EvaluationForm(instance=evaluation)
+        note_form_set = NoteFormSet(queryset=queryset)
+        for form in note_form_set:
+            form.initial['etudiant_full_name']=Etudiant.objects.filter(id=form.initial['etudiant']).get()
+    data = {
+        'evaluation_form' : evaluation_form,
+        'etudiants' : etudiants,
+        'notes_formset' : note_form_set,
+        'matiere' : matiere,
+        'ponderation_possible' : matiere.ponderation_restante()+evaluation.ponderation,
+    }
     return render(request, 'notes/create_or_edit_note.html', context=data)
 
-def deleteNote(request, id):
+def deleteEvaluation(request, id):
     """
-    Supprime une note :model:`main.Note`.
+    Supprime une evaluation :model:`main.Note`.
 
     **Context**
 
-    ``Note``
+    ``evaluation``
         une instance du :model:`main.Note`.
     """
-    note = get_object_or_404(Note, pk=id)
-    note.delete()
-    return redirect('main:index')
+    evaluation = get_object_or_404(Evaluation, pk=id)
+    matiere = evaluation.matiere
+    evaluation.delete()
+    return redirect('main:evaluations', id_matiere=matiere.id)
 
 
 def annee_academique(date):

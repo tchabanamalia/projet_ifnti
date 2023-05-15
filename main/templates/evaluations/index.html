@@ -1,0 +1,66 @@
+{% extends 'index.html' %}
+{% block content_title %} Evaluations {% endblock content_title %}
+{% block content_title_description %} Liste des evaluations de {{ matiere.libelle }} {% endblock content_title_description %}
+{% block content %}
+<div class="block block-rounded">
+    <div class="block-header">
+        <h3 class="block-title">Matiere : {{ matiere.libelle }} </h3>
+        <a href="{% url 'main:add_evaluation' matiere.id %}" class="btn btn-outline-primary">
+            <i class="fas fa-plus"></i> Ajout evaluation
+        </a>
+    </div>
+    <div class="block-content block-content-full">
+        <table class="table table-bordered table-striped table-vcenter js-dataTable-full-pagination">
+            <thead>
+                <tr>
+                    <th class="text-center" style="width: 80px;">Id</th>
+                    <th class="d-none d-sm-table-cell text-center" >Date</th>
+                    <th class="d-none d-sm-table-cell text-center" >Nom</th>
+                    <th class="d-none d-sm-table-cell text-center" style="width: 30%;">Pondération (%)</th>
+                    <th style="width: 15%;">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for evaluation in evaluations %}
+                <tr>
+                    <td class="text-center font-size-sm">{{ evaluation.id }}</td>
+                    <td class="text-center font-w600 font-size-sm">{{ evaluation.date }}</td>
+                    <td class="d-none d-sm-table-cell text-center">
+                        {{ evaluation.libelle }}
+                    </td>
+                    <td class="text-center d-none d-sm-table-cell font-size-sm">
+                        {{ evaluation.ponderation }}
+                    </td>
+                    <td class="text-center">                                       
+                        <!--button type="button" class="bs-modal read-book btn btn-sm btn-primary">
+                            <a style="color: blanchedalmond;" href="{% url 'main:add_evaluation' matiere.id %}">
+                                <span class="fa fa-eye"></span>                
+                            </a>
+                        </button-->
+                        <button type="button" class="update-book btn btn-sm btn-warning">
+                            <a style="color: blanchedalmond;" href="{% url 'main:edit_evaluation' evaluation.id %}">
+                                <span><i class="far fa-edit fa-lg"></i></span>
+                        </button>  
+                        <button type="button" class="delete-evaluation btn btn-sm btn-danger">
+                            <a style="color: blanchedalmond;" href="{% url 'main:delete_evaluation' evaluation.id %}">
+                                <span><i class="fa fa-fw fa-times mr-1"></i></span>
+                        </button>                                    
+                    </td> 
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock content %}
+{% block scripts %}
+    <script type="text/javascript">
+        $(".delete-evaluation").on('click', function(){
+            response = confirm("Voulez vous vraiment supprimer cet évaluation ?")
+            if (! response){
+                event.stopPropagation();
+                event.preventDefault();
+            }
+        });
+    </script>
+{% endblock scripts %}

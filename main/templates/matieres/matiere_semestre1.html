@@ -24,7 +24,9 @@
                 {% for matiere in matieres %}
                 <tr>
                     <td class="text-center font-size-sm">{{matiere.codematiere}}</td>
-                    <td class="text-center font-size-sm">{{matiere.libelle}}</td>                  
+                    <td class="text-center font-size-sm">
+                        <a href="{% url 'main:evaluations' matiere.id %}">{{matiere.libelle}}</a>
+                    </td>                  
                     <td class="text-center font-size-sm">{{matiere.coefficient}}</td>                  
                     <td class="text-center font-size-sm">{{matiere.minValue}}</td>                  
                     <td class="text-center font-size-sm">{{matiere.enseignant}}</td> 
