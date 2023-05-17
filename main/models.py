@@ -280,7 +280,7 @@ class Semestre(models.Model):
 
     def __str__(self):
 
-        return self.libelle + " " + str(self.anneescolaire)
+        return self.libelle + " " + str(self.anneescolaire) + " " + str(self.semestreCourant)
 
     class Meta:
         unique_together = [["anneescolaire", "libelle"]]
@@ -292,7 +292,7 @@ class Semestre(models.Model):
 
 class AnneeUniversitaire(models.Model):
     anneeUniv = models.CharField(max_length=300, verbose_name="Année universitaire")
-    anneeUnivCourante = models.BooleanField(default=False, verbose_name="Année universitaire acutuelle", null=True)
+    #anneeUnivCourante = models.BooleanField(default=False, verbose_name="Année universitaire acutuelle", null=True)
     
     def __str__(self):
         return str(self.anneeUniv)

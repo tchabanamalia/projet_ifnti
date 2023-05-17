@@ -199,7 +199,6 @@ class UeForm(forms.ModelForm):
             'libelle': forms.TextInput(attrs={'class': 'form-control col-md-6'}),
             'nbreCredits': forms.TextInput(attrs={'class': 'form-control col-md-6'}),
             'heures': forms.TextInput(attrs={'class': 'form-control col-md-6'}),
-            'enseignant': forms.Select(),
             'semestre': forms.Select(),
         }
 
@@ -215,7 +214,6 @@ class MatiereForm(forms.ModelForm):
             'libelle': forms.TextInput(attrs={'class': 'form-control col-md-6'}),
             'coefficient': forms.TextInput(attrs={'class': 'form-control col-md-6'}),
             'minValue': forms.TextInput(attrs={'class': 'form-control col-md-6'}),
-            'enseignant': forms.Select(),
             'ue': forms.Select(),       
         }
 

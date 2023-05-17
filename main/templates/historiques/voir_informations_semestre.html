@@ -1,0 +1,20 @@
+{% extends '../index.html' %}
+
+{% load static %}
+
+{% block content %}
+
+
+    <h1>Informations du semestre</h1>
+    <h2>Liste des étudiants</h2>
+    <ul>
+        {% for etudiant in etudiants %}
+            <li>{{ etudiant.nom }}</li>
+        {% empty %}
+            <li>Aucun étudiant inscrit</li>
+        {% endfor %}
+    </ul>
+    
+
+{% endblock %}
+

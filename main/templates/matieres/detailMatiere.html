@@ -46,7 +46,13 @@
                     <td class="text-center font-size-sm">{{matiere.libelle}}</td>                  
                     <td class="text-center font-size-sm">{{matiere.coefficient}}</td>                  
                     <td class="text-center font-size-sm">{{matiere.minValue}}</td>                  
-                    <td class="text-center font-size-sm">{{matiere.enseignant}}</td>                  
+                    <td class="text-center font-size-sm">
+                        {% if matiere.enseignant %}
+                            {{matiere.enseignant}}
+                        {% else %}
+                            pas de prof
+                        {% endif %}    
+                    </td>                  
                 </tr>
             </tbody>
         </table>
