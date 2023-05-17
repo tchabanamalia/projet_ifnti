@@ -114,6 +114,7 @@
                     </ul>
                 </li>
 
+
                 <li class="nav-main-heading">GESTION ETUDIANTS</li>
 
                 <li class="nav-main-item">
@@ -122,6 +123,68 @@
                         <span class="nav-main-link-name">Étudiants IFNTI</span>
                     </a>                   
                 </li>
+
+                <li class="nav-main-item">
+                    <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="false" href="#">
+                        <i class="nav-main-link-icon "></i>
+                        <span class="nav-main-link-name">Étudiants L1</span>
+                    </a>
+                    <ul class="nav-main-submenu">
+                        <li class="nav-main-item">
+                            <a class="nav-main-link" href="{% url 'main:liste_etudiants_semestre1' %}">
+                                <span class="nav-main-link-name">Semestre 1</span>
+                            </a>
+                        </li>
+
+                        <li class="nav-main-item">
+                            <a class="nav-main-link" href="{% url 'main:liste_etudiants_semestre2' %}">
+                                <span class="nav-main-link-name">Semestre 2</span>
+                            </a>
+                        </li>
+                       
+                    </ul>
+                </li>
+
+                <li class="nav-main-item">
+                    <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="false" href="#">
+                        <i class="nav-main-link-icon "></i>
+                        <span class="nav-main-link-name">Étudiants L2</span>
+                    </a>
+                    <ul class="nav-main-submenu">
+                        <li class="nav-main-item">
+                            <a class="nav-main-link" href="{% url 'main:liste_etudiants_semestre3' %}">
+                                <span class="nav-main-link-name">Semestre 3</span>
+                            </a>
+                        </li>
+                        <li class="nav-main-item">
+                            <a class="nav-main-link" href="{% url 'main:liste_etudiants_semestre4' %}">
+                                <span class="nav-main-link-name">Semestre 4</span>
+                            </a>
+                        </li>
+                       
+                    </ul>
+                </li>
+
+                <li class="nav-main-item">
+                    <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="false" href="#">
+                        <i class="nav-main-link-icon "></i>
+                        <span class="nav-main-link-name">Étudiants L3</span>
+                    </a>
+                    <ul class="nav-main-submenu">
+                        <li class="nav-main-item">
+                            <a class="nav-main-link" href="{% url 'main:liste_etudiants_semestre5' %}">
+                                <span class="nav-main-link-name">Semestre 5</span>
+                            </a>
+                        </li>
+                        <li class="nav-main-item">
+                            <a class="nav-main-link" href="{% url 'main:liste_etudiants_semestre6' %}">
+                                <span class="nav-main-link-name">Semestre 6</span>
+                            </a>
+                        </li>
+                       
+                    </ul>
+                </li>
+
 
                 <li class="nav-main-item">
                     <a class="nav-main-link nav-main-link-name" data-toggle="" aria-haspopup="true" aria-expanded="false" href="{% url 'main:liste_des_etudiants_suspendu' %}">
@@ -142,9 +205,23 @@
 
                  <li class="nav-main-heading">GESTION PROGRAMMES</li>
 
+                 <li class="nav-main-item">
+                    <a class="nav-main-link nav-main-link-name" data-toggle="" aria-haspopup="true" aria-expanded="false" href="{% url 'main:semestres' %}">
+                        <i class="nav-main-link-icon "></i>
+                        <span class="nav-main-link-name">Semestres</span>
+                    </a>                   
+                </li>
 
                 <li class="nav-main-item">
+                    <a class="nav-main-link nav-main-link-name" data-toggle="" aria-haspopup="true" aria-expanded="false" href="{% url 'main:cloture' %}">
+                        <i class="nav-main-link-icon "></i>
+                        <span class="nav-main-link-name">Cloturer Semestres</span>
+                    </a>                   
+                </li>
 
+
+
+                <li class="nav-main-item">
                     <li class="nav-main-item">
                         <a class="nav-main-link nav-main-link-name" data-toggle="" aria-haspopup="true" aria-expanded="false" href="{% url 'main:liste_des_ues' %}">
                             <i class="nav-main-link-icon "></i>
@@ -200,7 +277,7 @@
                     </a>                   
                 </li>
 
-
+              
                 <li class="nav-main-item">
                     <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="false" href="#">
                         <i class="nav-main-link-icon "></i>
