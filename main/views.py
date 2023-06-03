@@ -1,9 +1,19 @@
+import os
 import datetime
 from django import forms
-from django.http import HttpResponse
+from django.http import FileResponse, HttpResponse
 from django.shortcuts import render
 
 from django import forms
+from main.forms import  EnseignantForm, EtudiantForm, EvaluationForm, InformationForm, NoteForm, TuteurForm, UeForm, MatiereForm
+
+import datetime
+from main.pdfMaker import generate_pdf
+from .models import Enseignant, Information, Matiere, Etudiant, Competence, Note, Comptable, Semestre, Ue, AnneeUniversitaire, Personnel, Tuteur, MaquetteGenerique 
+from django.shortcuts import get_object_or_404, redirect, render
+from latex import build_pdf
+from django.template import loader
+from django.conf import settings
 from main.forms import  EnseignantForm, EtudiantForm, EvaluationForm, NoteForm, TuteurForm, UeForm, MatiereForm
 from .models import Enseignant, Evaluation, Matiere, Etudiant, Competence, Note, Comptable, Semestre, Ue, AnneeUniversitaire, Personnel, Tuteur, MaquetteGenerique 
 from django.shortcuts import get_object_or_404, redirect, render
@@ -826,9 +836,15 @@ def create_enseignant(request, id=0):
 
 
 # Read
-def enseignant_list(request):
-    enseignants = Enseignant.objects.all()
+
+
+def enseignant_actif(request):
+    enseignants = Enseignant.objects.filter(is_active=True)
     return render(request, 'enseignants/enseignant_list.html', {'enseignants': enseignants})
+
+def enseignant_inactif(request):
+    enseignants = Enseignant.objects.filter(is_active=False)
+    return render(request, 'enseignants/enseignant_suspendu.html', {'enseignants': enseignants})
 
 def enseignant_detail(request, id):
     enseignant = Enseignant.objects.get(id=id)
@@ -847,6 +863,67 @@ def edit_enseignant(request, id):
         form = EnseignantForm(instance=enseignant)
     return render(request, 'enseignants/edit_enseignant.html', {'form': form})
 
+def certificat_travail(request, id):
+    information = get_object_or_404(Information, id=id)
+    context = {'information': information}
+
+    # nom des fichiers d'entrée et de sortie
+    latex_input = 'certificat_travail'
+    latex_ouput = 'generated_certificat_travail'
+    pdf_file = 'pdf_certificat_travail'
+
+    # génération du pdf
+    generate_pdf(context, latex_input, latex_ouput, pdf_file)
+
+    #visualisation du pdf dans le navigateur
+    with open('media/pdf/' + str(pdf_file) + '.pdf', 'rb') as f:
+        pdf_preview = f.read()
+        response = HttpResponse(pdf_preview, content_type='application/pdf')
+        response['Content-Disposition'] = 'inline;filename=pdf_file.pdf'
+        return response
+
+
+def information_list(request):
+    informations = Information.objects.all()
+    return render(request, 'informations/information_list.html', {'informations': informations})
+
+def information_detail(request, id):
+    information = Information.objects.get(id=id)
+    return render(request, 'informations/information_detail.html', {'information': information})
+
+def create_information(request, id=0):
+    if request.method == "GET":
+        if id == 0:
+            form = InformationForm()
+        else:
+            information = Information.objects.get(pk=id)
+            form = InformationForm(instance=information)
+        return render(request, "informations/create_information.html", {'form': form})
+    else:
+        if id == 0:
+            form = InformationForm(request.POST)
+        else:
+            information = Information.objects.get(pk=id)
+            form = InformationForm(request.POST, instance=information)
+        if form.is_valid():
+            exit
+            form.save()
+            return redirect('/main/information_list/')
+        else:
+            print(form.errors)
+            return render(request, "informations/create_information.html", {'form': form})
+        
+def edit_information(request, id):
+    information = Information.objects.get(id=id)
+    if request.method == 'POST':
+        form = InformationForm(request.POST, request.FILES, instance=information)
+        if form.is_valid():
+            information = form.save(commit=False)
+            information.save()
+            return redirect('/main/information_list/')
+    else:
+        form = InformationForm(instance=information)
+    return render(request, 'informations/edit_information.html', {'form': form})
 
 
 

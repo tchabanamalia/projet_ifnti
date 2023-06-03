@@ -4,11 +4,6 @@
 <div class="block block-rounded m-5">
     <div class="block-header p-4">
         <h3 class="block-title">Liste des enseignants</h3>
-        <a href="{% url 'main:create_enseignant'%}">
-            <button type="button" class="btn btn-secondary float-right" id="dropdown-default-secondary" aria-haspopup="true" aria-expanded="false">
-                Ajouter
-            </button>
-        </a>
     </div>
     <div class="block-content block-content-full">
         <!-- DataTables init on table by adding .js-dataTable-full-pagination class, functionality is initialized in js/pages/be_tables_datatables.min.js which was auto compiled from _es6/pages/be_tables_datatables.js -->
@@ -23,7 +18,7 @@
                     <th class="text-center" style="width: 15%;">Email</th>
                     <th class="text-center" style="width: 15%;">Type</th>
                     <th class="text-center" style="width: 15%;">Specialité</th>
-                    <th class="text-center" style="width: 55%;">Actions</th>
+                    <th style="width: 15%;">Actions</th>
                 </tr>
             </thead>
             <tbody>
@@ -48,15 +43,7 @@
                             <a  style="color: blanchedalmond;" href="{% url 'main:edit_enseignant' enseignant.id %}">
                                 <span><i class="far fa-edit"></i></span>
                             </a>
-                        </button>
-                    
-                        <button type="button" class="update-book btn btn-sm btn-success">
-                            <a  style="color: blanchedalmond;" href="{% url 'main:certificat_travail' enseignant.id %}">
-                                <span><i class="fas fa-file-pdf"></i></span>
-                            </a>
-                        </button>
-                        
-
+                        </button>                                     
                     </td> 
                 </tr>
                 {% endfor%}
