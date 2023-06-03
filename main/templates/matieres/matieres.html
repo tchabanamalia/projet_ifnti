@@ -18,11 +18,6 @@
                     <th class="text-center" style="width: 40px;">Coefficient</th>
                     <th class="text-center" style="width: 50px;">Valeur minimale</th>
                     <th class="text-center" style="width: 20%;">Enseignant</th>
-                    <th class="text-center" style="width: 14%;">Code matière</th>
-                    <th class="text-center" style="width: 20%;">Libéllé</th>
-                    <th class="text-center" style="width: 40px;">Coefficient</th>
-                    <th class="text-center" style="width: 50px;">Valeur minimale</th>
-                    <th class="text-center" style="width: 20%;">Enseignant</th>
                     <th scope="col" class="bg-warning" style="width: 15%;">Actions</th>
                 </tr>
             </thead>
@@ -30,10 +25,18 @@
                 {% for matiere in matieres %}
                 <tr>
                     <td class="text-center font-size-sm">{{matiere.codematiere}}</td>
-                    <td class="text-center font-size-sm">{{matiere.libelle}}</td>                  
+                    <td class="text-center font-size-sm">
+                        <a href="{% url 'main:evaluations' matiere.id %}">{{matiere.libelle}}</a>
+                    </td>                  
                     <td class="text-center font-size-sm">{{matiere.coefficient}}</td>                  
                     <td class="text-center font-size-sm">{{matiere.minValue}}</td>                  
-                    <td class="text-center font-size-sm">{{matiere.enseignant}}</td> 
+                    <td class="text-center font-size-sm">
+                        {% if matiere.enseignant %}
+                            {{matiere.enseignant}}
+                        {% else %}
+                            pas de prof
+                        {% endif %}                            
+                        </td> 
                     <td style="text-align: center;">                                       
                         <button type="button" class="bs-modal read-book btn btn-sm btn-primary">
                             <a style="color: blanchedalmond;" href="{% url 'main:detail_matiere' matiere.id %}">

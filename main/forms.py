@@ -11,20 +11,24 @@ from django.utils.translation import gettext_lazy as _
 
 
 class EvaluationForm(forms.ModelForm):
+    date = DateField(widget=forms.SelectDateWidget(years=range(2020, 2100)), label="Date")
     class Meta:
         model = Evaluation
-        fields = '__all__'
+        fields = ['libelle', 'ponderation', 'date']
 
 class NoteForm(forms.ModelForm):
-    etudiant = forms.CharField(max_length=255, widget=forms.TextInput(attrs={'autocomplete': 'off', 'required': True, 'hidden' : False}))
-    etudiant_full_name = forms.CharField(max_length=255, widget=forms.TextInput(attrs={'autocomplete': 'off', 'required': True}))
+    etudiant = forms.CharField(max_length=255, widget=forms.TextInput(attrs={'autocomplete': 'off', 'required': True, 'hidden' : True}))
+    etudiant_full_name = forms.CharField(max_length=255, widget=forms.TextInput(attrs={'autocomplete': 'off', 'required': True, "value": ""}))
+    
     class Meta:
         model = Note
         fields = ['etudiant', 'valeurNote']
+        #fields = '__all__'
+        
         
     def clean_etudiant(self):
-        etudiant_nom = self.cleaned_data.get('etudiant')
-        etudiant = Etudiant.objects.get(id=etudiant_nom)
+        etudiant_id = self.cleaned_data.get('etudiant')
+        etudiant = Etudiant.objects.get(id=etudiant_id)
         return etudiant
 
 class EtudiantForm(forms.ModelForm):
@@ -195,7 +199,6 @@ class UeForm(forms.ModelForm):
             'libelle': forms.TextInput(attrs={'class': 'form-control col-md-6'}),
             'nbreCredits': forms.TextInput(attrs={'class': 'form-control col-md-6'}),
             'heures': forms.TextInput(attrs={'class': 'form-control col-md-6'}),
-            'enseignant': forms.Select(),
             'semestre': forms.Select(),
         }
 
@@ -211,7 +214,6 @@ class MatiereForm(forms.ModelForm):
             'libelle': forms.TextInput(attrs={'class': 'form-control col-md-6'}),
             'coefficient': forms.TextInput(attrs={'class': 'form-control col-md-6'}),
             'minValue': forms.TextInput(attrs={'class': 'form-control col-md-6'}),
-            'enseignant': forms.Select(),
             'ue': forms.Select(),       
         }
 

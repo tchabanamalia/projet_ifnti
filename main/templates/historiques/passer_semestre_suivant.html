@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Passer au semestre suivant</title>
+</head>
+<body>
+    <h1>Passer au semestre suivant</h1>
+    {% if semestre_suivant %}
+        <p>Le semestre suivant est {{ semestre_suivant.libelle }}.</p>
+    {% endif %}
+
+    <form method="POST" action="{% url 'main:passer_semestre_suivant' %}">
+        {% csrf_token %}
+        <input type="submit" value="Passer au semestre suivant">
+    </form>
+</body>
+</html>

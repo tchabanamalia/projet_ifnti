@@ -229,8 +229,8 @@ class Ue(models.Model):
 class Matiere(models.Model):
     codematiere = models.CharField(max_length=50, verbose_name="Code de la matière")
     libelle = models.CharField(max_length=100)
-    coefficient = models.IntegerField(null=True,  verbose_name="Coefficient", default="1")    
-    minValue = models.FloatField(null=True,  verbose_name="Valeur minimale",  default="7")  
+    coefficient = models.IntegerField(null=True,  verbose_name="Coefficient", default="1")
+    minValue = models.FloatField(null=True,  verbose_name="Valeur minimale",  default="7")
     enseignant = models.ForeignKey('Enseignant', on_delete=models.CASCADE,verbose_name="Enseignant",null=True, blank=True)
     ue = models.ForeignKey('Ue', on_delete=models.CASCADE)
     is_active = models.BooleanField(default=True, verbose_name="Actif")
@@ -250,6 +250,11 @@ class Matiere(models.Model):
     def reactiver(self):
         self.is_active = True
         self.save()
+    
+    def ponderation_restante(self):
+        evaluations = Evaluation.objects.filter(matiere=self)
+        ponderation_total = sum([evaluation.ponderation for evaluation in evaluations])
+        return 100-ponderation_total
 
 
 class Evaluation(models.Model):
@@ -257,6 +262,7 @@ class Evaluation(models.Model):
     ponderation = models.IntegerField(default=1, verbose_name="Pondération (%)", validators=[MinValueValidator(1), MaxValueValidator(100)])
     date = models.DateField(verbose_name="Date")
     matiere = models.ForeignKey(Matiere, on_delete=models.CASCADE, verbose_name='Matiere')
+    etudiants = models.ManyToManyField(Etudiant, through='Note',verbose_name="Étudiants")
     
     
 
@@ -282,7 +288,7 @@ class Semestre(models.Model):
     libelle = models.CharField(max_length=30, choices=CHOIX_SEMESTRE)
     anneescolaire = models.ForeignKey('AnneeUniversitaire', on_delete=models.CASCADE, verbose_name="Année universitaire")
     credits = models.IntegerField(default=30) 
-    semestreCourrant = models.BooleanField(default=False, verbose_name="Semestre acutuelle", null=True)
+    semestreCourant = models.BooleanField(default=False, verbose_name="Semestre acutuelle", null=True)
    
     """clef Semestre"""
 
@@ -292,7 +298,7 @@ class Semestre(models.Model):
 
     def __str__(self):
 
-        return self.libelle + " " + str(self.anneescolaire)
+        return self.libelle + " " + str(self.anneescolaire) + " " + str(self.semestreCourant)
 
     class Meta:
         unique_together = [["anneescolaire", "libelle"]]
@@ -304,7 +310,7 @@ class Semestre(models.Model):
 
 class AnneeUniversitaire(models.Model):
     anneeUniv = models.CharField(max_length=300, verbose_name="Année universitaire")
-    #anneeUnivCourante1 = models.BooleanField(default=False, verbose_name="Année universitaire acutuelle", null=True)
+    #anneeUnivCourante = models.BooleanField(default=False, verbose_name="Année universitaire acutuelle", null=True)
     
     def __str__(self):
         return str(self.anneeUniv)
@@ -323,7 +329,7 @@ class Note(models.Model):
     Methods:
         __str__() -> str: Renvoie une représentation en chaîne de caractères de l'objet Note.
     """
-    valeurNote = models.DecimalField(default=0.0, blank=False,max_digits=4, decimal_places=2, verbose_name="note", validators=[MaxValueValidator(20), MinValueValidator(0.0)])
+    valeurNote = models.DecimalField(default=0.0, blank=False,max_digits=5, decimal_places=2, verbose_name="note", validators=[MaxValueValidator(20), MinValueValidator(0.0)])
     rattrapage = models.BooleanField(default=False)
     etudiant = models.ForeignKey(Etudiant, on_delete=models.CASCADE,verbose_name="Étudiant")
     evaluation = models.ForeignKey(Evaluation, on_delete=models.CASCADE, verbose_name="Evaluation")
@@ -338,8 +344,6 @@ class Note(models.Model):
         """
         return str(self.id) + " " + str(self.evaluation) + " " + str(self.valeurNote)
 
-    def save(self):
-        super().save(self)
 
 class Conge(models.Model):
     ETAT_CHOISE = [

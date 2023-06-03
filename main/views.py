@@ -1,4 +1,5 @@
 import os
+import datetime
 from django import forms
 from django.http import FileResponse, HttpResponse
 from django.shortcuts import render
@@ -13,16 +14,27 @@ from django.shortcuts import get_object_or_404, redirect, render
 from latex import build_pdf
 from django.template import loader
 from django.conf import settings
+from main.forms import  EnseignantForm, EtudiantForm, EvaluationForm, NoteForm, TuteurForm, UeForm, MatiereForm
+from .models import Enseignant, Evaluation, Matiere, Etudiant, Competence, Note, Comptable, Semestre, Ue, AnneeUniversitaire, Personnel, Tuteur, MaquetteGenerique 
+from django.shortcuts import get_object_or_404, redirect, render
+from django.shortcuts import get_list_or_404
+
+
+from main.helpers import *
+from main.pdfMaker import generate_pdf
+from .models import Enseignant, Evaluation, Matiere, Etudiant, Competence, Note, Comptable, Semestre, Ue, AnneeUniversitaire, Personnel, Tuteur, MaquetteGenerique 
+from django.shortcuts import get_object_or_404, redirect, render
+from django.db import transaction
+
 
 
 def index(request):
     return render(request, 'ui.html')
 
 
- ##### Etudiants ####
+##### Etudiants ####
 
 def etudiants(request): # Retourne toute la liste des étudiants actif
-    #etudiants=Etudiant.objects.all()
     etudiants = Etudiant.objects.filter(is_active=True)
     context={"etudiants":etudiants}
     return render(request, 'etudiants/etudiants.html', context)
@@ -144,6 +156,22 @@ def create_matiere(request, id=0):
 
 # Vue pour récupérer la liste des matières par semestre
 
+def matiere_semestre(request, semestre):
+    try:
+        semestre_obj = Semestre.objects.get(libelle=f'S{semestre}')
+        matieres_semestre = Matiere.objects.filter(ue__semestre=semestre_obj)
+        template_name = f'matieres/matiere_semestre{semestre}.html'
+    except Semestre.DoesNotExist:
+        matieres_semestre = []
+    context = {
+        'matieres_semestre': matieres_semestre
+    }
+    return render(request, 'matieres/matiere_par_semestre.html', context)
+
+
+
+
+"""
 def matiere_semestre1(request):
     try:
         semestre = Semestre.objects.get(libelle='S1')
@@ -235,7 +263,7 @@ def matiere_semestre6(request):
 
 
 
-
+"""
         ##### UEs ####
 
 def ues(request):
@@ -270,59 +298,10 @@ def create_ue(request, id=0):
 
 # Vue pour récupérer la liste des UE par semestre
 
-def ues_semestre1(request):
-    ues = Ue.objects.filter(semestre__libelle='S1')
+def ues_semestre(request, semestre):
+    ues = Ue.objects.filter(semestre__libelle=semestre)
     context = {"ues": ues}
-    return render(request, 'ues/ues_semestre1.html', context)
-
-
-def ues_semestre2(request):
-    ues = Ue.objects.filter(semestre__libelle='S2')
-    context = {"ues": ues}
-    return render(request, 'ues/ues_semestre2.html', context)
-
-
-def ues_semestre3(request):
-    ues = Ue.objects.filter(semestre__libelle='S3')
-    context = {"ues": ues}
-    return render(request, 'ues/ues_semestre3.html', context)
-
-
-def ues_semestre4(request):
-    ues = Ue.objects.filter(semestre__libelle='S4')
-    context = {"ues": ues}
-    return render(request, 'ues/ues_semestre4.html', context)
-
-
-def ues_semestre5(request):
-    ues = Ue.objects.filter(semestre__libelle='S5')
-    context = {"ues": ues}
-    return render(request, 'ues/ues_semestre5.html', context)
-
-
-def ues_semestre6(request):
-    ues = Ue.objects.filter(semestre__libelle='S6')
-    context = {"ues": ues}
-    return render(request, 'ues/ues_semestre6.html', context)
-
-
-
-
-# Vue pour récupérer la liste des matières par semestre
-def matieres_par_semestre(request):
-    semestres = Semestre.objects.all()
-    matieres_par_semestre = {}
-
-    # Parcours de chaque semestre
-    for semestre in semestres:
-        # Récupération des matières pour ce semestre
-        matieres = Matiere.objects.filter(ue__semestre=semestre)
-        matieres_par_semestre[semestre.libelle] = matieres
-    context = {'matieres_par_semestre': matieres_par_semestre}
-    return render(request, 'matieres/matieres_semestre1.html', context)
-
-
-
+    return render(request, 'ues/ues_par_semestre.html', context)
 
 
 
@@ -341,7 +320,6 @@ def etudiants_l1(request):
 
     # récupération des étudiants de chaque semestres
     for semestre in semestres:
-        print(semestre.etudiant_set.all())
         for etudiant in semestre.etudiant_set.all():
             #ajout de tout les étudiant du semestre dans un tableau temporaire
             temp.append(etudiant)
@@ -350,6 +328,7 @@ def etudiants_l1(request):
     etudiants['etudiants'] = temp
 
     return render(request, 'etudiants/list.html', etudiants)
+
 
 
 
@@ -553,14 +532,60 @@ def certificat_scolaire(request, id, niveau):
         response = HttpResponse(pdf_preview, content_type='application/pdf')
         response['Content-Disposition'] = 'inline;filename=pdf_file.pdf'
         return response
-    
+
+
+
+
 
 
 #methode générant le relevé de notes de l'étudiant
 def releve_notes(request, id, id_semestre):
     etudiant = get_object_or_404(Etudiant, id=id)
     semestre = get_object_or_404(Semestre, id=id_semestre)
-    context = {'etudiant': etudiant, 'semestre' : semestre}
+
+    semestre_ues = get_semester_ues(semestre)
+
+    # récupération et assignation des matières à chacune des UEs
+    ues_matieres = get_all_ues_matieres(semestre_ues)
+
+
+    # récupération et assignation des evaluations au matières des UEs et calcul de la moyenne de l'étudiant dans la matière
+    for ue in ues_matieres:
+        matieres = ue['matieres']
+        # parcours des matières de chaque UEs
+        for ue_matieres in matieres:
+            matiere = get_object_or_404(Matiere, id=ue_matieres['id'])
+            #assignation des evaluations à chaque 
+            ue_matieres['evaluations'] = get_all_matiere_evaluations(matiere)
+            # calcul des moyennes dans chaque matières
+            ue_matieres['moyenne'] = get_matiere_moy(matiere, etudiant)
+
+
+    # calcul de la moyenne de chaque UE
+    for ue in ues_matieres:
+        get_ue_moy(ue)
+    
+    # vérification de la validation des ue par l'étudiant
+    for ue in ues_matieres:
+        if valid_UE(ue):
+            ue['validation'] = 'Validé'
+        else:
+            ue['validation'] =  'Échec'
+        
+        
+
+
+    # #récupération et assignation des notes de chacune des évaluations d'une matière
+    # for ue in ues_matieres:
+    #     matieres = ue['matieres']
+    #     # parcours des matières de chaque UEs
+    #     for ue_matieres in matieres:
+    #         for evaluation in ue_matieres['evaluations']:
+    #             temp_evalution = get_object_or_404(Evaluation, id=evaluation['id'])
+    #             evaluation['note'] = get_evaluation_note(temp_evalution,etudiant)
+
+
+    context = {'etudiant': etudiant, 'semestre' : semestre, 'ues' : ues_matieres}
 
     # nom des fichiers d'entrée et de sortie
 
@@ -604,31 +629,27 @@ def releve_notes_semestre(request, id_semestre):
         return response
 
 
-def matieres(request):
+def evaluations(request, id_matiere):
     """
-    Affiche la liste des matiers de l'année et du semestre actuelle :model:`main.Matiere`.
+    Affiche la liste des évaluations d'une matière donnée :model:`main.Matiere`.
 
     **Context**
 
     **Template:**
 
-    :template:`main/matieres/index.html`
+    :template:`main/evaluations/index.html`
     """
-    # Déterminer l'année courrante
-    # annee_academique = AnneeUniversitaire.objects.filter(anneeUnivCourante=True)
-    # Détérminier les semestres courrants : il sont toujours trois : s1, s3, s5 ou s2, s4, s6
-    # Rechercher les Ues selon les semèstre
-    # Rechercher la liste des matières pour chaque Ue
-    #  
+    matiere = get_object_or_404(Matiere, pk=id_matiere)
+    evaluations = Evaluation.objects.filter(matiere=matiere)
     data = {
         'annee_courrante': '',
-        'semestres_courrant': [],
-        'annees_semestres_matieres' : [],
+        'matiere' : matiere,
+        'evaluations' : evaluations,
     }
     
-    return render(request, 'matieres/index.html', data)
+    return render(request, 'evaluations/index.html', data)
 
-def createNotesByMatiere(request, id_matiere):
+def createNotesByEvaluation(request, id_matiere):
     """
     Affiche un formulaire de création d'une évaluation et ensuite d'une note :model:`main.Note` selon la matière.
 
@@ -645,9 +666,12 @@ def createNotesByMatiere(request, id_matiere):
     matiere = get_object_or_404(Matiere, pk=id_matiere)
     etudiants = matiere.ue.semestre.etudiant_set.all()
     NoteFormSet = forms.modelformset_factory(Note, form=NoteForm, extra=len(etudiants))
+    queryset=Note.objects.none()
     if request.method == 'POST':
         evaluation_form = EvaluationForm(request.POST)
         note_form_set = NoteFormSet(request.POST)
+        print(evaluation_form.is_valid())
+        print(note_form_set.is_valid())
         if evaluation_form.is_valid() and note_form_set.is_valid():
             evaluation = evaluation_form.save(commit=False)
             evaluation.matiere = matiere
@@ -656,21 +680,22 @@ def createNotesByMatiere(request, id_matiere):
             for note in notes:
                 note.evaluation = evaluation
                 note.save()
-            return redirect('success')
+            return redirect('main:evaluations', id_matiere=matiere.id)
     else :
         evaluation_form = EvaluationForm()
         initial_etudiant_note_data = [{'etudiant' : etudiant.id, 'etudiant_full_name': etudiant} for etudiant in etudiants]
-        note_form_set = NoteFormSet(initial=initial_etudiant_note_data)
+        note_form_set = NoteFormSet(initial=initial_etudiant_note_data, queryset=queryset)
     
     data = {
         'evaluation_form' : evaluation_form,
         'etudiants' : etudiants,
         'notes_formset' : note_form_set,
         'matiere' : matiere,
+        'ponderation_possible' : matiere.ponderation_restante(),
     }
     return render(request, 'notes/create_or_edit_note.html', context=data)
 
-def editeNoteByMatiere(request, id):
+def editeNoteByEvaluation(request, id):
     """
     Affiche un formulaire d'édition d'une note :model:`main.Note`.
 
@@ -683,32 +708,50 @@ def editeNoteByMatiere(request, id):
 
     :template:`main/notes/create_or_edit_note.html`
     """
-    note = get_object_or_404(Note, pk=id)
-    data = {
-        'note_form' : NoteForm(request.POST, instance=Note),
-        'etudiant' : note.etudiant,
-        'matiere' :  note.matiere,
-    }
+    evaluation = get_object_or_404(Evaluation, pk=id)
+    matiere = evaluation.matiere
+    etudiants = matiere.ue.semestre.etudiant_set.all()
+    NoteFormSet = forms.modelformset_factory(Note, form=NoteForm, extra=0)
+    queryset=Note.objects.filter(evaluation=evaluation)
     if request.method == 'POST':
-        noteForm = NoteForm(request.POST)
-        if noteForm.is_valid():
-            noteForm.save()
-            return redirect('main:index')
-        data['note_form'] = noteForm
+        evaluation_form = EvaluationForm(request.POST, instance=evaluation)
+        note_form_set = NoteFormSet(request.POST)
+        if evaluation_form.is_valid() and note_form_set.is_valid():
+            evaluation = evaluation_form.save(commit=False)
+            evaluation.matiere = matiere
+            evaluation.save()
+            notes = note_form_set.save(commit=False)
+            for note in notes:
+                note.evaluation = evaluation
+                note.save()
+            return redirect('main:evaluations', id_matiere=matiere.id)
+    else :
+        evaluation_form = EvaluationForm(instance=evaluation)
+        note_form_set = NoteFormSet(queryset=queryset)
+        for form in note_form_set:
+            form.initial['etudiant_full_name']=Etudiant.objects.filter(id=form.initial['etudiant']).get()
+    data = {
+        'evaluation_form' : evaluation_form,
+        'etudiants' : etudiants,
+        'notes_formset' : note_form_set,
+        'matiere' : matiere,
+        'ponderation_possible' : matiere.ponderation_restante()+evaluation.ponderation,
+    }
     return render(request, 'notes/create_or_edit_note.html', context=data)
 
-def deleteNote(request, id):
+def deleteEvaluation(request, id):
     """
-    Supprime une note :model:`main.Note`.
+    Supprime une evaluation :model:`main.Note`.
 
     **Context**
 
-    ``Note``
+    ``evaluation``
         une instance du :model:`main.Note`.
     """
-    note = get_object_or_404(Note, pk=id)
-    note.delete()
-    return redirect('main:index')
+    evaluation = get_object_or_404(Evaluation, pk=id)
+    matiere = evaluation.matiere
+    evaluation.delete()
+    return redirect('main:evaluations', id_matiere=matiere.id)
 
 
 def annee_academique(date):
@@ -881,3 +924,54 @@ def edit_information(request, id):
     else:
         form = InformationForm(instance=information)
     return render(request, 'informations/edit_information.html', {'form': form})
+
+
+
+def semestres(request):
+    semestres=Semestre.objects.all()
+    context={"semestres":semestres}
+    return render(request, 'historiques/semestres.html', context)
+
+
+
+def cloture(request):
+    return render(request, 'historiques/cloturer_semestres.html', {})
+
+
+def cloturer_semestres(request):
+    # récupérer les semestres en cours
+    semestres_courants = Semestre.objects.filter(semestreCourant=True)
+
+    # désactiver les semestres en cours
+    with transaction.atomic():
+        for semestre in semestres_courants:
+            semestre.semestreCourant = False
+            semestre.save()
+
+    # activer les nouveaux semestres
+    with transaction.atomic():
+        semestre2 = Semestre.objects.get(libelle='S2') # semestre 2
+        semestre2.semestreCourant = True
+        semestre2.save()
+
+        semestre4 = Semestre.objects.get(libelle='S4') # semestre 4
+        semestre4.semestreCourant = True
+        semestre4.save()
+
+        semestre6 = Semestre.objects.get(libelle='S6') # semestre 6
+        semestre6.semestreCourant = True
+        semestre6.save()
+
+    # rediriger vers la page d'accueil ou de confirmation
+    return redirect('/main/semestres')
+
+
+
+
+def liste_etudiants_par_semestre(request, semestre):
+    semestre_obj = Semestre.objects.get(libelle=semestre)  
+    etudiants = semestre_obj.etudiant_set.all()
+    context = {
+        'etudiants': etudiants
+    }
+    return render(request, 'etudiants/liste_etudiants_par_semestre.html', context)
