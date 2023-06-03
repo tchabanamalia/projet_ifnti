@@ -280,7 +280,25 @@
                         <span class="nav-main-link-name">Liste des enseignants</span>
                     </a>                   
                 </li>
+                <li class="nav-main-item">
+                    <a class="nav-main-link nav-main-link-name" data-toggle="" aria-haspopup="true" aria-expanded="false" href="{% url 'main:enseignant_suspendu' %}">
+                        <i class="nav-main-link-icon "></i>
+                        <span class="nav-main-link-name">Liste des suspendus</span>
+                    </a>                   
+                </li>
+                <li class="nav-main-item">
+                    <a class="nav-main-link nav-main-link-name" data-toggle="" aria-haspopup="true" aria-expanded="false" href="{% url 'paiement:comptable_list' %}">
+                        <i class="nav-main-link-icon "></i>
+                        <span class="nav-main-link-name">Liste des Comptables</span>
+                    </a>                   
+                </li>
                 <li class="nav-main-heading">GESTION PAIEMENT</li>
+                <li class="nav-main-item">
+                    <a class="nav-main-link nav-main-link-name" data-toggle="" aria-haspopup="true" aria-expanded="false" href="{% url 'paiement:paiement_list' %}">
+                        <i class="nav-main-link-icon "></i>
+                        <span class="nav-main-link-name">Liste des Paiements</span>
+                    </a>                   
+                </li>
             </ul>
         </div>
         <!-- END Side Navigation -->

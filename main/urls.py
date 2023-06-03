@@ -85,8 +85,16 @@ urlpatterns = [
 
                             #### Enseignant ####
     path('create_enseignant/', views.create_enseignant, name='create_enseignant'),
-    path('enseignant_list/', views.enseignant_list, name='enseignant_list'),
+    path('enseignant_list/', views.enseignant_actif, name='enseignant_list'),
+    path('enseignant_suspendu/', views.enseignant_inactif, name='enseignant_suspendu'),
     path('enseignant_detail/(?P<id>[0-9]+)\\Z/', views.enseignant_detail, name='enseignant_detail'),
     path('edit_enseignant/(?P<id>[0-9]+)\\Z/', views.edit_enseignant, name='edit_enseignant'),
+    path('certificat_travail/(?P<id>[0-9]+)\\Z/', views.certificat_travail, name='certificat_travail'),
+
+                        ### Information ###
+    path('information_list/', views.information_list, name='information_list'),
+    path('information_detail/(?P<id>[0-9]+)\\Z/', views.information_detail, name='information_detail'),
+    path('create_information/', views.create_information, name='create_information'),
+    path('edit_information/(?P<id>[0-9]+)\\Z/', views.edit_information, name='edit_information'),
 
 ]

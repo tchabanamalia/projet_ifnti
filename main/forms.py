@@ -2,7 +2,7 @@ from typing import Any, Dict
 import re
 from typing import Any, Dict
 from django import forms
-from .models import Evaluation, Note, Utilisateur, Personnel, Enseignant, Etudiant, Matiere, AnneeUniversitaire, Ue, Tuteur, Semestre
+from .models import Evaluation, Information, Note, Utilisateur, Personnel, Enseignant, Etudiant, Matiere, AnneeUniversitaire, Ue, Tuteur, Semestre
 from django.core.exceptions import ValidationError
 from django.forms import DateField
 from django.forms.utils import ErrorList,ErrorDict
@@ -390,7 +390,20 @@ class EnseignantForm(forms.ModelForm):
                 self._errors['nbreJrsConsommes'] = ErrorDict()
             self._errors['nbreJrsConsommes'] = 'Le nombre de jours de congés consommés ne doit pas dépasser 30'
 
-
+class InformationForm(forms.ModelForm):
+    class Meta:
+        model = Information
+        fields = ('nomDirecteur', 'prenomDirecteur', 'nomEnseignant', 'prenomEnseignant', 'numeroSecurite', 'discipline', 'niveau', 'dateDebut', 'dateFin', 'duree')
+        widgets = {
+            'nomDirecteur': forms.TextInput(attrs={'class': 'form-control'}),
+            'prenomDirecteur': forms.TextInput(attrs={'class': 'form-control'}),
+            'nomEnseignant': forms.TextInput(attrs={'class': 'form-control'}),
+            'prenomEnseignant': forms.TextInput(attrs={'class': 'form-control'}),
+            'numeroSecurite': forms.TextInput(attrs={'class': 'form-control'}),
+            'discipline': forms.TextInput(attrs={'class': 'form-control'}),
+            'niveau': forms.TextInput(attrs={'class': 'form-control'}),
+            'duree': forms.TextInput(attrs={'class': 'form-control'}),
+        }
 
 
          

@@ -166,8 +166,26 @@ class Enseignant(Personnel):
 
 
 class Comptable(Personnel):
-    pass
+    # Attributs spécifiques au comptable
+    #numeroComptable = models.CharField(max_length=20, verbose_name="Numéro de comptable")
 
+    """clef comptable"""
+    def save(self):
+        if not self.id:
+            comptables = Comptable.objects.all()
+            if comptables:
+                rang_compt = int(comptables.last().id.replace("COM", ""))
+                self.id = "COM" + str(rang_compt + 1)
+            else:
+                self.id = "COM" + str(1)
+            # Création de l'utilisateur associé à l'instance du comptable
+            username = (self.prenom + self.nom).lower()
+            user = User.objects.create_user(username=username, password="ifnti2023!")
+            self.user = user
+        return super().save()
+    
+    def __str__(self):
+        return self.prenom + " " + self.nom
 
 
 class Tuteur(models.Model):
@@ -323,17 +341,6 @@ class Note(models.Model):
     def save(self):
         super().save(self)
 
-
-class Salaire(models.Model):
-    montantNet = models.DecimalField(max_digits=10, decimal_places=2, verbose_name="Montant Net")
-    montantBrut = models.DecimalField(max_digits=10, decimal_places=2,  verbose_name="Montant Brut")
-    chargeSalariales = models.FloatField(verbose_name="Charges salariales")
-    chargePatronales = models.FloatField(verbose_name="Charges patronales")
-    bonification = models.DecimalField(max_digits=10, decimal_places=2)
-    personnel = models.ForeignKey('Personnel', on_delete=models.CASCADE, verbose_name="Personnel") 
-
-
-
 class Conge(models.Model):
     ETAT_CHOISE = [
         ('actif','Actif'),
@@ -356,13 +363,42 @@ class Conge(models.Model):
 
 
 
-class Versement(models.Model):
+class Paiement(models.Model):
     TYPE_CHOISE = [
         ('scolarite','Frais de scolarité'),
-        ('inscription','Frais Inscription')
+        #('inscription','Frais Inscription')
     ]
     type = models.CharField(max_length=30, choices=TYPE_CHOISE)
-    montant = models.DecimalField(max_digits=10, decimal_places=2,  verbose_name="Montant")
-    dateversement = models.DateTimeField(default=timezone.now, verbose_name="Date de versement")
+    montant = models.DecimalField(max_digits=10, decimal_places=2,  verbose_name="Montant versé")
+    fraisconcours = models.IntegerField(default=10000, verbose_name="Frais de concours")
+    fraisinscription = models.IntegerField(default=30000, verbose_name="Frais de concours")
+    dateversement = models.DateField(default=timezone.now, verbose_name="Date de versement")
+    nombreTranche = models.IntegerField(verbose_name="Nombre de tranche")
+    debit = models.IntegerField(default=590000, verbose_name="Débit")
+    credit = models.IntegerField(default=0, verbose_name="Crédit")
     etudiant = models.ForeignKey('Etudiant', on_delete=models.CASCADE, verbose_name="Etudiant") 
-    comptable = models.ForeignKey('Comptable', on_delete=models.CASCADE, verbose_name="Comptable") 
+    comptable = models.ForeignKey('Comptable', on_delete=models.CASCADE, verbose_name="Comptable")
+
+    def save(self, *args, **kwargs):
+        if self.credit < 590000 and self.debit > 0:
+            difference = min(self.montant, 590000 - self.credit)
+            self.credit += difference
+            self.debit -= difference
+            if self.credit == 590000 and self.debit == 0:
+                self.nombreTranche += 1
+        super(Paiement, self).save(*args, **kwargs)
+
+class Information(models.Model):
+    nomDirecteur = models.CharField(max_length=100, verbose_name="Nom du directeur")
+    prenomDirecteur = models.CharField(max_length=100, verbose_name="Prénom du directeur")
+    nomEnseignant = models.CharField(max_length=100, verbose_name="Nom de l'enseignant")
+    prenomEnseignant = models.CharField(max_length=100, verbose_name="Prénom de l'enseignant")
+    numeroSecurite = models.IntegerField(verbose_name="Numéro de sécurité sociale")
+    discipline = models.CharField(max_length=100, verbose_name="Discipline")
+    niveau = models.CharField(max_length=100, verbose_name="Niveau")
+    dateDebut = models.DateField(verbose_name="Date de début")
+    dateFin = models.DateField(verbose_name="Date de fin")
+    duree = models.CharField(max_length=100, verbose_name="Durée")
+
+    def __str__(self):
+        return str(self.nomDirecteur) + " " + str(self.nomEnseignant) + " " + str(self.numeroSecurite) + " " + str(self.discipline) + " " + str(self.typeAnnee) + " " + str(self.dateDebut) + " " + str(self.dateFin) + " " + str(self.duree)

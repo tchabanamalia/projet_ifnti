@@ -1,0 +1,108 @@
+{% extends '../index.html' %}
+
+{% block content %}
+
+<div class="block block-rounded md-5">
+    <div class="block-header">
+        <h3 class="block-title">Ajouter un paiement</h3>
+        <a href="{% url 'paiement:paiement_list'%}">
+            <button type="button" class="btn btn-secondary float-right" id="dropdown-default-secondary" aria-haspopup="true" aria-expanded="false">
+                Retour
+            </button>
+        </a>
+    </div>
+   <div class="block-content block-content-full">
+    <div class="card mb-3 border border-primary rounded shadow">
+    <div class="card-body text-dark text-center rounded-top shadow" style="background-color: #f2f4f4;">
+        <form method="POST" action="{% url 'paiement:create_paiement' %}">
+            {% csrf_token %}
+            
+            <div class="form-group row">
+                <label for="{{ form.type.id_for_label }}" class="col-md-2 col-form-label">Type de paiement</label>
+                <div class="col-md-10">
+                    {{ form.type }}
+                    {{ form.type.errors }}
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label for="{{ form.montant.id_for_label }}" class="col-md-2 col-form-label">Montant versé</label>
+                <div class="col-md-10">
+                    {{ form.montant }}
+                    {{ form.montant.errors }}
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label for="{{ form.fraisconcours.id_for_label }}" class="col-md-2 col-form-label">Frais de concours</label>
+                <div class="col-md-10">
+                    {{ form.fraisconcours }}
+                    {{ form.fraisconcours.errors }}
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label for="{{ form.fraisinscription.id_for_label }}" class="col-md-2 col-form-label">Frais d'inscription</label>
+                <div class="col-md-10">
+                    {{ form.fraisinscription }}
+                    {{ form.fraisinscription.errors }}
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label for="{{ form.dateversement.id_for_label }}" class="col-md-2 col-form-label">Date de versement</label>
+                <div class="col-md-10">
+                    {{ form.dateversement }}
+                    {{ form.dateversement.errors }}
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label for="{{ form.nombreTranche.id_for_label }}" class="col-md-2 col-form-label">Nombre de tranche</label>
+                <div class="col-md-10">
+                    {{ form.nombreTranche }}
+                    {{ form.nombreTranche.errors }}
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label for="{{ form.debit.id_for_label }}" class="col-md-2 col-form-label">Débit</label>
+                <div class="col-md-10">
+                    {{ form.debit }}
+                    {{ form.debit.errors }}
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label for="{{ form.credit.id_for_label }}" class="col-md-2 col-form-label">Crédit</label>
+                <div class="col-md-10">
+                    {{ form.credit }}
+                    {{ form.credit.errors }}
+                </div>
+            </div>
+            
+
+            <div class="form-group row">
+                <label for="{{ form.etudiant.id_for_label }}" class="col-md-2 col-form-label">Etudiant</label>
+                <div class="col-md-10">
+                    {{ form.etudiant }}
+                    {{ form.etudiant.errors }}
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label for="{{ form.comptable.id_for_label }}" class="col-md-2 col-form-label">Comptable</label>
+                <div class="col-md-10">
+                    {{ form.comptable }}
+                    {{ form.comptable.errors }}
+                </div>
+            </div>
+        
+            <button type="submit" class="btn btn-primary">Enregistrer</button>
+        </form>
+    </div>
+    </div>
+   </div>
+</div>
+
+{% endblock %}
