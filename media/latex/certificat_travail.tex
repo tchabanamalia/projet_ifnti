@@ -1,0 +1,45 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[french]{babel}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage[french]{datetime2}
+
+
+\usepackage[left=2cm,right=2cm,top=2cm,bottom=2cm]{geometry}
+
+\begin{document}
+\begin{flushright}
+sokodé le \today \vspace{30mm}
+\end{flushright}
+
+\begin{center}
+Certificat de travail \vspace{5mm}
+\end{center}
+\begin{flushleft}
+Je soussigné \textbf{\VAR{information.nomDirecteur} \VAR{information.prenomDirecteur}}, responsable d'établissement au sein de l'Institut de Formation aux Normes et technologies de l'Informatique(IFNTI) agissant en qualité d'employeur, certifie que Monsieur \textbf{\VAR{information.nomEnseignant} \VAR{information.prenomEnseignant}}, Numéro de sécutité sociale \VAR{information.numeroSecurite},\vspace{1mm} \\
+a été employé en tant que : \vspace{2mm}
+\begin{itemize}
+\item[•] enseignant du cours de \VAR{information.discipline} au niveau de licence \VAR{information.niveau} année du \VAR{information.dateDebut} au \VAR{information.dateFin} soit une durée totale de \VAR{information.duree}. \vspace{2mm}
+%\item[•]enseignant du cours de Base de données au niveau de licence première année du 1er octobre 2022 au 31 mars 2023 soit une durée totale de six mois. \vspace{2mm}
+\end{itemize}
+Monsieur \textbf{\VAR{information.nomEnseignant} \VAR{information.prenomEnseignant}} nous quitte ce jour, libre de tout engagement
+
+\end{flushleft}\vspace{6mm}
+
+\begin{flushright}
+Fait à Sokodé le \today
+\end{flushright}\vspace{20mm}
+
+\hfill
+\begin{minipage}[t]{0.4\textwidth}
+    \raggedright 
+    \VAR{information.nomDirecteur} \VAR{information.prenomDirecteur}
+\end{minipage}
+\end{document}
+
+
+
