@@ -1,4 +1,5 @@
 
+
 from django.db import models
 from django.conf import settings
 from tabnanny import verbose
@@ -14,10 +15,6 @@ from django.dispatch import receiver
 from django.db import models
 from datetime import datetime
 import datetime
-
-
-
-
 
 class Utilisateur(models.Model):  
     SEXE_CHOISE = [
@@ -55,36 +52,29 @@ class Utilisateur(models.Model):
         self.save()
 
 
-
 class Etudiant(Utilisateur):
     id = models.CharField(primary_key=True, blank=True, max_length=12)
     CHOIX_SERIE = [('A', 'A'), ('C', 'C'), ('D', 'D'), ('E', 'E'), ('F1', 'F1'), ('F2', 'F2'), ('F3', 'F3'),
                    ('F4', 'F4'), ('G2', 'G2')]
     seriebac1 = models.CharField(blank=True,max_length=2, choices=CHOIX_SERIE, verbose_name="Série bac 1", null=True)
     seriebac2 = models.CharField(blank=True,max_length=2, choices=CHOIX_SERIE, verbose_name="Série bac 2", null=True)
-
     anneeentree = models.IntegerField(default=datetime.date.today().year, blank=True, verbose_name="année entrée", null=False)
-
     anneebac1 = models.IntegerField(blank=True,verbose_name="Année d’obtention du BAC 1", null=True)
     anneebac2 = models.IntegerField(blank=True,verbose_name="Année d’obtention du BAC 2", null=True, default=datetime.date.today().year)
-
     etablissementSeconde = models.CharField(max_length=300, verbose_name="Nom d'établissement seconde", null=True, blank=True)
     francaisSeconde = models.DecimalField(max_digits=4, decimal_places=2, verbose_name="Note de français Seconde", default="0")
     anglaisSeconde = models.DecimalField(max_digits=4, decimal_places=2, verbose_name="Note d'anglais Seconde", default="0")
     mathematiqueSeconde = models.DecimalField(max_digits=4, decimal_places=2, verbose_name="Note de mathématique Seconde", default="0")
-
     etablissementPremiere = models.CharField(max_length=300, verbose_name="Nom d'établissement Première", null=True, blank=True)
     francaisPremiere = models.DecimalField(max_digits=4, decimal_places=2, verbose_name="Note de français Première", default="0")
     anglaisPremiere = models.DecimalField(max_digits=4, decimal_places=2, verbose_name="Note d'anglais Première", default="0")
     mathematiquePremiere = models.DecimalField(max_digits=4, decimal_places=2, verbose_name="Note de mathématique Première", default="0")
-
     etablissementTerminale = models.CharField(max_length=300, verbose_name="Nom d'établissement Terminale", null=True, blank=True)
     francaisTerminale = models.DecimalField(max_digits=4, decimal_places=2, verbose_name="Note de français Terminale", default="0")
     anglaisTerminale = models.DecimalField(max_digits=4, decimal_places=2, verbose_name="Note d'anglais Terminale", default="0")
     mathematiqueTerminale = models.DecimalField(max_digits=4, decimal_places=2, verbose_name="Note de mathématique Terminale", default="0")
-
     semestre = models.ManyToManyField('Semestre')
-
+    passer_semestre_suivant =models.BooleanField(default=False, verbose_name="Passer au semestre suivant") 
 
 
     class Meta:
@@ -127,14 +117,12 @@ class Etudiant(Utilisateur):
         return self.id + " " + self.nom + " " + self.prenom
 
 
-
 class Personnel(Utilisateur):
     id = models.CharField(primary_key=True, blank=True, max_length=12)  
     salaireBrut = models.DecimalField(max_digits=10, decimal_places=2,  verbose_name="Salaire Brut")
     dernierdiplome = models.ImageField(null=True, blank=True, verbose_name="Dernier diplome")
     nbreJrsCongesRestant = models.IntegerField(verbose_name="Nonbre de jours de congé restant")
     nbreJrsConsomme = models.IntegerField(verbose_name="Nonbre de jours consommé")
-
 
 
 class Enseignant(Personnel):
@@ -164,28 +152,8 @@ class Enseignant(Personnel):
 
 
 
-
 class Comptable(Personnel):
-    # Attributs spécifiques au comptable
-    #numeroComptable = models.CharField(max_length=20, verbose_name="Numéro de comptable")
-
-    """clef comptable"""
-    def save(self):
-        if not self.id:
-            comptables = Comptable.objects.all()
-            if comptables:
-                rang_compt = int(comptables.last().id.replace("COM", ""))
-                self.id = "COM" + str(rang_compt + 1)
-            else:
-                self.id = "COM" + str(1)
-            # Création de l'utilisateur associé à l'instance du comptable
-            username = (self.prenom + self.nom).lower()
-            user = User.objects.create_user(username=username, password="ifnti2023!")
-            self.user = user
-        return super().save()
-    
-    def __str__(self):
-        return self.prenom + " " + self.nom
+    pass
 
 
 class Tuteur(models.Model):
@@ -264,7 +232,6 @@ class Evaluation(models.Model):
     matiere = models.ForeignKey(Matiere, on_delete=models.CASCADE, verbose_name='Matiere')
     etudiants = models.ManyToManyField(Etudiant, through='Note',verbose_name="Étudiants")
     
-    
 
 class Competence(models.Model):
     id = models.CharField(primary_key=True, blank=True, max_length=30)
@@ -274,12 +241,8 @@ class Competence(models.Model):
     matiere = models.ForeignKey('Matiere', on_delete=models.CASCADE, verbose_name="Matiere")
 
    
-
-
-
 class MaquetteGenerique(models.Model):
     pass
-
 
 
 class Semestre(models.Model):
@@ -298,23 +261,17 @@ class Semestre(models.Model):
 
     def __str__(self):
 
-        return self.libelle + " " + str(self.anneescolaire) + " " + str(self.semestreCourant)
+        return self.libelle + " " + str(self.anneescolaire) 
 
     class Meta:
         unique_together = [["anneescolaire", "libelle"]]
 
 
-
-
-
-
 class AnneeUniversitaire(models.Model):
     anneeUniv = models.CharField(max_length=300, verbose_name="Année universitaire")
-    #anneeUnivCourante = models.BooleanField(default=False, verbose_name="Année universitaire acutuelle", null=True)
     
     def __str__(self):
         return str(self.anneeUniv)
-
 
 
 class Note(models.Model):
@@ -334,7 +291,6 @@ class Note(models.Model):
     etudiant = models.ForeignKey(Etudiant, on_delete=models.CASCADE,verbose_name="Étudiant")
     evaluation = models.ForeignKey(Evaluation, on_delete=models.CASCADE, verbose_name="Evaluation")
 
-
     def __str__(self):
         """
         Renvoie une représentation en chaîne de caractères de l'objet Note.
@@ -343,6 +299,15 @@ class Note(models.Model):
             str: La représentation en chaîne de caractères de l'objet Note.
         """
         return str(self.id) + " " + str(self.evaluation) + " " + str(self.valeurNote)
+
+
+class Salaire(models.Model):
+    montantNet = models.DecimalField(max_digits=10, decimal_places=2, verbose_name="Montant Net")
+    montantBrut = models.DecimalField(max_digits=10, decimal_places=2,  verbose_name="Montant Brut")
+    chargeSalariales = models.FloatField(verbose_name="Charges salariales")
+    chargePatronales = models.FloatField(verbose_name="Charges patronales")
+    bonification = models.DecimalField(max_digits=10, decimal_places=2)
+    personnel = models.ForeignKey('Personnel', on_delete=models.CASCADE, verbose_name="Personnel") 
 
 
 class Conge(models.Model):
@@ -365,44 +330,13 @@ class Conge(models.Model):
     etat = models.CharField(max_length=50, choices=ETAT_CHOISE)
     personnel = models.ForeignKey('Personnel', on_delete=models.CASCADE, verbose_name="Personnel") 
 
-
-
-class Paiement(models.Model):
+class Versement(models.Model):
     TYPE_CHOISE = [
         ('scolarite','Frais de scolarité'),
-        #('inscription','Frais Inscription')
+        ('inscription','Frais Inscription')
     ]
     type = models.CharField(max_length=30, choices=TYPE_CHOISE)
-    montant = models.DecimalField(max_digits=10, decimal_places=2,  verbose_name="Montant versé")
-    fraisconcours = models.IntegerField(default=10000, verbose_name="Frais de concours")
-    fraisinscription = models.IntegerField(default=30000, verbose_name="Frais de concours")
-    dateversement = models.DateField(default=timezone.now, verbose_name="Date de versement")
-    nombreTranche = models.IntegerField(verbose_name="Nombre de tranche")
-    debit = models.IntegerField(default=590000, verbose_name="Débit")
-    credit = models.IntegerField(default=0, verbose_name="Crédit")
+    montant = models.DecimalField(max_digits=10, decimal_places=2,  verbose_name="Montant")
+    dateversement = models.DateTimeField(default=timezone.now, verbose_name="Date de versement")
     etudiant = models.ForeignKey('Etudiant', on_delete=models.CASCADE, verbose_name="Etudiant") 
-    comptable = models.ForeignKey('Comptable', on_delete=models.CASCADE, verbose_name="Comptable")
-
-    def save(self, *args, **kwargs):
-        if self.credit < 590000 and self.debit > 0:
-            difference = min(self.montant, 590000 - self.credit)
-            self.credit += difference
-            self.debit -= difference
-            if self.credit == 590000 and self.debit == 0:
-                self.nombreTranche += 1
-        super(Paiement, self).save(*args, **kwargs)
-
-class Information(models.Model):
-    nomDirecteur = models.CharField(max_length=100, verbose_name="Nom du directeur")
-    prenomDirecteur = models.CharField(max_length=100, verbose_name="Prénom du directeur")
-    nomEnseignant = models.CharField(max_length=100, verbose_name="Nom de l'enseignant")
-    prenomEnseignant = models.CharField(max_length=100, verbose_name="Prénom de l'enseignant")
-    numeroSecurite = models.IntegerField(verbose_name="Numéro de sécurité sociale")
-    discipline = models.CharField(max_length=100, verbose_name="Discipline")
-    niveau = models.CharField(max_length=100, verbose_name="Niveau")
-    dateDebut = models.DateField(verbose_name="Date de début")
-    dateFin = models.DateField(verbose_name="Date de fin")
-    duree = models.CharField(max_length=100, verbose_name="Durée")
-
-    def __str__(self):
-        return str(self.nomDirecteur) + " " + str(self.nomEnseignant) + " " + str(self.numeroSecurite) + " " + str(self.discipline) + " " + str(self.typeAnnee) + " " + str(self.dateDebut) + " " + str(self.dateFin) + " " + str(self.duree)
+    comptable = models.ForeignKey('Comptable', on_delete=models.CASCADE, verbose_name="Comptable") 
