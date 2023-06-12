@@ -3,6 +3,7 @@
 
 {% block content %}
 
+
 <div class="block block-rounded m-5">
     <div class="block-header p-4">
         <h3 class="block-title">Clôture des semestres</h3>
@@ -11,14 +12,13 @@
     </div>
     <div class="block-content block-content-full">
         
-  <form action="{% url 'main:cloturer_semestres' %}" method="post">
-    {% csrf_token %}
-    <p>Voulez-vous vraiment clôturer les semestres en cours et activer les nouveaux semestres ? Cette action est irréversible.</p>
-    <button type="submit" class="btn btn-danger">Clôturer les semestres</button>
-  </form>
+        <h1 style="color: red;" >Erreur</h1>
+        <h3>{{ message }}</h3>
 
     </div>
 </div>
 
+
 {% endblock %}
 
+    

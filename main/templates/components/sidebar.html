@@ -117,6 +117,9 @@
 
                 <li class="nav-main-heading">GESTION ETUDIANTS</li>
 
+
+        
+
                 <li class="nav-main-item">
                     <a class="nav-main-link nav-main-link-name" data-toggle="" aria-haspopup="true" aria-expanded="false" href="{% url 'main:liste_des_etudiants' %}">
                         <i class="nav-main-link-icon "></i>
@@ -208,20 +211,18 @@
                  <li class="nav-main-item">
                     <a class="nav-main-link nav-main-link-name" data-toggle="" aria-haspopup="true" aria-expanded="false" href="{% url 'main:semestres' %}">
                         <i class="nav-main-link-icon "></i>
-                        <span class="nav-main-link-name">Semestres</span>
+                        <span class="nav-main-link-name">Semestres Courants</span>
                     </a>                   
                 </li>
 
                 <li class="nav-main-item">
-                    <a class="nav-main-link nav-main-link-name" data-toggle="" aria-haspopup="true" aria-expanded="false" href="{% url 'main:cloture' %}">
+                    <a class="nav-main-link nav-main-link-name" data-toggle="" aria-haspopup="true" aria-expanded="false" href="{% url 'main:semestres_clotures' %}">
                         <i class="nav-main-link-icon "></i>
-                        <span class="nav-main-link-name">Cloturer Semestres</span>
+                        <span class="nav-main-link-name">Semestres Clôturés</span>
                     </a>                   
-                </li>
+                </li>            
 
-
-
-                <li class="nav-main-item">
+               <li class="nav-main-item">
                     <li class="nav-main-item">
                         <a class="nav-main-link nav-main-link-name" data-toggle="" aria-haspopup="true" aria-expanded="false" href="{% url 'main:liste_des_ues' %}">
                             <i class="nav-main-link-icon "></i>
