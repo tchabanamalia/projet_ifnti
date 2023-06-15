@@ -335,7 +335,6 @@ class Conge(models.Model):
 class Paiement(models.Model):
     TYPE_CHOISE = [
         ('scolarite','Frais de scolarité'),
-        #('inscription','Frais Inscription')
     ]
     type = models.CharField(max_length=30, choices=TYPE_CHOISE)
     montant = models.DecimalField(max_digits=10, decimal_places=2,  verbose_name="Montant versé")
