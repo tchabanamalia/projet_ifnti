@@ -6,9 +6,9 @@ from .models import Enseignant, Matiere, Etudiant, Competence, Note, Comptable, 
 admin.site.register(Evaluation)
 class EnseignantAdmin(admin.ModelAdmin):
     form = EnseignantForm
-    
+
+admin.site.register(Programme)
 admin.site.register(Enseignant, EnseignantAdmin)
-admin.site.register(MaquetteGenerique)
 admin.site.register(Matiere)
 admin.site.register(Etudiant)
 admin.site.register(Competence)

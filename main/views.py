@@ -15,7 +15,7 @@ from latex import build_pdf
 from django.template import loader
 from django.conf import settings
 from main.forms import  EnseignantForm, EtudiantForm, EvaluationForm, NoteForm, TuteurForm, UeForm, MatiereForm
-from .models import Enseignant, Evaluation, Matiere, Etudiant, Competence, Note, Comptable, Semestre, Ue, AnneeUniversitaire, Personnel, Tuteur, MaquetteGenerique 
+from .models import Enseignant, Evaluation, Matiere, Etudiant, Competence, Note, Comptable, Semestre, Ue, AnneeUniversitaire, Personnel, Tuteur 
 from django.shortcuts import get_object_or_404, redirect, render
 from django.shortcuts import get_list_or_404
 from django.core.exceptions import ObjectDoesNotExist
@@ -24,8 +24,6 @@ from django.contrib import messages
 
 from main.helpers import *
 from main.pdfMaker import generate_pdf
-from .models import Enseignant, Evaluation, Matiere, Etudiant, Competence, Note, Comptable, Semestre, Ue, AnneeUniversitaire, Personnel, Tuteur, MaquetteGenerique 
-from django.shortcuts import get_object_or_404, redirect, render
 from django.db import transaction
 
 
@@ -82,15 +80,6 @@ def create_etudiant(request, id=0):
             return render(request, 'etudiants/create_etudiant.html',{'form':form})
 
 
-
-
-
-
-
-
-
-
-        ##### Tuteurs ####
 
 def tuteurs(request): # Retourne toute la liste des tuteurs
     tuteurs=Tuteur.objects.all()

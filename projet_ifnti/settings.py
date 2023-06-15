@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-y7o2lc)eq4=b@awtr9-8rx2ivxbyg3*17-p2-jqs7nti-%bmpv
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
 
 
 # Application definition
@@ -38,7 +38,11 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'main',
+<<<<<<< HEAD
     'paiement.apps.PaiementConfig',
+=======
+    'maquette.apps.MaquetteConfig',
+>>>>>>> 363a612 (création de l'application maquette)
 ]
 
 MIDDLEWARE = [
