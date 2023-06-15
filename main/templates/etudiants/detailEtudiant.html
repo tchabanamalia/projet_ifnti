@@ -38,7 +38,7 @@
                     <th class="text-center" style="width: 15%;">Adresse</th>
                     <th class="text-center" style="width: 15%;">Date de Naissance</th>
                     <th class="text-center" style="width: 15%;">Lieu de Naissance</th>
-                    <th class="text-center" style="width: 15%;">Préfecture</th>
+                    <th class="text-center" style="width: 15%;">Semestre</th>
                     <th class="text-center" style="width: 15%;">État</th>
                 </tr>
             </thead>
@@ -51,7 +51,11 @@
                     <td class="text-center font-size-sm">{{etudiant.adresse}}</td>
                     <td class="text-center font-size-sm">{{etudiant.datenaissance}}</td>
                     <td class="text-center font-size-sm">{{etudiant.lieunaissance}}</td>
-                    <td class="text-center font-size-sm">{{etudiant.prefecture}}</td>
+                    {% for s in etudiant.semestre.all %}
+                    <td style="text-align: center;">                                       
+                        {{s.libelle}}
+                    </td>  
+                    {% endfor%}                  
                     <td class="text-center font-size-sm">{{etudiant.is_active}}</td>
                 </tr>
             </tbody>

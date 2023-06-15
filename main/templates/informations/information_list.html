@@ -1,0 +1,68 @@
+{% extends '../index.html' %}
+
+{% block content %}
+
+<div class="block block-rounded m-5">
+    <div class="block-header p-4">
+        <h3 class="block-title">Certificat des enseignants</h3>
+        <a href="{% url 'main:create_information'%}">
+            <button type="button" class="btn btn-secondary float-right" id="dropdown-default-secondary" aria-haspopup="true" aria-expanded="false">
+                Ajouter
+            </button>
+        </a>
+    </div>
+    <div class="block-content block-content-full">
+        <!-- DataTables init on table by adding .js-dataTable-full-pagination class, functionality is initialized in js/pages/be_tables_datatables.min.js which was auto compiled from _es6/pages/be_tables_datatables.js -->
+        <table class="table table-bordered table-striped table-vcenter js-dataTable-full-pagination">
+            <thead>
+                <tr>
+                    <th class="text-center" style="width: 30%;">Nom & Prénoms Directeur</th>
+                    <th class="text-center" style="width: 30%;">Nom & Prénoms enseignant</th>
+                    <th class="text-center" style="width: 15%;">Numero de securite </th>
+                    <th class="text-center" style="width: 15%;">Discipline</th>
+                    <th class="text-center" style="width: 15%;">Niveau</th>
+                    <th class="text-center" style="width: 15%;">Date debut</th>
+                    <th class="text-center" style="width: 15%;">Date Fin</th>
+                    <th class="text-center" style="width: 25%;">Durée</th>
+                    <th class="text-center" style="width: 55%;">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for information in informations %}
+                <tr>
+                    <td class="text-center font-size-sm">{{information.nomDirecteur}} {{information.prenomDirecteur}}</td>
+                    <td class="text-center font-size-sm">{{information.nomEnseignant}} {{information.prenomEnseignant}}</td>
+                    <td class="text-center font-size-sm">{{information.numeroSecurite}}</td>
+                    <td class="text-center font-size-sm">{{information.discipline}}</td>
+                    <td class="text-center font-size-sm">{{information.niveau}}</td>
+                    <td class="text-center font-size-sm">{{information.dateDebut}}</td>
+                    <td class="text-center font-size-sm">{{information.dateFin}}</td>
+                    <td class="text-center font-size-sm">{{information.duree}}</td>
+                    <td style="text-align: center;">                                       
+                        <button type="button" class="bs-modal read-book btn btn-sm btn-primary">
+                            <a style="color: blanchedalmond;" href="{% url 'main:information_detail' information.id %}">
+                                <span class="fa fa-eye"></span>                
+                            </a>
+                        </button>
+                        
+                        <button type="button" class="update-book btn btn-sm btn-warning">
+                            <a  style="color: blanchedalmond;" href="{% url 'main:edit_information' information.id %}">
+                                <span><i class="far fa-edit"></i></span>
+                            </a>
+                        </button>
+                    
+                        <button type="button" class="update-book btn btn-sm btn-success">
+                            <a  style="color: blanchedalmond;" href="{% url 'main:certificat_travail' information.id %}">
+                                <span><i class="fas fa-file-pdf"></i></span>
+                            </a>
+                        </button>
+                        
+
+                    </td> 
+                </tr>
+                {% endfor%}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

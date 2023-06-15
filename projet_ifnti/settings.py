@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'main',
     'maquette.apps.MaquetteConfig',
+    'paiement.apps.PaiementConfig',
 ]
 
 MIDDLEWARE = [

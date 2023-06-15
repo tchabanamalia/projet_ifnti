@@ -9,7 +9,7 @@
         </a>
     </div>
     <div class="block-content block-content-full">
-        <form action="{% url 'main:passage_etudiants' %}" method="post" onsubmit="return confirmPassageEtudiants();">
+        <form action="{% url 'main:passage_etudiants' %}" method="post">
             {% csrf_token %}
         <table class="table table-bordered table-striped table-vcenter js-dataTable-full-pagination">
             <thead>
@@ -49,10 +49,4 @@
     </form>
     </div>
 </div>
-
-<script>
-    function confirmPassageEtudiants() {
-        return confirm("Êtes-vous sûr de vouloir passer les étudiants au semestre suivant ?");
-    }
-</script>
 {% endblock %}

@@ -91,24 +91,52 @@ urlpatterns = [
 
                             #### Enseignant ####
     path('create_enseignant/', views.create_enseignant, name='create_enseignant'),
-    path('enseignant_list/', views.enseignant_list, name='enseignant_list'),
+    path('enseignant_list/', views.enseignant_actif, name='enseignant_list'),
+    path('enseignant_suspendu/', views.enseignant_inactif, name='enseignant_suspendu'),
     path('enseignant_detail/(?P<id>[0-9]+)\\Z/', views.enseignant_detail, name='enseignant_detail'),
     path('edit_enseignant/(?P<id>[0-9]+)\\Z/', views.edit_enseignant, name='edit_enseignant'),
+    path('certificat_travail/(?P<id>[0-9]+)\\Z/', views.certificat_travail, name='certificat_travail'),
+
+                        ### Information ###
+    path('information_list/', views.information_list, name='information_list'),
+    path('information_detail/(?P<id>[0-9]+)\\Z/', views.information_detail, name='information_detail'),
+    path('create_information/', views.create_information, name='create_information'),
+    path('edit_information/(?P<id>[0-9]+)\\Z/', views.edit_information, name='edit_information'),
 
 
 
 
 ## Malia clôture des semestres
-    path('semestres/', views.semestres, name='semestres'),
-    path('cloture/', views.cloture, name='cloture'),
-    path('cloturer_semestres/', views.cloturer_semestres, name='cloturer_semestres'),
+    path('semestres/', views.semestres_courants, name='semestres'),
+    path('semestres_clotures/', views.semestres_clotures, name='semestres_clotures'),
+    path('cloturer_semestre/<str:semestre_id>/', views.cloturer_semestre, name='cloturer_semestre'),
+    path('reactiver_semestre/<str:semestre_id>/', views.reactiver_semestre, name='reactiver_semestre'),
 
+
+## Historique des semestres :
+    path('semestre/<str:semestre_id>/historique/', views.historique_semestre, name='historique_semestre'),
+
+
+
+### Liste des étudiants par semestres 
     path('liste-etudiants/semestre1/', views.liste_etudiants_par_semestre, {'semestre': 'S1'}, name='liste_etudiants_semestre1'),
     path('liste-etudiants/semestre2/', views.liste_etudiants_par_semestre, {'semestre': 'S2'}, name='liste_etudiants_semestre2'),
     path('liste-etudiants/semestre3/', views.liste_etudiants_par_semestre, {'semestre': 'S3'}, name='liste_etudiants_semestre3'),
     path('liste-etudiants/semestre4/', views.liste_etudiants_par_semestre, {'semestre': 'S4'}, name='liste_etudiants_semestre4'),
     path('liste-etudiants/semestre5/', views.liste_etudiants_par_semestre, {'semestre': 'S5'}, name='liste_etudiants_semestre5'),
     path('liste-etudiants/semestre6/', views.liste_etudiants_par_semestre, {'semestre': 'S6'}, name='liste_etudiants_semestre6'),
+
+    path('passage_etudiants/', views.passage_etudiants, name='passage_etudiants'),
+
+
+
+
+
+
+
+
+
+
 
 
 ]

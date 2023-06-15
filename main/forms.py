@@ -2,7 +2,7 @@ from typing import Any, Dict
 import re
 from typing import Any, Dict
 from django import forms
-from .models import Evaluation, Note, Utilisateur, Personnel, Enseignant, Etudiant, Matiere, AnneeUniversitaire, Ue, Tuteur, Semestre
+from .models import Evaluation, Information, Note, Utilisateur, Personnel, Enseignant, Etudiant, Matiere, AnneeUniversitaire, Ue, Tuteur, Semestre
 from django.core.exceptions import ValidationError
 from django.forms import DateField
 from django.forms.utils import ErrorList,ErrorDict
@@ -33,10 +33,10 @@ class NoteForm(forms.ModelForm):
 
 class EtudiantForm(forms.ModelForm):
     datenaissance = DateField(widget=forms.SelectDateWidget(years=range(1900, 2006)), label="Date de naissance")
-
+    semestre = forms.ModelMultipleChoiceField(queryset=Semestre.objects.all(), widget=forms.CheckboxSelectMultiple())
     class Meta:
         model = Etudiant
-        fields = ['nom', 'prenom', 'contact', 'sexe', 'email', 'adresse', 'datenaissance', 'lieunaissance', 'prefecture', 'is_active', 'anneeentree', 'seriebac1', 'seriebac2', 'anneebac1', 'anneebac2', 'etablissementSeconde', 'etablissementPremiere', 'etablissementTerminale', 'francaisSeconde', 'francaisPremiere','francaisTerminale', 'anglaisSeconde', 'anglaisPremiere', 'anglaisTerminale', 'mathematiqueSeconde', 'mathematiquePremiere', 'mathematiqueTerminale']
+        fields = ['nom', 'prenom', 'contact', 'sexe', 'email', 'adresse', 'datenaissance', 'lieunaissance', 'prefecture', 'is_active', 'anneeentree', 'seriebac1', 'seriebac2', 'anneebac1', 'anneebac2', 'etablissementSeconde', 'etablissementPremiere', 'etablissementTerminale', 'francaisSeconde', 'francaisPremiere','francaisTerminale', 'anglaisSeconde', 'anglaisPremiere', 'anglaisTerminale', 'mathematiqueSeconde', 'mathematiquePremiere', 'mathematiqueTerminale', 'semestre']
         widgets = {
             'nom': forms.TextInput(attrs={'class': 'form-control col-md-6'}),
             'prenom': forms.TextInput(attrs={'class': 'form-control col-md-6'}),
@@ -47,7 +47,7 @@ class EtudiantForm(forms.ModelForm):
             'datenaissance': DateField(widget=forms.SelectDateWidget(years=range(1900, 2006)), label="Date de naissance"),
             'lieunaissance': forms.TextInput(attrs={'class': 'form-control col-md-6'}),
             'prefecture': forms.TextInput(attrs={'class': 'form-control col-md-6'}),
-            'is_active': forms.CheckboxInput(),
+            'is_active': forms.CheckboxInput(attrs={'class': 'form-control col-md-6'}),
             'anneeentree': forms.TextInput(attrs={'class': 'form-control col-md-6'}),
             'seriebac1': forms.Select(choices=Etudiant.CHOIX_SERIE, attrs={'class': 'form-control col-md-6'}),
             'seriebac2': forms.Select(choices=Etudiant.CHOIX_SERIE, attrs={'class': 'form-control col-md-6'}), 
@@ -65,7 +65,10 @@ class EtudiantForm(forms.ModelForm):
             'mathematiqueSeconde': forms.TextInput(attrs={'class': 'form-control col-md-6'}),
             'mathematiquePremiere': forms.TextInput(attrs={'class': 'form-control col-md-6'}),
             'mathematiqueTerminale': forms.TextInput(attrs={'class': 'form-control col-md-6'}),
+            'semestre': forms.CheckboxSelectMultiple(),
+
         }
+        
 
     def clean(self):
         cleaned_data = super(EtudiantForm, self).clean()
@@ -392,7 +395,20 @@ class EnseignantForm(forms.ModelForm):
                 self._errors['nbreJrsConsommes'] = ErrorDict()
             self._errors['nbreJrsConsommes'] = 'Le nombre de jours de congés consommés ne doit pas dépasser 30'
 
-
+class InformationForm(forms.ModelForm):
+    class Meta:
+        model = Information
+        fields = ('nomDirecteur', 'prenomDirecteur', 'nomEnseignant', 'prenomEnseignant', 'numeroSecurite', 'discipline', 'niveau', 'dateDebut', 'dateFin', 'duree')
+        widgets = {
+            'nomDirecteur': forms.TextInput(attrs={'class': 'form-control'}),
+            'prenomDirecteur': forms.TextInput(attrs={'class': 'form-control'}),
+            'nomEnseignant': forms.TextInput(attrs={'class': 'form-control'}),
+            'prenomEnseignant': forms.TextInput(attrs={'class': 'form-control'}),
+            'numeroSecurite': forms.TextInput(attrs={'class': 'form-control'}),
+            'discipline': forms.TextInput(attrs={'class': 'form-control'}),
+            'niveau': forms.TextInput(attrs={'class': 'form-control'}),
+            'duree': forms.TextInput(attrs={'class': 'form-control'}),
+        }
 
 
          
