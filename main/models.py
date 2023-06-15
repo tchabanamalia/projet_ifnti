@@ -129,38 +129,35 @@ class Etudiant(Utilisateur):
 
 
 class Personnel(Utilisateur):
-    id = models.CharField(primary_key=True, blank=True, max_length=12)  
     salaireBrut = models.DecimalField(max_digits=10, decimal_places=2,  verbose_name="Salaire Brut")
     dernierdiplome = models.ImageField(null=True, blank=True, verbose_name="Dernier diplome")
     nbreJrsCongesRestant = models.IntegerField(verbose_name="Nonbre de jours de congé restant")
     nbreJrsConsomme = models.IntegerField(verbose_name="Nonbre de jours consommé")
 
+    def save(self):
+        #print(self.id)
+        if self.id == None:
+            username = (self.prenom + self.nom).lower()
+            year = date.today().year
+            password = 'ifnti' + str(year) + '!'
+            user = User.objects.create_user(username=username, password=password)
+            self.user = user
 
+        return super().save()
+    
+    def showId(self):
+        return f'PER{self.id}'
 
 class Enseignant(Personnel):
     CHOIX_TYPE = (('Vacataire', 'Vacataire'), ('Permanent', 'Permanent'))
     type = models.CharField(null=True,blank=True,max_length=9, choices=CHOIX_TYPE)
     specialite =  models.CharField(max_length=300, verbose_name="Spécialité", blank=True)
-   
-
-    """clef enseignant"""
-
-    def save(self):
-        if not self.id:
-            enseignants = Enseignant.objects.all()
-            if enseignants:
-                rang_ens = int(enseignants.last().id.replace("ENS", ""))
-                self.id = "ENS" + str(rang_ens + 1)
-            else:
-                self.id = "ENS" + str(1)
-            # Création de l'utilisateur associé à l'instance de l'enseignant
-            username = (self.prenom[0] + self.nom).lower()
-            user = User.objects.create_user(username=username, password="ifnti2023!")
-            self.user = user # On associe l'utilisateur à l'enseignant
-        return super().save()
+    
+    def showId(self):
+        return f'ENS{self.id}'
 
     def __str__(self):
-        return self.prenom + " " + self.nom
+        return "M. "+self.prenom + " " + self.nom
 
 
 
@@ -189,17 +186,28 @@ class Tuteur(models.Model):
     type = models.CharField(blank=True,max_length=20, choices=CHOIX_TYPE)
     etudiants = models.ManyToManyField("Etudiant", verbose_name="Étudiants", blank=True)
 
+    def save(self):
+        #print(self.id)
+        if self.id == None:
+            username = (self.prenom + self.nom).lower()
+            year = date.today().year
+            password = 'ifnti' + str(year) + '!'
+            user = User.objects.create_user(username=username, password=password)
+            self.user = user
+
+        return super().save()
 
 
 
 class Ue(models.Model):
     codeUE = models.CharField(max_length=50, verbose_name="Code de l'UE")
     libelle = models.CharField(max_length=100)
+    TYPES = [("L", "Licence")]
+    type = models.CharField(max_length=1, choices=TYPES, null=True)
     nbreCredits = models.IntegerField(verbose_name="Nombre de crédit")
-    heures = models.DecimalField(blank=True, max_digits=4, decimal_places=1)
-    enseignant = models.ForeignKey('Enseignant', on_delete=models.CASCADE,verbose_name="Enseignant",null=True, blank=True)
-    semestre = models.ForeignKey('Semestre', on_delete=models.CASCADE, verbose_name="Semestre")
- 
+    heures = models.DecimalField(blank=True, max_digits=4, decimal_places=1, validators=[MinValueValidator(1)])
+    enseignant = models.ForeignKey('Enseignant', on_delete=models.CASCADE,verbose_name="Enseignant", null=True, blank=True)
+
     class Meta:
         verbose_name_plural = 'UE'
 
@@ -213,10 +221,10 @@ class Matiere(models.Model):
     libelle = models.CharField(max_length=100)
     coefficient = models.IntegerField(null=True,  verbose_name="Coefficient", default="1")
     minValue = models.FloatField(null=True,  verbose_name="Valeur minimale",  default="7")
+    heures = models.DecimalField(blank=True, max_digits=4, decimal_places=1, validators=[MinValueValidator(1)], null=True) # Retirer plus tard le null
     enseignant = models.ForeignKey('Enseignant', on_delete=models.CASCADE,verbose_name="Enseignant",null=True, blank=True)
     ue = models.ForeignKey('Ue', on_delete=models.CASCADE)
     is_active = models.BooleanField(default=True, verbose_name="Actif")
-
 
     def __str__(self):
 
@@ -255,49 +263,55 @@ class Competence(models.Model):
     ue = models.ForeignKey('Ue', on_delete=models.CASCADE, verbose_name="UE")
     matiere = models.ForeignKey('Matiere', on_delete=models.CASCADE, verbose_name="Matiere")
 
-   
-
-
-
-class MaquetteGenerique(models.Model):
-    pass
-
-
 
 class Semestre(models.Model):
     id = models.CharField(primary_key=True, blank=True, max_length=14)
     CHOIX_SEMESTRE = [('S1', 'Semestre1'), ('S2', 'Semestre2'), ('S3', 'Semestre3'), ('S4', 'Semestre4'), ('S5', 'Semestre5'), ('S6', 'Semestre6')]
     libelle = models.CharField(max_length=30, choices=CHOIX_SEMESTRE)
-    anneescolaire = models.ForeignKey('AnneeUniversitaire', on_delete=models.CASCADE, verbose_name="Année universitaire")
     credits = models.IntegerField(default=30) 
     semestreCourant = models.BooleanField(default=False, verbose_name="Semestre acutuelle", null=True)
    
     """clef Semestre"""
 
     def save(self):
-        if not self.id: self.id = self.libelle +"-"+ str(self.anneescolaire)
+        if not self.id: self.id = self.libelle +"-"+ str("A revoir avec malik")
         return super().save()
 
     def __str__(self):
 
-        return self.libelle + " " + str(self.anneescolaire) + " " + str(self.semestreCourant)
+        return self.libelle + " " + str("A revoir avec malik") + " " + str(self.semestreCourant)
 
     class Meta:
-        unique_together = [["anneescolaire", "libelle"]]
+        unique_together = [["libelle"]]
 
 
+class Domaine(models.Model):
+    libelle = models.CharField(max_length=255, verbose_name="Libelle")
+    description = models.TextField(max_length=500, verbose_name="description")
+    def __str__(self):
+        return self.libelle
 
-
+class Parcours(models.Model):
+    libelle = models.CharField(max_length=255, verbose_name="Libelle")
+    domaine = models.ForeignKey(Domaine, on_delete = models.CASCADE, verbose_name="Domaine", null=True)
+    description = models.TextField(max_length=500, verbose_name="description")
+    def __str__(self):
+        return self.libelle
 
 
 class AnneeUniversitaire(models.Model):
     anneeUniv = models.CharField(max_length=300, verbose_name="Année universitaire")
-    #anneeUnivCourante = models.BooleanField(default=False, verbose_name="Année universitaire acutuelle", null=True)
+    anneeUnivCourante = models.BooleanField(default=False, verbose_name="Année universitaire acutuelle", null=True)
     
     def __str__(self):
         return str(self.anneeUniv)
 
 
+class Programme(models.Model):
+    parcours = models.ForeignKey(Parcours, on_delete=models.CASCADE, verbose_name="Parcours", null=True, blank=True)
+    semestre = models.ForeignKey(Semestre, on_delete=models.CASCADE, verbose_name="Semestre")
+    ue = models.ForeignKey(Ue, on_delete=models.CASCADE, verbose_name="UE")
+    anneescolaire = models.ForeignKey(AnneeUniversitaire, on_delete=models.CASCADE, verbose_name="Année universitaire")
 
 class Note(models.Model):
     """

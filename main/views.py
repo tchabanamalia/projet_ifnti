@@ -5,18 +5,17 @@ from django.shortcuts import render
 
 from django import forms
 from main.forms import  EnseignantForm, EtudiantForm, EvaluationForm, NoteForm, TuteurForm, UeForm, MatiereForm
-from .models import Enseignant, Evaluation, Matiere, Etudiant, Competence, Note, Comptable, Semestre, Ue, AnneeUniversitaire, Personnel, Tuteur, MaquetteGenerique 
+from .models import Enseignant, Evaluation, Matiere, Etudiant, Competence, Note, Comptable, Semestre, Ue, AnneeUniversitaire, Personnel, Tuteur 
 from django.shortcuts import get_object_or_404, redirect, render
 from django.shortcuts import get_list_or_404
 
 
 from main.helpers import *
 from main.pdfMaker import generate_pdf
-from .models import Enseignant, Evaluation, Matiere, Etudiant, Competence, Note, Comptable, Semestre, Ue, AnneeUniversitaire, Personnel, Tuteur, MaquetteGenerique 
-from django.shortcuts import get_object_or_404, redirect, render
 from django.db import transaction
-
-
+"""
+from main import factory
+"""
 
 def index(request):
     return render(request, 'ui.html')
@@ -64,15 +63,6 @@ def create_etudiant(request, id=0):
             return render(request, 'etudiants/create_etudiant.html',{'form':form})
 
 
-
-
-
-
-
-
-
-
-        ##### Tuteurs ####
 
 def tuteurs(request): # Retourne toute la liste des tuteurs
     tuteurs=Tuteur.objects.all()
@@ -898,3 +888,5 @@ def liste_etudiants_par_semestre(request, semestre):
         'etudiants': etudiants
     }
     return render(request, 'etudiants/liste_etudiants_par_semestre.html', context)
+
+
