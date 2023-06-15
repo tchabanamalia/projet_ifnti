@@ -1,0 +1,70 @@
+{% extends 'index.html' %}
+{% load static %}
+{% block content_title %} Maquette {% endblock content_title %}
+{% block content_title_description %} {% endblock content_title_description %}
+{% block content %}
+<div class="container">
+    <div class="block block-rounded">
+        <div class="block-header">
+            <h3 class="block-title"> Générer une maquette</h3>
+        </div>
+        <form method="POST" action="">
+            {% csrf_token %}
+            <div class="block-content row">
+                <div class="form-group col-lg-2">
+                    <label for="semestre" class="text-capitalize">semestre</label>
+                    <select class="form-control" id="semestre" name="semestre">
+                        <option value="{{ semestre.id }}" class="text-capitalize">séléctionner</option>
+                        {% for semestre in semestres %}
+                        <option value="" class="text-capitalize">{{ semestre }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="form-group col-lg-2">
+                    <label for="domaine" class="text-capitalize">domaine</label>
+                    <select class="form-control" id="domaine" name="domaine">
+                        <option value="" class="text-capitalize">séléctionner</option>
+                        {% for domaine in domaines %}
+                        <option value="{{ domaine.id }}" class="text-capitalize">{{ domaine }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="form-group col-lg-2">
+                    <label for="parcours" class="text-capitalize">parcours</label>
+                    <select class="form-control" id="parcours" name="parcours">
+                        <option value="" class="text-capitalize">séléctionner</option>
+                        {% for p in parcours %}
+                        <option value="{{ p.id }}" class="text-capitalize">{{ p }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="form-group col-lg-3">
+                    <label for="type_maquette" class="text-capitalize">Type de maquette</label>
+                    <select class="form-control" id="type_maquette" name="type_maquette">
+                        <option value="" class="text-capitalize">séléctionner</option>
+                        {% for type_maquette in type_maquettes %}
+                        <option value="{{ type_maquette }}" class="text-capitalize">{{ type_maquette }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-lg-3">
+                    <form action="" method="POST">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-outline-primary mt-4">
+                            <i class="si si-refresh"></i> Générer
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </form>
+        <div class="block-content block-content-full">
+            <embed src="{% static '/pdf/maquette_generique.pdf' %}" type="application/pdf" width="100%" height="800px"/>
+        </div>
+    </div>
+</div>
+{% endblock content %}
+{% block scripts %}
+    <script type="text/javascript">
+        
+    </script>
+{% endblock scripts %}
