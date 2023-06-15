@@ -9,7 +9,7 @@ from main.forms import  EnseignantForm, EtudiantForm, EvaluationForm, Informatio
 
 import datetime
 from main.pdfMaker import generate_pdf
-from .models import Enseignant, Information, Matiere, Etudiant, Competence, Note, Comptable, Semestre, Ue, AnneeUniversitaire, Personnel, Tuteur, MaquetteGenerique 
+from .models import Enseignant, Information, Matiere, Etudiant, Competence, Note, Comptable, Semestre, Ue, AnneeUniversitaire, Personnel, Tuteur 
 from django.shortcuts import get_object_or_404, redirect, render
 from latex import build_pdf
 from django.template import loader
@@ -20,25 +20,10 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.shortcuts import get_list_or_404
 from django.core.exceptions import ObjectDoesNotExist
 from django.contrib import messages
-
-
 from main.helpers import *
-from main.pdfMaker import generate_pdf
-from django.db import transaction
-<<<<<<< HEAD
 """
 from main import factory
 """
-=======
-
-
-from django.contrib.auth.decorators import login_required
-from django.http import HttpResponseRedirect
-from .models import Semestre, AnneeUniversitaire
-
-
-
->>>>>>> main
 
 def index(request):
     return render(request, 'ui.html')

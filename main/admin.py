@@ -1,7 +1,6 @@
 from django.contrib import admin
-from .models import Enseignant, Evaluation, Information, Programme, Matiere, Etudiant, Competence, Note, Comptable, Semestre, Ue, AnneeUniversitaire, Personnel, Tuteur, MaquetteGenerique, Paiement
+from .models import Enseignant, Evaluation, Information, Programme, Matiere, Etudiant, Competence, Note, Comptable, Semestre, Ue, AnneeUniversitaire, Personnel, Tuteur, Paiement
 from main.forms import EnseignantForm
-from .models import Enseignant, Matiere, Etudiant, Competence, Note, Comptable, Semestre, Ue, AnneeUniversitaire, Personnel, Tuteur, MaquetteGenerique, Paiement, Evaluation, Information
 
 admin.site.register(Evaluation)
 class EnseignantAdmin(admin.ModelAdmin):
