@@ -921,8 +921,9 @@ def liste_etudiants_par_semestre(request, semestre):
     context = {
         'etudiants': etudiants
     }
-    return render(request, 'etudiants/liste_etudiants_par_semestre.html', context)
-
+    if etudiants :
+        return render(request, 'etudiants/liste_etudiants_par_semestre.html', context)
+    return HttpResponse('Pas d\étudiant dans ce semestre')
 
 
 
