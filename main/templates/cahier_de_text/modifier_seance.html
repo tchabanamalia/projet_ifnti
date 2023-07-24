@@ -1,0 +1,70 @@
+{% extends '../index.html' %}
+
+{% load static %}
+
+{% block content %}
+
+ <main id="main-container">
+                <!-- Hero -->
+              <div class="block block-rounded">
+						    <div class="block-header">
+						        <h3 class="block-title">Modifier une séance</h3>
+						    </div>
+						    <div class="block-content block-content-full">
+						        <form action="/main/modifier_seance/{{ seance.id }}" method="POST">
+						            {% csrf_token %}
+						            <div class="row">
+						                <div class="col-lg-4">
+						                    <p class="font-size-sm text-muted">
+						                        Veuillez modifier les informations nécessaires
+						                    </p>
+						                </div>
+						                <div class="col-lg-8 col-xl-5">
+						                    <div class="form-group">
+						                        <label for="intitulé">Intitulé</label>
+						                        <input type="text" class="form-control form-control-alt" id="intitulé" name="intitulé" placeholder="Text Input" value="{{ seance.intitule }}">
+						                    </div>
+
+						                    <div class="form-row">
+						                        <div class="form-group col-xl-7">
+						                            <label for="dateheuredebut">Date et Heure du début de la séance</label>
+						                            <input type="text" class="js-flatpickr form-control bg-white" id="dateheuredebut" name="dateheuredebut" data-enable-time="true" data-time_24hr="true" value="{{ seance.date_et_heure_debut }}">
+						                        </div>
+						                    </div>
+						                    <div class="form-row">
+						                        <div class="form-group col-xl-7">
+						                            <label for="dateheurefin">Date et Heure fin de la séance</label>
+						                            <input type="text" class="js-flatpickr form-control bg-white" id="dateheurefin" name="dateheurefin" data-enable-time="true" data-time_24hr="true" value="{{ seance.date_et_heure_fin }}">
+						                        </div>
+						                    </div>
+						                    <div class="form-group">
+						                        <label for="description">Saisissez le résumé de la séance</label>
+						                        <textarea class="form-control form-control-alt" id="description" name="description" rows="7" placeholder="Textarea content..">{{ seance.description }}</textarea>
+						                    </div>
+						                    <div class="form-group">
+						                        <label for="matiere">Sélectionnez la matière</label>
+						                        <select class="form-control" id="matiere" name="matiere">
+						                            {% for matiere in matieres %}
+						                                <option value="{{ matiere.id }}" {% if seance.matiere.id == matiere.id %}selected{% endif %}>{{ matiere.libelle }}</option>
+						                            {% endfor %}
+						                        </select>
+						                    </div>
+						                    <div class="form-group">
+						                        <label for="eleves-absents">Élèves absents</label>
+						                        <select class="form-control" id="eleves-absents" name="eleves-absent" multiple>
+						                            {% for etudiant in etudiants %}
+						                                <option value="{{ etudiant.id }}" >{{ etudiant.nom }} {{ etudiant.prenom }}</option>
+						                            {% endfor %}
+						                        </select>
+						                    </div>
+						                    <button type="submit" class="btn btn-outline-primary">Enregistrer les modifications</button>
+						                </div>
+						            </div>
+						        </form>
+						    </div>
+						
+
+                    
+                </div>
+            </main>
+  {% endblock %}

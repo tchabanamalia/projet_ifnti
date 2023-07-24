@@ -34,7 +34,9 @@ class Utilisateur(models.Model):
     carte_identity = models.CharField(max_length=50, null=True,  verbose_name="Carte d'identité")
     nationalite = models.CharField(max_length=30, default='Togolaise', verbose_name='Nationalté',blank=True)
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    
+    role = models.CharField(max_length=50,default="User")
+   
+
     class Meta:
         abstract = True
 
@@ -108,8 +110,8 @@ class Etudiant(Utilisateur):
             username = (self.prenom + self.nom).lower()
             year = date.today().year
             password = 'ifnti' + str(year) + '!'
-            user = User.objects.create_user(username=username, password=password)
-
+            user = User.objects.create_user(username=username, password=password,email=self.email,last_name=self.nom,first_name=self.prenom,is_staff=False)
+            
             self.user = user # association de l'utilisateur à l'instance de l'étudiant
         return super().save()
 
@@ -118,6 +120,7 @@ class Etudiant(Utilisateur):
 
 
 class Personnel(Utilisateur):
+    id = models.CharField(primary_key=True, blank=True, max_length=12) 
     salaireBrut = models.DecimalField(max_digits=10, decimal_places=2,  verbose_name="Salaire Brut")
     dernierdiplome = models.ImageField(null=True, blank=True, verbose_name="Dernier diplome")
     nbreJrsCongesRestant = models.IntegerField(verbose_name="Nonbre de jours de congé restant")
@@ -137,11 +140,63 @@ class Personnel(Utilisateur):
     def showId(self):
         return f'PER{self.id}'
 
+
+class DirecteurDesEtudes(Personnel):
+    actif = models.BooleanField(default=True)
+
+    def save(self, *args, **kwargs):
+        if not self.id:
+            directeurs = DirecteurDesEtudes.objects.all()
+            if directeurs:
+                raise ValidationError("Il ne peut y avoir qu'un seul directeur des études.")
+            
+            username = (self.prenom[0] + self.nom).lower()
+            password = "ifnti2023!"  # Définir le mot de passe souhaité
+            user = User.objects.create_user(username=username, password=password, email=self.email, last_name=self.nom, first_name=self.prenom, is_staff=True)
+            self.user = user
+
+        if self.actif:
+            # Désactiver les autres directeurs des études
+            DirecteurDesEtudes.objects.exclude(pk=self.pk).update(actif=False)
+
+        return super().save(*args, **kwargs)
+
+    def delete(self, *args, **kwargs):
+        if self.actif:
+            raise ValidationError("Le directeur des études actif ne peut pas être supprimé.")
+        return super().delete(*args, **kwargs)
+
+    def __str__(self):
+        return self.prenom + " " + self.nom
+
+    class Meta:
+        verbose_name = "Directeur des études"
+        verbose_name_plural = "Directeurs des études"
+    
+
+
 class Enseignant(Personnel):
     CHOIX_TYPE = (('Vacataire', 'Vacataire'), ('Permanent', 'Permanent'))
     type = models.CharField(null=True,blank=True,max_length=9, choices=CHOIX_TYPE)
     specialite =  models.CharField(max_length=300, verbose_name="Spécialité", blank=True)
     
+
+    def save(self):
+        if not self.id:
+            enseignants = Enseignant.objects.all()
+            if enseignants:
+                rang_ens = int(enseignants.last().id.replace("ENS", ""))
+                self.id = "ENS" + str(rang_ens + 1)
+            else:
+                self.id = "ENS" + str(1)
+            # Création de l'utilisateur associé à l'instance de l'enseignant
+            
+            username = (self.prenom[0] + self.nom).lower()
+            user =User.objects.create_user(username=username, password="ifnti2023!",email=self.email,last_name=self.nom,first_name=self.prenom,is_staff=True)
+            self.user = user # On associe l'utilisateur à l'enseignant
+            
+        return super().save()
+
     def showId(self):
         return f'ENS{self.id}'
 
@@ -276,6 +331,23 @@ class Domaine(models.Model):
     description = models.TextField(max_length=500, verbose_name="description")
     def __str__(self):
         return self.libelle
+
+class Seance(models.Model):
+    intitule = models.CharField(max_length=200)
+    date_et_heure_debut = models.DateTimeField()
+    date_et_heure_fin = models.DateTimeField()
+    description = models.TextField()
+    auteur = models.ForeignKey(Etudiant, on_delete=models.CASCADE,related_name='seance_auteur',default='Anonyme')
+    valider = models.BooleanField(default=False)
+    matiere = models.ForeignKey(Matiere, on_delete=models.CASCADE)
+    eleves_presents = models.ManyToManyField(Etudiant,related_name='seances_presents')
+
+
+    def __str__(self):
+        return self.intitule
+        
+
+
 
 class Parcours(models.Model):
     libelle = models.CharField(max_length=255, verbose_name="Libelle")
