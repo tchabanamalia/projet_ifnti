@@ -658,6 +658,7 @@ def deleteEvaluation(request, id):
     return redirect('main:evaluations', id_matiere=matiere.id)
 
 
+
 def annee_academique(date):
 
     annee = date.year
@@ -669,9 +670,40 @@ def annee_academique(date):
     
     return {"annee_academique": f"{annee}-{annee+1}"}
 
+date = datetime.date.today()
+result = annee_academique(date)
+#annee_univ = AnneeUniversitaire(anneeUniv=result["annee_academique"])
+#annee_univ.save()
 
 def dashboard(request):
-    return render(request, 'dashboard/be_pages_dashboard.html',context=result)
+    return render(request, 'dashboard.html',context=result)
+
+
+
+def affectation_matieres_professeur(request):
+    enseignants_filtrer = Enseignant.objects.all()
+    matieres=Matiere.objects.all()
+
+    
+    if request.method == "POST":
+        enseignant_id = request.POST.get("enseignant")
+        enseignant_choisi=get_object_or_404(Enseignant,id=enseignant_id)
+        matieres_selectionnees = request.POST.getlist("matieres[]")
+        ponderation_choisi=request.POST.getlist("ponderations[]")
+
+        for index, matiere in enumerate(matieres_selectionnees):
+            matiere_obj = get_object_or_404(Matiere,libelle=matiere)
+            ponderation = float(ponderation_choisi[index])
+            matiere_obj.enseignant=enseignant_choisi
+            matiere_obj.ponderation =ponderation
+            matiere_obj.save()
+        
+        return render(request, "matieres/liste_matieres.html", {"matieres":matieres })
+    
+    else:
+        matieres_filtrer = Matiere.objects.filter(enseignant=None)
+        context = {'enseignants': enseignants_filtrer, 'matieres': matieres_filtrer}
+        return render(request, "matieres/affectation_professeur.html", context)
 
 
 def liste_matieres_professeur(request):
@@ -708,6 +740,291 @@ def retirer_prof(request,pk):
     matiere.save()
     return redirect('confirmation_affectation')
 
+
+
+def retirer_professeur(request, id):
+    matiere = get_object_or_404(Matiere, pk=id)
+    matiere.enseignant = None
+    matiere.save()
+
+    return redirect('/main/liste_matieres_professeur')
+
+def modifier_ponderation(request, matiere_id, ponderation):
+    matiere = get_object_or_404(Matiere, pk=matiere_id)
+    matiere.ponderation = ponderation
+    matiere.save()
+
+    return redirect('/main/liste_matieres_professeur')
+
+
+@login_required
+def enregistrer_seance(request):
+    if request.method == "POST":
+        intitule = request.POST.get("intitulé")
+        description = request.POST.get("description")
+        date=request.POST.get("dateseance")
+        heure_debut = request.POST.get("heuredebut")
+        heure_fin = request.POST.get("heurefin")
+        date_et_heure_debut = date + ' '+heure_debut
+        date_et_heure_fin = date + ' '+heure_fin
+        eleves_absents = request.POST.getlist("eleves-absent")
+        print("eleves absent : ",eleves_absents)
+        matiere_id = request.POST.get("matiere")
+        etudiant_id = request.POST['ecrit_par']
+        matiere_obj=get_object_or_404(Matiere, pk=matiere_id)
+        user_connecte=get_object_or_404(get_user_model(),id=request.user.id)
+        auteur_obj=get_object_or_404(Etudiant,user=user_connecte)
+
+        seance = Seance(
+            intitule=intitule,
+            description=description,
+            date_et_heure_debut=date_et_heure_debut,
+            date_et_heure_fin=date_et_heure_fin,
+            matiere=matiere_obj,
+            auteur=auteur_obj
+        )
+        seance.save()
+        for etudiant_id in eleves_absents:
+            print("absent id : ",etudiant_id)
+            etudiant_obj = get_object_or_404(Etudiant, id=etudiant_id)
+            seance.eleves_presents.add(etudiant_obj)
+            print("absent  : ",etudiant_obj)
+
+        
+
+
+
+        return redirect("/main/info_seance/" + str(seance.id) + "/" ) 
+
+    elif request.user.is_authenticated:
+        user_connecte=get_object_or_404(settings.AUTH_USER_MODEL,id=request.user.id)
+        etudiant=get_object_or_404(Etudiant,user=user_connecte)
+        print("etudiant :" ,etudiant)
+        semestres= etudiant.semestre.all()
+        for semestre in semestres:
+            print(semestre.libelle)
+            etudiants = Etudiant.objects.filter(semestre=semestre)
+        ue=Ue.objects.filter(semestre=semestre)
+        matieres = Matiere.objects.filter(ue__in=ue)
+        return render(request, "cahier_de_text/enregistrer_seance.html", {"etudiants": etudiants, "matieres": matieres,"etudiant":etudiant})
+
+    else :
+        return redirect('/admin/')
+
+@login_required
+def modifier_seance(request, seance_id):
+    seance = get_object_or_404(Seance, id=seance_id)
+    etudiants = Etudiant.objects.all()
+    matieres = Matiere.objects.all()
+
+    if request.method == "POST":
+        seance.intitule = request.POST.get("intitulé")
+        seance.description = request.POST.get("description")
+        seance.date_et_heure_debut = request.POST.get("dateheuredebut")
+        seance.date_et_heure_fin = request.POST.get("dateheurefin")
+        eleves_absents = request.POST.getlist("eleves-absent")
+        seance.matiere = get_object_or_404(Matiere, id=request.POST.get("matiere"))
+        seance.valider=False
+
+        seance.eleves_absents.clear()
+        for etudiant_id in eleves_absents:
+            etudiant = get_object_or_404(Etudiant, id=etudiant_id)
+            seance.eleves_absents.add(etudiant)
+            
+
+        seance.save()
+
+        return redirect("/main/info_seance/" + int(seance.id)+ "/" )  # Redirect to the session detail page
+
+    return render(request, "cahier_de_text/modifier_seance.html", {"seance": seance, "etudiants": etudiants, "matieres": matieres})
+
+def changer_secretaire(request):
+    return render(request, "cahier_de_text/details_seance.html")
+
+def gestion_classe(request):
+    # Récupérer les étudiants de la licence 1 (semestre S2)
+    students = Etudiant.objects.all()
+    license1_students = set()
+    license2_students = set()
+    license3_students = set()
+    s2 = Semestre.objects.filter(id="S2")
+    s4 = Semestre.objects.filter(id="S4")
+    s6 = Semestre.objects.filter(id="S6")
+    
+    for etudiant in students: 
+        semestres = etudiant.semestre.all()
+        if set(s2) <= set(semestres):
+            license1_students.add(etudiant)
+        
+    for etudiant in students:
+        semestres = etudiant.semestre.all()
+        if set(s4) <= set(semestres):
+            license2_students.add(etudiant)
+
+    for etudiant in students:
+        semestres = etudiant.semestre.all()
+        if set(s6) <= set(semestres):
+            license3_students.add(etudiant)
+
+    context = {
+        'license1_students': license1_students,
+        'license2_students': license2_students,
+        'license3_students': license3_students,
+    }
+
+    return render(request, "cahier_de_text/controle_classe.html", context)
+
+
+
+
+
+@login_required
+def info_seance(request, seance_id):
+    seance = get_object_or_404(Seance, id=seance_id)
+
+    return render(request, "cahier_de_text/details_seance.html", {"seance": seance})
+
+@login_required
+def valider_seance(request,seance_id):
+    seance = get_object_or_404(Seance, id=seance_id)
+    seance.valider=True
+    seance.save()
+    return redirect("/main/liste_seance/") 
+
+
+def datetime_serializer(obj):
+    if isinstance(obj, datetime2):
+        return obj.strftime('%Y-%m-%dT%H:%M:%S')
+    raise TypeError("Type not serializable")
+
+
+@login_required
+def cahier_de_text(request):
+    if request.user.is_authenticated:
+        if not request.user.is_staff:
+            user_connecte=get_object_or_404(get_user_model(),id=request.user.id)
+            etudiant=get_object_or_404(Etudiant,user=user_connecte)
+            semestres= etudiant.semestre.all()
+            seances=Seance.objects.all()
+            events = set()
+            for seance in seances:
+                semestre_auteur = seance.auteur.semestre.all()
+                if set(semestre_auteur) <= set(semestres):
+                    print("seance :", seance)
+                    events.add(seance)
+            print("seances :",events )
+            event_data = [{'title': event.intitule, 'start': event.date_et_heure_debut , 'end':event.date_et_heure_fin ,'url': '/main/info_seance/' + str(event.id) + '/'} for event in events]
+            event_data = json.dumps(event_data, default=datetime_serializer)
+            return render(request,"cahier_de_text/cahier_de_texte.html",{"event_data":event_data})
+
+        elif request.user.is_staff:
+            s3=Semestre.objects.filter(id="S3")
+            s5=Semestre.objects.filter(id="S5")
+            s6=Semestre.objects.filter(id="S6")
+            events = set()
+            seances=Seance.objects.all()
+
+            if request.method=="POST" and request.POST.get("niveau")=="L1" : 
+                for seance in seances:
+                    semestre_auteur = seance.auteur.semestre.all()
+                    if s3 not in semestre_auteur:
+                        events.add(seance)
+
+            elif request.method=="POST" and request.POST.get("niveau")=="L2" : 
+                for seance in seances:
+                    semestre_auteur = seance.auteur.semestre.all()
+                    if s5 not in semestre_auteur:
+                        events.add(seance)
+            else :
+                for seance in seances:
+                    semestre_auteur = seance.auteur.semestre.all()
+                    if s6 in semestre_auteur:
+                        events.add(seance)
+
+            event_data = [{'title': event.intitule, 'start': event.date_et_heure_debut , 'end':event.date_et_heure_fin ,'url': '/main/info_seance/' + str(event.id) + '/'} for event in events]
+            event_data = json.dumps(event_data, default=datetime_serializer)
+            return render(request,"cahier_de_text/cahier_de_texte.html",{"event_data":event_data})
+
+
+    
+
+@login_required
+def liste_seance(request):
+    if request.user.is_authenticated:
+        user_connecte=get_object_or_404(get_user_model(),id=request.user.id)
+        enseignant_connecte = get_object_or_404(Enseignant, user=user_connecte)
+        matieres = Matiere.objects.filter(enseignant=enseignant_connecte)
+        seances_en_attente = Seance.objects.filter(matiere__in=matieres, valider=False)
+        seances_validees = Seance.objects.filter(matiere__in=matieres, valider=True)
+        return render(request, "cahier_de_text/liste_seance.html", {"seances_en_attente": seances_en_attente, "seances_validees": seances_validees})
+
+@login_required
+def liste_seance_etudiant(request):
+    if request.user.is_authenticated:
+        user_connecte=get_object_or_404(get_user_model(),id=request.user.id)
+        etudiant_connecte = get_object_or_404(Etudiant, user=user_connecte)
+        seances_en_attente = Seance.objects.filter(auteur=etudiant_connecte, valider=False)
+        seances_validees = Seance.objects.filter(auteur=etudiant_connecte,valider=True)
+        return render(request, "cahier_de_text/liste_seance_etudiant.html", {"seances_en_attente": seances_en_attente, "seances_validees": seances_validees})
+
+
+
+
+def login_view(request):
+    if request.method == "POST":
+        username = request.POST.get('login-username')
+        password = request.POST.get('login-password')
+        user = authenticate(request, username=username, password=password)
+
+        if user is not None:
+            login(request, user)
+            return redirect('/main/dashboard')
+        else:
+            return render(request, "connexion/login.html", {'error': 'Identifiants invalides'})
+    else:
+        return render(request, "connexion/login.html")
+
+
+
+def recuperation_mdp(request):
+    def get(self, request):
+        return render(request, "connexion/reminder.html")
+
+    def post(self, request):
+        email_or_username = request.POST.get('email_or_username')
+        try:
+            user = get_user_model().objects.get(email=email_or_username)
+        except settings.AUTH_USER_MODEL.DoesNotExist:
+            try:
+                user = get_user_model().objects.get(username=email_or_username) 
+            except User.DoesNotExist:
+                user = None
+
+        if user is not None:
+            password = get_user_model().objects.make_random_password() 
+            user.set_password(password) 
+            user.save()
+
+            if hasattr(user, 'enseignant'):
+                user_type = 'Enseignant'
+                recipient_email = user.enseignant.email
+            elif hasattr(user, 'etudiant'):
+                user_type = 'Etudiant'
+                recipient_email = user.etudiant.email
+            else:
+                user_type = 'Autre'
+                recipient_email = user.email
+
+            subject = f"Récupération du mot de passe - {user_type}"
+            message = f"Bonjour {user_type},\n\nVotre mot de passe a été réinitialisé. Voici votre nouveau mot de passe : {password}\n\nMerci."
+            from_email = 'ifnti@ifnti.com'
+            send_mail(subject, message, from_email, [recipient_email])
+
+        return redirect('/main/connexion/')
+
+def logout_view(request):
+    logout(request)
+    return  render(request, "connexion/login.html")
 
 
             ##### Enseignant #####

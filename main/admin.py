@@ -20,6 +20,8 @@ admin.site.register(Personnel)
 admin.site.register(AnneeUniversitaire)
 admin.site.register(Information)
 admin.site.register(Paiement)
+admin.site.register(DirecteurDesEtudes)
+admin.site.register(Seance)
 
 
 
