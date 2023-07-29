@@ -3,7 +3,7 @@ import re
 from typing import Any, Dict
 from django import forms
 
-from main.models import Comptable, Paiement
+from main.models import Comptable, Paiement, FicheDePaie
 from .models import Evaluation, Note, Utilisateur, Personnel, Enseignant, Etudiant, Matiere, AnneeUniversitaire, Ue, Tuteur, Semestre
 from django.core.exceptions import ValidationError
 from django.forms import DateField
@@ -227,6 +227,33 @@ class PaiementForm(forms.ModelForm):
             self._errors['debit'] = 'Le débit ne doit pas être égal au crédit'
 
     
-
+class FicheDePaieForm(forms.ModelForm):
+    class Meta:
+        model = FicheDePaie
+        fields = ['dateDebut', 'dateFin','niveau1', 'niveau2', 'niveau3', 'bp', 'telephone',  'enseignant', 'prixUnitaire', 'montantAvance', 'montantAPayer', 'numero', 'heureL1', 'heureL2', 'heureL3', 'matiere', 'montantTotal', 'nombreHeure', 'montantL1', 'montantL2', 'montantL3', 'montantEnLettre']   
+        widgets = {
+            'dateDebut': forms.DateInput(attrs={'type': 'date'}),
+            'dateFin': forms.DateInput(attrs={'type': 'date'}),
+            'niveau1': forms.Select(choices=FicheDePaie.TYPE_CHOISE, attrs={'class': 'form-control'}),
+            'niveau2': forms.Select(choices=FicheDePaie.TYPE_CHOISE1, attrs={'class': 'form-control'}),
+            'niveau3': forms.Select(choices=FicheDePaie.TYPE_CHOISE2, attrs={'class': 'form-control'}),
+            'bp': forms.NumberInput(attrs={'class': 'form-control'}),
+            'telephone': forms.NumberInput(attrs={'class': 'form-control'}),
+            'matiere': forms.TextInput(attrs={'class': 'form-control'}),
+            'enseignant': forms.Select(attrs={'class': 'form-control'}),
+            'nombreHeure': forms.NumberInput(attrs={'class': 'form-control'}),
+            'prixUnitaire': forms.NumberInput(attrs={'class': 'form-control'}),
+            'montantTotal': forms.NumberInput(attrs={'class': 'form-control'}),
+            'montantAvance': forms.NumberInput(attrs={'class': 'form-control'}),
+            'montantAPayer': forms.NumberInput(attrs={'class': 'form-control'}),
+            'montantEnLettre': forms.TextInput(attrs={'class': 'form-control'}),
+            'numero': forms.NumberInput(attrs={'class': 'form-control'}),
+            'heureL1': forms.NumberInput(attrs={'class': 'form-control'}),
+            'heureL2': forms.NumberInput(attrs={'class': 'form-control'}),
+            'heureL3': forms.NumberInput(attrs={'class': 'form-control'}),
+            'montantL1': forms.NumberInput(attrs={'class': 'form-control'}),
+            'montantL2': forms.NumberInput(attrs={'class': 'form-control'}),
+            'montantL3': forms.NumberInput(attrs={'class': 'form-control'}),
+        }
 
         

@@ -371,7 +371,13 @@
                 <li class="nav-main-item">
                     <a class="nav-main-link nav-main-link-name" data-toggle="" aria-haspopup="true" aria-expanded="false" href="{% url 'main:enseignant_suspendu' %}">
                         <i class="nav-main-link-icon "></i>
-                        <span class="nav-main-link-name">Liste des suspendus</span>
+                        <span class="nav-main-link-name">Liste des enseignants suspendus</span>
+                    </a>                   
+                </li>
+                <li class="nav-main-item">
+                    <a class="nav-main-link nav-main-link-name" data-toggle="" aria-haspopup="true" aria-expanded="false" href="{% url 'main:information_list' %}">
+                        <i class="nav-main-link-icon "></i>
+                        <span class="nav-main-link-name">Délivrer une attestation de service</span>
                     </a>                   
                 </li>
                 <li class="nav-main-item">
@@ -385,6 +391,12 @@
                     <a class="nav-main-link nav-main-link-name" data-toggle="" aria-haspopup="true" aria-expanded="false" href="{% url 'paiement:paiement_list' %}">
                         <i class="nav-main-link-icon "></i>
                         <span class="nav-main-link-name">Liste des Paiements</span>
+                    </a>                   
+                </li>
+                <li class="nav-main-item">
+                    <a class="nav-main-link nav-main-link-name" data-toggle="" aria-haspopup="true" aria-expanded="false" href="{% url 'paiement:fiche_de_paie_list' %}">
+                        <i class="nav-main-link-icon "></i>
+                        <span class="nav-main-link-name">Fiche de Paie</span>
                     </a>                   
                 </li>
             </ul>
