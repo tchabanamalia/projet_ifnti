@@ -1,0 +1,112 @@
+{% extends '../index.html' %}
+
+{% block content %}
+
+<div class="block block-rounded m-5">
+    <div class="block-header p-4">
+        <h3 class="block-title">Détails de la Fiche de Paie</h3>
+    </div>
+
+    <div class="block-content block-content-full">
+        <table class="table table-bordered table-striped">
+            <tr>
+                <th>ID</th>
+                <td>{{ fiche_de_paie.id }}</td>
+            </tr>
+            <tr>
+                <th>B.P</th>
+                <td>{{ fiche_de_paie.bp }}</td>
+            </tr>
+            <tr>
+                <th>Téléphone</th>
+                <td>{{ fiche_de_paie.telephone }}</td>
+            </tr>
+            <tr>
+                <th>Date de début</th>
+                <td>{{ fiche_de_paie.dateDebut }}</td>
+            </tr>
+            <tr>
+                <th>Date de fin</th>
+                <td>{{ fiche_de_paie.dateFin }}</td>
+            </tr>
+            <tr>
+                <th>Niveau 1</th>
+                <td>{{ fiche_de_paie.niveau1 }}</td>
+            </tr>
+            <tr>
+                <th>Niveau 2</th>
+                <td>{{ fiche_de_paie.niveau2 }}</td>
+            </tr>
+            <tr>
+                <th>Niveau 3</th>
+                <td>{{ fiche_de_paie.niveau3 }}</td>
+            </tr>
+            <tr>
+                <th>Matière</th>
+                <td>{{ fiche_de_paie.matiere }}</td>
+            </tr>
+            <tr>
+                <th>Enseignant</th>
+                <td>{{ fiche_de_paie.enseignant }}</td>
+            </tr>
+            <tr>
+                <th>Heure en L1</th>
+                <td>{{ fiche_de_paie.heureL1 }}</td>
+            </tr>
+            <tr>
+                <th>Heure en L2</th>
+                <td>{{ fiche_de_paie.heureL2 }}</td>
+            </tr>
+            <tr>
+                <th>Heure en L3</th>
+                <td>{{ fiche_de_paie.heureL3 }}</td>
+            </tr>
+            <tr>
+                <th>Montant en L1</th>
+                <td>{{ fiche_de_paie.montantL1 }}</td>
+            </tr>
+            <tr>
+                <th>Montant en L2</th>
+                <td>{{ fiche_de_paie.montantL2 }}</td>
+            </tr>
+            <tr>
+                <th>Montant en L3</th>
+                <td>{{ fiche_de_paie.montantL3 }}</td>
+            </tr>
+            <tr>
+                <th>Nombre d'heure Total</th>
+                <td>{{ fiche_de_paie.nombreHeure }}</td>
+            </tr>
+            <tr>
+                <th>Prix unitaire</th>
+                <td>{{ fiche_de_paie.prixUnitaire }}</td>
+            </tr>
+            <tr>
+                <th>Montant Total</th>
+                <td>{{ fiche_de_paie.montantTotal }}</td>
+            </tr>
+            <tr>
+                <th>Montant Avance</th>
+                <td>{{ fiche_de_paie.montantAvance }}</td>
+            </tr>
+            <tr>
+                <th>Montant à payer</th>
+                <td>{{ fiche_de_paie.montantAPayer }}</td>
+            </tr>
+            <tr>
+                <th>Montan en lettre</th>
+                <td>{{ fiche_de_paie.montantEnLettre }}</td>
+            </tr>
+            <tr>
+                <th>Numero</th>
+                <td>{{ fiche_de_paie.numero }}</td>
+            </tr>
+            
+        </table>
+        <div class="form-group">
+            <a href="{% url 'paiement:fiche_de_paie_list' %}" class="btn btn-secondary">Retour à la liste</a>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

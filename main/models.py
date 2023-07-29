@@ -473,16 +473,16 @@ class Information(models.Model):
 
 class FicheDePaie(models.Model):
     TYPE_CHOISE = [
-        ('semstre1','S1'),
-        ('semstre2','S2'),
+        ('semestre1','S1'),
+        ('semestre2','S2'),
     ]
     TYPE_CHOISE1 = [
-        ('semstre3','S3'),
-        ('semstre4','S4'),
+        ('semestre3','S3'),
+        ('semestre4','S4'),
     ]
     TYPE_CHOISE2 = [
-        ('semstre5','S5'),
-        ('semstre6','S6'),
+        ('semestre5','S5'),
+        ('semestre6','S6'),
     ]
 
     bp = models.IntegerField(verbose_name="B.P" , default=40)
@@ -492,8 +492,8 @@ class FicheDePaie(models.Model):
     matiere = models.CharField(max_length=100, verbose_name="Matière")
     enseignant = models.ForeignKey('Enseignant', on_delete=models.CASCADE, verbose_name="Enseignant")
     nombreHeure = models.IntegerField(verbose_name="Nombre d'heure")
-    prixUnitaire = models.IntegerField(verbose_name="Prix unitaire")
-    montant = models.IntegerField(verbose_name="Montant")
+    prixUnitaire = models.IntegerField(verbose_name="Prix unitaire", default=2000)
+    montantTotal = models.IntegerField(verbose_name="montantTotal", default=0)
     montantAvance = models.IntegerField(verbose_name="Montant avance")
     montantAPayer = models.IntegerField(verbose_name="Montant à payer")
     montantEnLettre = models.CharField(max_length=100, verbose_name="Montant en lettre")
@@ -507,3 +507,6 @@ class FicheDePaie(models.Model):
     montantL1 = models.IntegerField(verbose_name="Montant L1")
     montantL2 = models.IntegerField(verbose_name="Montant L2")
     montantL3 = models.IntegerField(verbose_name="Montant L3")
+    
+    def __str__(self):
+        return str(self.bp) + " " + str(self.telephone) + " " + str(self.dateDebut) + " " + str(self.dateFin) + " " + str(self.matiere) + " " + str(self.enseignant) + " " + str(self.nombreHeure) + " " + str(self.prixUnitaire) + " " + str(self.montantTotal) + " " + str(self.montantAvance) + " " + str(self.montantAPayer) + " " + str(self.montantEnLettre) + " " + str(self.numero) + " " + str(self.niveau1) + " " + str(self.niveau2) + " " + str(self.niveau3) + " " + str(self.heureL1) + " " + str(self.heureL2) + " " + str(self.heureL3) + " " + str(self.montantL1) + " " + str(self.montantL1) + " " + str(self.montantL2) + " " + str(self.montantL3)

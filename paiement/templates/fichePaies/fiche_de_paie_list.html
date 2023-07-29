@@ -1,0 +1,89 @@
+{% extends '../index.html' %}
+
+{% block content %}
+
+<div class="block block-rounded m-5">
+    <div class="block-header p-4">
+        <h3 class="block-title">Liste des Fiches de Paie</h3>
+        <a href="{% url 'paiement:create_fiche_de_paie' %}">
+            <button type="button" class="btn btn-secondary float-right" id="dropdown-default-secondary" aria-haspopup="true" aria-expanded="false">
+                Ajouter
+            </button>
+        </a>
+    </div>
+
+    <div class="block-content block-content-full">
+        <div class="table-responsive">
+            <table class="table table-bordered table-striped table-vcenter js-dataTable-full-pagination">
+                <thead>
+                    <tr>
+                        <th class="text-center" style="width: 80px;">ID</th>
+                        <th class="text-center" style="width: 30%;">Date debut</th>
+                        <th class="text-center" style="width: 30%;">Date Fin</th>
+                        <th class="text-center" style="width: 80px;">Niveau1</th>
+                        <th class="text-center" style="width: 80px;">Niveau2</th>
+                        <th class="text-center" style="width: 80px;">Niveau3</th>
+                        <th class="text-center" style="width: 30%;">Matière</th>
+                        <th class="text-center" style="width: 30%;">Enseignant</th>
+                        <th class="text-center" style="width: 15%;">Nombre d'heure</th>
+                        <th class="text-center" style="width: 15%;">Prix unitaire</th>
+                        <th class="text-center" style="width: 15%;">Montant Total</th>
+                        <th class="text-center" style="width: 15%;">Montant avance</th>
+                        <th class="text-center" style="width: 15%;">Montant à payer</th>
+                        <th class="text-center" style="width: 15%;">Montant En lettre</th>
+                        <th class="text-center" style="width: 15%;">Heure en L1</th>
+                        <th class="text-center" style="width: 15%;">Heure en L2</th>
+                        <th class="text-center" style="width: 15%;">Heure en L3</th>
+
+                        <th class="text-center" style="width: 55%;">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for fiche in fiches %}
+                    <tr>
+                        <td class="text-center font-size-sm">{{ fiche.id }}</td>
+                        <td class="text-center font-size-sm">{{ fiche.dateDebut }}</td>
+                        <td class="text-center font-size-sm">{{ fiche.dateFin }}</td>
+                        <td class="text-center font-size-sm">{{ fiche.niveau1 }}</td>
+                        <td class="text-center font-size-sm">{{ fiche.niveau2 }}</td>
+                        <td class="text-center font-size-sm">{{ fiche.niveau3 }}</td>
+                        <td class="text-center font-size-sm">{{ fiche.matiere }}</td>
+                        <td class="text-center font-size-sm">{{ fiche.enseignant }}</td>
+                        <td class="text-center font-size-sm">{{ fiche.nombreHeure }}</td>
+                        <td class="text-center font-size-sm">{{ fiche.prixUnitaire }}</td>
+                        <td class="text-center font-size-sm">{{ fiche.montantTotal }}</td>
+                        <td class="text-center font-size-sm">{{ fiche.montantAvance }}</td>
+                        <td class="text-center font-size-sm">{{ fiche.montantAPayer }}</td>
+                        <td class="text-center font-size-sm">{{ fiche.montantEnLettre }}</td>
+                        <td class="text-center font-size-sm">{{ fiche.heureL1 }}</td>
+                        <td class="text-center font-size-sm">{{ fiche.heureL2 }}</td>
+                        <td class="text-center font-size-sm">{{ fiche.heureL3 }}</td>
+                        <td style="text-align: center;">
+                            <button type="button" class="bs-modal read-book btn btn-sm btn-primary">
+                                <a style="color: blanchedalmond;" href="{% url 'paiement:fiche_de_paie_detail' fiche.id %}">
+                                    <span class="fa fa-eye"></span>
+                                </a>
+                            </button>
+
+                            <button type="button" class="update-book btn btn-sm btn-warning">
+                                <a style="color: blanchedalmond;" href="{% url 'paiement:update_fiche_de_paie' fiche.id %}">
+                                    <span><i class="far fa-edit"></i></span>
+                                </a>
+                            </button>
+
+                            <button type="button" class="update-book btn btn-sm btn-success">
+                                <a  style="color: blanchedalmond;" href="{% url 'paiement:fiche_paie' fiche.id %}">
+                                    <span><i class="fas fa-file-pdf"></i></span>
+                                </a>
+                            </button>
+
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
