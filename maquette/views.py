@@ -7,7 +7,7 @@ def generate_maquette(request):
     if request.method == "POST":
         domaine = Domaine.objects.all()[0]
         parcours = Parcours.objects.filter(domaine=domaine)[0]
-        annee_accademique = AnneeUniversitaire.objects.filter(anneeUniv="2023-03-18")[0]
+        annee_accademique = AnneeUniversitaire.objects.filter(anneeUniv="2023-07-23")[0]
         semestre = Semestre.objects.all()[0]
         #print(semestre)
         programmes = Programme.objects.filter(semestre=semestre, parcours=parcours, anneescolaire=annee_accademique)
@@ -36,7 +36,7 @@ def generate_maquette(request):
             "semestre" : semestre.libelle,
             "tatale_credit" : sum([ue["credit"] for ue in ues_list]),
             "totale_volume_horaire" : sum(horaires),
-            "ues" : ues_list
+            "ues" : ues_list[:3]
         }
         generate_maquette_pdf(data)
     data = {

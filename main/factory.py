@@ -4,7 +4,7 @@ from main.models import Etudiant, Personnel, Enseignant, Comptable, Programme, T
 from django.contrib.auth.models import User 
 from django.core.files import File
 from django.core.files.temp import NamedTemporaryFile
-user = User.objects.filter(username="amk")[0]
+user = User.objects.filter(username="amk2048")[0]
 for us in User.objects.all():
     if us != user : us.delete()
 print("Drop all object .....")
