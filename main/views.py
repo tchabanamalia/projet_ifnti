@@ -606,7 +606,7 @@ def editeNoteByEvaluation(request, id):
 
     **Template:**
 
-    :template:`main/notes/create_or_edit_note.html`
+    :template:`main /notes/create_or_edit_note.html`
     """
     evaluation = get_object_or_404(Evaluation, pk=id)
     matiere = evaluation.matiere
