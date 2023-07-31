@@ -597,7 +597,7 @@ def releve_notes(request, id, id_semestre):
     # calcul de la moyenne de chaque UE
     for ue in ues_matieres:
         get_ue_moy(ue)
-    
+
     # vérification de la validation des ue par l'étudiant
     for ue in ues_matieres:
         if valid_UE(ue):
@@ -639,7 +639,9 @@ def releve_notes(request, id, id_semestre):
         response = HttpResponse(pdf_preview, content_type='application/pdf')
         response['Content-Disposition'] = 'inline;filename=pdf_file.pdf'
         return response
-    
+
+
+
 
 
 
@@ -661,11 +663,6 @@ def releve_notes_semestre(request, id_semestre):
         releves_notes_tab.append(make_releve_note_data(etudiant, semestre))
 
 
-
-
-
-
-
     context = {'releves_notes': releves_notes_tab, 'semestre' : semestre}
 
     # nom des fichiers d'entrée et de sortie
@@ -683,6 +680,43 @@ def releve_notes_semestre(request, id_semestre):
         response = HttpResponse(pdf_preview, content_type='application/pdf')
         response['Content-Disposition'] = 'inline;filename=pdf_file.pdf'
         return response
+
+
+
+
+# methode générant le relevé détaillé d'un étudiant
+def releve_notes_detail(request, id, id_semestre):
+    etudiant = get_object_or_404(Etudiant, id=id)
+    semestre = get_object_or_404(Semestre, id=id_semestre)
+
+    releve_notes_details = make_releve_note_data(etudiant, semestre)
+    # jai besoin dun dictionnaire qui pour chaque etudiant , regroupe son prenom , son nom et chacune des moyennes de chacune de ses matieres
+    # un dictionnaire qui qui a le nombre de matiere par ue et le libelle de cette ue
+    # un tableau des libelle de chacune des matiere
+    #une donnee longueur tableau qui est le nombre de matiere total pour les ue + 2 
+    
+    context = {'releves_notes': releve_notes_details, 'semestre' : semestre, 'nbreUes' : len(releve_notes_details)}
+
+    print(releve_notes_details)
+
+    # nom des fichiers d'entrée et de sortie
+
+    latex_input = 'synthese_semestre'
+    latex_ouput = 'generated_synthese_semestre'
+    pdf_file = 'pdf_synthese_semestre'
+
+    #génération du pdf
+    generate_pdf(context, latex_input, latex_ouput, pdf_file)
+
+    #visualisation du pdf dans le navigateur
+    with open('media/pdf/' + str(pdf_file) + '.pdf', 'rb') as f:
+        pdf_preview = f.read()
+        response = HttpResponse(pdf_preview, content_type='application/pdf')
+        response['Content-Disposition'] = 'inline;filename=pdf_file.pdf'
+        return response
+
+
+
 
 
 def evaluations(request, id_matiere):
