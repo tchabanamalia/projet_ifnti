@@ -1,0 +1,39 @@
+{% extends '../index.html' %}
+
+{% block content %}
+
+<div class="block block-rounded m-5">
+    <div class="block-header p-4">
+        <h1 class="block-title">Clôture de l'année</h1>
+        <a class="btn btn-sm btn-success"  href="{% url 'main:liste_des_etudiants' %}" style="padding: 8px; float: right; background-color: blue; color: white;"><i class="fas fa-chevron-left fa-lg"></i>
+            Retour</a>
+    </div>
+    <div class="block-content block-content-full">
+        
+        <form method="post">
+            {% csrf_token %}
+            
+            <label for="annee_id">Année universitaire :</label>
+            <select id="annee_id" name="annee_id">
+                {% for annee in annees %}
+                    <option value="{{ annee.id }}">{{ annee }}</option>
+                {% endfor %}
+            </select>
+            
+            <br>
+            
+            <label for="semestre_id">Semestre :</label>
+            <select id="semestre_id" name="semestre_id">
+                {% for semestre in semestres %}
+                    <option value="{{ semestre.id }}">{{ semestre }}</option>
+                {% endfor %}
+            </select>
+            
+            <br>
+            
+            <input type="submit" value="Clôturer l'année">
+        </form>
+    </div>
+</div>
+
+{% endblock %}

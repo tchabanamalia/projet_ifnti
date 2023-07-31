@@ -27,23 +27,23 @@
                         <span>Default</span>
                         <i class="fa fa-circle text-default"></i>
                     </a>
-                    <a class="dropdown-item d-flex align-items-center justify-content-between font-w500" data-toggle="theme" data-theme="{% static 'assets/css/themes/amethyst.min.css" href="#">
+                    <a class="dropdown-item d-flex align-items-center justify-content-between font-w500" data-toggle="theme" data-theme="{% static 'assets/css/themes/amethyst.min.css'}" href="#">
                         <span>Amethyst</span>
                         <i class="fa fa-circle text-amethyst"></i>
                     </a>
-                    <a class="dropdown-item d-flex align-items-center justify-content-between font-w500" data-toggle="theme" data-theme="{% static 'assets/css/themes/city.min.css" href="#">
+                    <a class="dropdown-item d-flex align-items-center justify-content-between font-w500" data-toggle="theme" data-theme="{% static 'assets/css/themes/city.min.css'}"href="#">
                         <span>City</span>
                         <i class="fa fa-circle text-city"></i>
                     </a>
-                    <a class="dropdown-item d-flex align-items-center justify-content-between font-w500" data-toggle="theme" data-theme="{% static 'assets/css/themes/flat.min.css" href="#">
+                    <a class="dropdown-item d-flex align-items-center justify-content-between font-w500" data-toggle="theme" data-theme="{% static 'assets/css/themes/flat.min.css'}" href="#">
                         <span>Flat</span>
                         <i class="fa fa-circle text-flat"></i>
                     </a>
-                    <a class="dropdown-item d-flex align-items-center justify-content-between font-w500" data-toggle="theme" data-theme="{% static 'assets/css/themes/modern.min.css" href="#">
+                    <a class="dropdown-item d-flex align-items-center justify-content-between font-w500" data-toggle="theme" data-theme="{% static 'assets/css/themes/modern.min.css'}" href="#">
                         <span>Modern</span>
                         <i class="fa fa-circle text-modern"></i>
                     </a>
-                    <a class="dropdown-item d-flex align-items-center justify-content-between font-w500" data-toggle="theme" data-theme="{% static 'assets/css/themes/smooth.min.css" href="#">
+                    <a class="dropdown-item d-flex align-items-center justify-content-between font-w500" data-toggle="theme" data-theme="{% static 'assets/css/themes/smooth.min.css'}" href="#">
                         <span>Smooth</span>
                         <i class="fa fa-circle text-smooth"></i>
                     </a>
@@ -114,7 +114,11 @@
                     </ul>
                 </li>
 
+
                 <li class="nav-main-heading">GESTION ETUDIANTS</li>
+
+
+        
 
                 <li class="nav-main-item">
                     <a class="nav-main-link nav-main-link-name" data-toggle="" aria-haspopup="true" aria-expanded="false" href="{% url 'main:liste_des_etudiants' %}">
@@ -122,6 +126,68 @@
                         <span class="nav-main-link-name">Étudiants IFNTI</span>
                     </a>                   
                 </li>
+
+                <li class="nav-main-item">
+                    <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="false" href="#">
+                        <i class="nav-main-link-icon "></i>
+                        <span class="nav-main-link-name">Étudiants L1</span>
+                    </a>
+                    <ul class="nav-main-submenu">
+                        <li class="nav-main-item">
+                            <a class="nav-main-link" href="{% url 'main:liste_etudiants_semestre1' %}">
+                                <span class="nav-main-link-name">Semestre 1</span>
+                            </a>
+                        </li>
+
+                        <li class="nav-main-item">
+                            <a class="nav-main-link" href="{% url 'main:liste_etudiants_semestre2' %}">
+                                <span class="nav-main-link-name">Semestre 2</span>
+                            </a>
+                        </li>
+                       
+                    </ul>
+                </li>
+
+                <li class="nav-main-item">
+                    <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="false" href="#">
+                        <i class="nav-main-link-icon "></i>
+                        <span class="nav-main-link-name">Étudiants L2</span>
+                    </a>
+                    <ul class="nav-main-submenu">
+                        <li class="nav-main-item">
+                            <a class="nav-main-link" href="{% url 'main:liste_etudiants_semestre3' %}">
+                                <span class="nav-main-link-name">Semestre 3</span>
+                            </a>
+                        </li>
+                        <li class="nav-main-item">
+                            <a class="nav-main-link" href="{% url 'main:liste_etudiants_semestre4' %}">
+                                <span class="nav-main-link-name">Semestre 4</span>
+                            </a>
+                        </li>
+                       
+                    </ul>
+                </li>
+
+                <li class="nav-main-item">
+                    <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="false" href="#">
+                        <i class="nav-main-link-icon "></i>
+                        <span class="nav-main-link-name">Étudiants L3</span>
+                    </a>
+                    <ul class="nav-main-submenu">
+                        <li class="nav-main-item">
+                            <a class="nav-main-link" href="{% url 'main:liste_etudiants_semestre5' %}">
+                                <span class="nav-main-link-name">Semestre 5</span>
+                            </a>
+                        </li>
+                        <li class="nav-main-item">
+                            <a class="nav-main-link" href="{% url 'main:liste_etudiants_semestre6' %}">
+                                <span class="nav-main-link-name">Semestre 6</span>
+                            </a>
+                        </li>
+                       
+                    </ul>
+                </li>
+
 
                 <li class="nav-main-item">
                     <a class="nav-main-link nav-main-link-name" data-toggle="" aria-haspopup="true" aria-expanded="false" href="{% url 'main:liste_des_etudiants_suspendu' %}">
@@ -142,9 +208,21 @@
 
                  <li class="nav-main-heading">GESTION PROGRAMMES</li>
 
+                 <li class="nav-main-item">
+                    <a class="nav-main-link nav-main-link-name" data-toggle="" aria-haspopup="true" aria-expanded="false" href="{% url 'main:semestres' %}">
+                        <i class="nav-main-link-icon "></i>
+                        <span class="nav-main-link-name">Semestres Courants</span>
+                    </a>                   
+                </li>
 
                 <li class="nav-main-item">
+                    <a class="nav-main-link nav-main-link-name" data-toggle="" aria-haspopup="true" aria-expanded="false" href="{% url 'main:semestres_clotures' %}">
+                        <i class="nav-main-link-icon "></i>
+                        <span class="nav-main-link-name">Semestres Clôturés</span>
+                    </a>                   
+                </li>            
 
+               <li class="nav-main-item">
                     <li class="nav-main-item">
                         <a class="nav-main-link nav-main-link-name" data-toggle="" aria-haspopup="true" aria-expanded="false" href="{% url 'main:liste_des_ues' %}">
                             <i class="nav-main-link-icon "></i>
@@ -200,7 +278,7 @@
                     </a>                   
                 </li>
 
-
+              
                 <li class="nav-main-item">
                     <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="false" href="#">
                         <i class="nav-main-link-icon "></i>
@@ -290,7 +368,37 @@
                         <span class="nav-main-link-name">Liste des enseignants</span>
                     </a>                   
                 </li>
+                <li class="nav-main-item">
+                    <a class="nav-main-link nav-main-link-name" data-toggle="" aria-haspopup="true" aria-expanded="false" href="{% url 'main:enseignant_suspendu' %}">
+                        <i class="nav-main-link-icon "></i>
+                        <span class="nav-main-link-name">Liste des enseignants suspendus</span>
+                    </a>                   
+                </li>
+                <li class="nav-main-item">
+                    <a class="nav-main-link nav-main-link-name" data-toggle="" aria-haspopup="true" aria-expanded="false" href="{% url 'main:information_list' %}">
+                        <i class="nav-main-link-icon "></i>
+                        <span class="nav-main-link-name">Délivrer une attestation de service</span>
+                    </a>                   
+                </li>
+                <li class="nav-main-item">
+                    <a class="nav-main-link nav-main-link-name" data-toggle="" aria-haspopup="true" aria-expanded="false" href="{% url 'paiement:comptable_list' %}">
+                        <i class="nav-main-link-icon "></i>
+                        <span class="nav-main-link-name">Liste des Comptables</span>
+                    </a>                   
+                </li>
                 <li class="nav-main-heading">GESTION PAIEMENT</li>
+                <li class="nav-main-item">
+                    <a class="nav-main-link nav-main-link-name" data-toggle="" aria-haspopup="true" aria-expanded="false" href="{% url 'paiement:paiement_list' %}">
+                        <i class="nav-main-link-icon "></i>
+                        <span class="nav-main-link-name">Liste des Paiements</span>
+                    </a>                   
+                </li>
+                <li class="nav-main-item">
+                    <a class="nav-main-link nav-main-link-name" data-toggle="" aria-haspopup="true" aria-expanded="false" href="{% url 'paiement:fiche_de_paie_list' %}">
+                        <i class="nav-main-link-icon "></i>
+                        <span class="nav-main-link-name">Fiche de Paie</span>
+                    </a>                   
+                </li>
             </ul>
         </div>
         <!-- END Side Navigation -->

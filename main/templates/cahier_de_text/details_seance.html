@@ -1,0 +1,40 @@
+{% extends '../index.html' %}
+
+{% load static %}
+
+{% block content %}
+  <main id="main-container">
+       
+                <div class="content">
+<div class="block block-rounded">
+    <div class="block-header">
+        <h3 class="block-title">Détails de la séance</h3>
+    </div>
+    <div class="block-content block-content-full">
+        <div class="row">
+            <div class="col-lg-6">
+                <p><strong>Intitulé:</strong> {{ seance.intitule }}</p>
+                <p><strong>Date et Heure de début:</strong> {{ seance.date_et_heure_debut }}</p>
+                <p><strong>Date et Heure de fin:</strong> {{ seance.date_et_heure_fin }}</p>
+                <p><strong>Matière:</strong> {{ seance.matiere }}</p>
+                <p><strong>Ecrit Par:</strong> {{ seance.auteur.nom }} {{ seance.auteur.prenom }}</p>
+            </div>
+            <div class="col-lg-6">
+                <p><strong>Résumé:</strong> {{ seance.description }}</p>
+                <p><strong>Élèves absents:</strong></p>
+                <ul>
+                    {% for etudiant in seance.eleves_presents.all %}
+                        <li>{{ etudiant.nom }} {{ etudiant.prenom }}</li>
+                    {% empty %}
+                        <li>Aucun élève absent</li>
+                    {% endfor %}
+                </ul>
+                <p><strong>Validé par l'Enseignant ?:</strong> {%if seance.valider %} OUI {% else %} NON {% endif %}</p>
+                <p><strong>Enseignant:</strong>  {{ seance.matiere.enseignant.prenom }} {{ seance.matiere.enseignant.nom }}</p>
+            </div>
+        </div>
+    </div>
+</div>
+ </div>
+            </main>
+{% endblock %}

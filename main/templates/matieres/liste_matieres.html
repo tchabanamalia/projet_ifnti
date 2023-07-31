@@ -1,0 +1,122 @@
+{% extends '../index.html' %}
+
+{% load static %}
+
+{% block content %}
+      <div class="content">
+                    <!-- lal -->
+                    <div class="block block-rounded mt-4">
+                        <div class="block-header">
+                          <h3 class="block-title">Affectation Matières : Page de confirmation</h3>
+                          <a href="/main/affecter_matieres_prof" class="btn btn-sm btn-primary ml-3">AFFECTER DES MATIERES A UN PROFESSEUR</a>
+  
+                        </div>
+                        <div class="block-content">
+                            <table class="table table-borderless table-vcenter">
+                              <thead>
+                                <tr>
+                                  <th class="text-center" style="width: 50px;">#</th>
+                                  <th>Matière</th>
+                                  <th class="d-none d-sm-table-cell" style="width: 15%;">Pondération</th>
+                                  <th class="text-center" style="width: 100px;">Professeur</th>
+                                  <th class="text-center" style="width: 100px;">Action</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                {% for matiere in matieres %}
+                                <tr>
+                                  <th class="text-center" scope="row">{{ loop.index }}</th>
+                                  <td class="font-w600 font-size-sm">{{ matiere.libelle }}</td>
+                                  <td class="d-none d-sm-table-cell text-right">{{ matiere.ponderation }}</td>
+                                  {% if matiere.enseignant %}
+                                    <td class="text-center">{{ matiere.enseignant.nom }}  {{ matiere.enseignant.prenom }}</td>
+                                    {% else %}
+                                        <td class="text-center">Pas de professeur</td>
+                                    {% endif %}
+                                    <td class="text-center">
+                                    <div class="btn-group">
+                                      <button type="button" class="btn btn-alt-danger">Action</button>
+                                      <button type="button" class="btn btn-alt-danger dropdown-toggle dropdown-toggle-split" id="dropdown-split-alt-danger" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <span class="sr-only">Toggle Dropdown</span>
+                                      </button>
+                                      <div class="dropdown-menu font-size-sm" aria-labelledby="dropdown-split-alt-danger">
+                                        <a class="dropdown-item" href="/main/retirer_professeur/{{matiere.id }}">Retirer le professeur</a>
+                                            <a class="dropdown-item" href="#" data-toggle="modal" data-matiere-id="{{ matiere.id }}" data-target="#modal-block-slideright">Modifier la pondération</a>
+                                      </div>
+                                    </div>
+                                  </td>
+                                </tr>
+                                {% endfor %}
+                              </tbody>
+                            </table>
+                          </div>
+                          
+                          <div class="modal fade" id="modal-block-slideright" tabindex="-1" role="dialog" aria-labelledby="modal-block-slideright" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-slide-right" role="document">
+                              <div class="modal-content">
+                                <div class="block block-themed block-transparent mb-0">
+                                  <div class="block-header bg-primary-dark">
+                                    <h3 class="block-title">Nouvelle Ponderation</h3>
+                                    <div class="block-options">
+                                      <button type="button" class="btn-block-option" data-dismiss="modal" aria-label="Close">
+                                        <i class="fa fa-fw fa-times"></i>
+                                      </button>
+                                    </div>
+                                  </div>
+                                  <div class="block-content">
+                                    <p class="font-size-sm text-muted">
+                                      Choisissez votre nouvelle ponderation
+                                    </p>
+                                    <input type="hidden" name="matiere_id" id="matiere_id" value="">
+
+                                    <div class="dropdown dropright push">
+                                      <button type="button" class="btn btn-alt-primary dropdown-toggle" id="dropdown-dropright-alt-primary" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        Nouvelle Ponderation
+                                      </button>
+                                      <div class="dropdown-menu font-size-sm" aria-labelledby="dropdown-dropright-alt-primary">
+                                        <a class="dropdown-item" href="/main/modifier_ponderation/{{dd}}/1">1</a>
+                                        <a class="dropdown-item" href="/main/modifier_ponderation/{{dd}}/2">2</a>
+                                        <a class="dropdown-item" href="/main/modifier_ponderation/{{dd}}/3">3</a>
+
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                                                   
+         </div>
+
+          <script>
+            $('.matiere').change(function() {
+                var matiere = $(this).attr('id');
+                var ponderation = $('#' + matiere + '-ponderation');
+                if ($(this).is(':checked')) {
+                    ponderation.removeClass('d-none');
+                } else {
+                    ponderation.addClass('d-none');
+                }
+            });
+            $('#modal-block-slideright').on('show.bs.modal', function (event) {
+                var button = $(event.relatedTarget);
+                var matiere_id = button.data('matiere-id');
+                var modal = $(this);
+                modal.find('#matiere_id').val(matiere_id);
+            });
+            var modalTrigger = document.querySelector('[data-target="#modal-block-slideright"]');
+            modalTrigger.addEventListener('click', function() {
+            var matiereId = this.getAttribute('data-matiere-id');
+            var links = document.querySelectorAll('#modal-block-slideright .dropdown-menu a');
+            for (var i = 0; i < links.length; i++) {
+                var href = links[i].getAttribute('href');
+                href = href.replace('{{dd}}', matiereId);
+                links[i].setAttribute('href', href);
+            }
+            var matiereIdField = document.querySelector('#matiere_id');
+            matiereIdField.value = matiereId;
+});
+</script>
+
+{% endblock %}
+                      

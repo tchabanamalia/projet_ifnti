@@ -1,0 +1,158 @@
+{% extends '../index.html' %}
+
+{% block content %}
+<div class="block block-rounded md-5">
+    <div class="block-header">
+        <h3 class="block-title">Ajouter un comptable</h3>
+        <a href="{% url 'paiement:comptable_list'%}">
+            <button type="button" class="btn btn-secondary float-right" id="dropdown-default-secondary" aria-haspopup="true" aria-expanded="false">
+                Retour
+            </button>
+        </a>
+    </div>
+   <div class="block-content block-content-full">
+    <div class="card mb-3 border border-primary rounded shadow">
+    <div class="card-body text-dark text-center rounded-top shadow" style="background-color: #f2f4f4;">
+        <form method="post" enctype="multipart/form-data">
+        
+            {% csrf_token %}
+            <div class="form-group row">
+                <label for="{{ form.nom.id_for_label }}" class="col-md-2 col-form-label">Nom</label>
+                <div class="col-md-10">
+                    {{ form.nom }}
+                    {{ form.nom.errors }}
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label for="{{ form.prenom.id_for_label }}" class="col-md-2 col-form-label">Prénom</label>
+                <div class="col-md-10">
+                    {{ form.prenom }}
+                    {{ form.prenom.errors }}
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label for="{{ form.sexe.id_for_label }}" class="col-md-2 col-form-label">Sexe</label>
+                <div class="col-md-10">
+                    {{ form.sexe }}
+                    {{ form.sexe.errors }}
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label for="{{ form.contact.id_for_label }}" class="col-md-2 col-form-label">Contact</label>
+                <div class="col-md-10">
+                    {{ form.contact }}
+                    {{ form.contact.errors }}
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label for="{{ form.email.id_for_label }}" class="col-md-2 col-form-label">Email</label>
+                <div class="col-md-10">
+                    {{ form.email }}
+                    {{ form.email.errors }}
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label for="{{ form.adresse.id_for_label }}" class="col-md-2 col-form-label">Adresse</label>
+                <div class="col-md-10">
+                    {{ form.adresse }}
+                    {{ form.adresse.errors }}
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label for="{{ form.datenaissance.id_for_label }}" class="col-md-2 col-form-label">Date de naissance</label>
+                <div class="col-md-10" style="margin-left: -300px;">
+                    {{ form.datenaissance }}
+                    {{ form.datenaissance.errors }}
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label for="{{ form.lieunaissance.id_for_label }}" class="col-md-2 col-form-label">Lieu de naissance</label>
+                <div class="col-md-10">
+                    {{ form.lieunaissance }}
+                    {{ form.lieunaissance.errors }}
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label for="{{ form.prefecture.id_for_label }}" class="col-md-2 col-form-label">Préfecture</label>
+                <div class="col-md-10">
+                    {{ form.prefecture }}
+                    {{ form.prefecture.errors }}
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label for="{{ form.carte_identity.id_for_label }}" class="col-md-2 col-form-label">Carte d'identité</label>
+                <div class="col-md-10">
+                    {{ form.carte_identity }}
+                    {{ form.carte_identity.errors }}
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label for="{{ form.nationalite.id_for_label }}" class="col-md-2 col-form-label">Nationalité</label>
+                <div class="col-md-10">
+                    {{ form.nationalite }}
+                    {{ form.nationalite.errors }}
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label for="{{ form.salaireBrut.id_for_label }}" class="col-md-2 col-form-label">Salaire brut</label>
+                <div class="col-md-10">
+                    {{ form.salaireBrut }}
+                    {{ form.salaireBrut.errors }}
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label for="{{ form.dernierdiplome.id_for_label }}" class="col-md-2 col-form-label">Dernier diplôme</label>
+                <div class="col-md-10">
+                    {{ form.dernierdiplome }}
+                    {{ form.dernierdiplome.errors }}
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label for="{{ form.nbreJrsCongesRestant.id_for_label }}" class="col-md-2 col-form-label">Nombre de jours de congés restant</label>
+                <div class="col-md-10">
+                    {{ form.nbreJrsCongesRestant }}
+                    {{ form.nbreJrsCongesRestant.errors }}
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label for="{{ form.nbreJrsConsomme.id_for_label }}" class="col-md-2 col-form-label">Nombre de jours consommés</label>
+                <div class="col-md-10">
+                    {{ form.nbreJrsConsomme }}
+                    {{ form.nbreJrsConsomme.errors }}
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label for="{{ form.is_active.id_for_label }}" class="col-md-2 col-form-label">Actif</label>
+                <div class="col-md-10">
+                    {{ form.is_active }}
+                </div>
+            </div>
+
+            
+        
+        
+        <button type="submit" class="btn btn-primary">Enregistrer</button>
+      </form>
+    </div>
+    </div>
+    
+   </div>
+    
+</div>
+{% endblock %}
+    

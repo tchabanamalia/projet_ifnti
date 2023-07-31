@@ -25,6 +25,14 @@ class Migration(migrations.Migration):
             ],
         ),
         migrations.CreateModel(
+            name='Domaine',
+            fields=[
+                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('libelle', models.CharField(max_length=255, verbose_name='Libelle')),
+                ('description', models.TextField(max_length=500, verbose_name='description')),
+            ],
+        ),
+        migrations.CreateModel(
             name='Etudiant',
             fields=[
                 ('nom', models.CharField(max_length=50)),
@@ -73,14 +81,18 @@ class Migration(migrations.Migration):
             ],
         ),
         migrations.CreateModel(
-            name='MaquetteGenerique',
+            name='Parcours',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('libelle', models.CharField(max_length=255, verbose_name='Libelle')),
+                ('description', models.TextField(max_length=500, verbose_name='description')),
+                ('domaine', models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, to='main.domaine', verbose_name='Domaine')),
             ],
         ),
         migrations.CreateModel(
             name='Personnel',
             fields=[
+                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('nom', models.CharField(max_length=50)),
                 ('prenom', models.CharField(max_length=50, verbose_name='Prénom')),
                 ('sexe', models.CharField(choices=[('F', 'Feminin'), ('M', 'Masculin')], max_length=1)),
@@ -93,7 +105,6 @@ class Migration(migrations.Migration):
                 ('is_active', models.BooleanField(default=True, verbose_name='Actif')),
                 ('carte_identity', models.CharField(max_length=50, null=True, verbose_name="Carte d'identité")),
                 ('nationalite', models.CharField(blank=True, default='Togolaise', max_length=30, verbose_name='Nationalté')),
-                ('id', models.CharField(blank=True, max_length=12, primary_key=True, serialize=False)),
                 ('salaireBrut', models.DecimalField(decimal_places=2, max_digits=10, verbose_name='Salaire Brut')),
                 ('dernierdiplome', models.ImageField(blank=True, null=True, upload_to='', verbose_name='Dernier diplome')),
                 ('nbreJrsCongesRestant', models.IntegerField(verbose_name='Nonbre de jours de congé restant')),
@@ -105,15 +116,23 @@ class Migration(migrations.Migration):
             },
         ),
         migrations.CreateModel(
-            name='Semestre',
+            name='Ue',
             fields=[
+<<<<<<< HEAD
                 ('id', models.CharField(blank=True, max_length=14, primary_key=True, serialize=False)),
                 ('libelle', models.CharField(choices=[('S1', 'Semestre1'), ('S2', 'Semestre2'), ('S3', 'Semestre3'), ('S4', 'Semestre4'), ('S5', 'Semestre5'), ('S6', 'Semestre6')], max_length=30)),
                 ('credits', models.IntegerField(default=30)),
                 ('anneescolaire', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='main.anneeuniversitaire', verbose_name='Année universitaire')),
+=======
+                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('codeUE', models.CharField(max_length=50, verbose_name="Code de l'UE")),
+                ('libelle', models.CharField(max_length=100)),
+                ('nbreCredits', models.IntegerField(verbose_name='Nombre de crédit')),
+                ('heures', models.DecimalField(blank=True, decimal_places=1, max_digits=4, validators=[django.core.validators.MinValueValidator(1)])),
+>>>>>>> main
             ],
             options={
-                'unique_together': {('anneescolaire', 'libelle')},
+                'verbose_name_plural': 'UE',
             },
         ),
         migrations.CreateModel(
@@ -139,21 +158,6 @@ class Migration(migrations.Migration):
             bases=('main.personnel',),
         ),
         migrations.CreateModel(
-            name='Ue',
-            fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('codeUE', models.CharField(max_length=50, verbose_name="Code de l'UE")),
-                ('libelle', models.CharField(max_length=100)),
-                ('nbreCredits', models.IntegerField(verbose_name='Nombre de crédit')),
-                ('heures', models.DecimalField(blank=True, decimal_places=1, max_digits=4)),
-                ('semestre', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='main.semestre', verbose_name='Semestre')),
-                ('enseignant', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to='main.enseignant', verbose_name='Enseignant')),
-            ],
-            options={
-                'verbose_name_plural': 'UE',
-            },
-        ),
-        migrations.CreateModel(
             name='Tuteur',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
@@ -168,6 +172,18 @@ class Migration(migrations.Migration):
             ],
         ),
         migrations.CreateModel(
+            name='Semestre',
+            fields=[
+                ('id', models.CharField(blank=True, max_length=14, primary_key=True, serialize=False)),
+                ('libelle', models.CharField(choices=[('S1', 'Semestre1'), ('S2', 'Semestre2'), ('S3', 'Semestre3'), ('S4', 'Semestre4'), ('S5', 'Semestre5'), ('S6', 'Semestre6')], max_length=30)),
+                ('credits', models.IntegerField(default=30)),
+                ('semestreCourant', models.BooleanField(default=False, null=True, verbose_name='Semestre acutuelle')),
+            ],
+            options={
+                'unique_together': {('libelle',)},
+            },
+        ),
+        migrations.CreateModel(
             name='Salaire',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
@@ -177,6 +193,16 @@ class Migration(migrations.Migration):
                 ('chargePatronales', models.FloatField(verbose_name='Charges patronales')),
                 ('bonification', models.DecimalField(decimal_places=2, max_digits=10)),
                 ('personnel', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='main.personnel', verbose_name='Personnel')),
+            ],
+        ),
+        migrations.CreateModel(
+            name='Programme',
+            fields=[
+                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('anneescolaire', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='main.anneeuniversitaire', verbose_name='Année universitaire')),
+                ('parcours', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to='main.parcours', verbose_name='Parcours')),
+                ('semestre', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='main.semestre', verbose_name='Semestre')),
+                ('ue', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='main.ue', verbose_name='UE')),
             ],
         ),
         migrations.CreateModel(
@@ -197,6 +223,7 @@ class Migration(migrations.Migration):
                 ('libelle', models.CharField(max_length=100)),
                 ('coefficient', models.IntegerField(default='1', null=True, verbose_name='Coefficient')),
                 ('minValue', models.FloatField(default='7', null=True, verbose_name='Valeur minimale')),
+                ('heures', models.DecimalField(blank=True, decimal_places=1, max_digits=4, null=True, validators=[django.core.validators.MinValueValidator(1)])),
                 ('is_active', models.BooleanField(default=True, verbose_name='Actif')),
                 ('ue', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='main.ue')),
                 ('enseignant', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to='main.enseignant', verbose_name='Enseignant')),
@@ -256,6 +283,11 @@ class Migration(migrations.Migration):
                 ('etudiant', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='main.etudiant', verbose_name='Etudiant')),
                 ('comptable', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='main.comptable', verbose_name='Comptable')),
             ],
+        ),
+        migrations.AddField(
+            model_name='ue',
+            name='enseignant',
+            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to='main.enseignant', verbose_name='Enseignant'),
         ),
         migrations.AlterUniqueTogether(
             name='etudiant',

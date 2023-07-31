@@ -1,5 +1,8 @@
 django
-psycopg2
+psycopg2-binary
 Pillow
 latex
 jinja2
+Faker
+watchdog
+num2words #permet de convertir en lettre le montant à payer

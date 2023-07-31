@@ -46,7 +46,13 @@
                     <td class="text-center font-size-sm">{{ue.libelle}}</td>
                     <td class="text-center font-size-sm">{{ue.nbreCredits}}</td>
                     <td class="text-center font-size-sm">{{ue.semestre}}</td>
-                    <td class="text-center font-size-sm">{{ue.enseignant}}</td>
+                    <td class="text-center font-size-sm">
+                        {% if ue.enseignant %}
+                            {{ue.enseignant}}
+                        {% else %}
+                            pas de prof
+                        {% endif %}                        
+                    </td>
                 </tr>
             </tbody>
         </table>

@@ -23,7 +23,7 @@
                     <th class="text-center" style="width: 15%;">Email</th>
                     <th class="text-center" style="width: 15%;">Type</th>
                     <th class="text-center" style="width: 15%;">Specialité</th>
-                    <th style="width: 15%;">Actions</th>
+                    <th class="text-center" style="width: 55%;">Actions</th>
                 </tr>
             </thead>
             <tbody>
@@ -48,7 +48,8 @@
                             <a  style="color: blanchedalmond;" href="{% url 'main:edit_enseignant' enseignant.id %}">
                                 <span><i class="far fa-edit"></i></span>
                             </a>
-                        </button>                                     
+                        </button>                      
+
                     </td> 
                 </tr>
                 {% endfor%}

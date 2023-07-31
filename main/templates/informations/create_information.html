@@ -1,0 +1,115 @@
+{% extends '../index.html' %}
+
+{% block content %}
+
+<div class="block block-rounded md-5">
+    <div class="block-header">
+        <h3 class="block-title">Ajouter une information</h3>
+        <a href="{% url 'main:information_list'%}">
+            <button type="button" class="btn btn-secondary float-right" id="dropdown-default-secondary" aria-haspopup="true" aria-expanded="false">
+                Retour
+            </button>
+        </a>
+    </div>
+    <div class="block-content block-content-full">
+    <div class="card mb-3 border border-primary rounded shadow">
+    <div class="card-body text-dark text-center rounded-top shadow" style="background-color: #f2f4f4;">
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="form-group row">
+                <label for="{{ form.nomDirecteur.id_for_label }}" class="col-md-2 col-form-label">Nom Directeur</label>
+                <div class="col-md-10">
+                    {{ form.nomDirecteur }}
+                    {{ form.nomDirecteur.errors }}
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label for="{{ form.prenomDirecteur.id_for_label }}" class="col-md-2 col-form-label">Prénom Directeur</label>
+                <div class="col-md-10">
+                    {{ form.prenomDirecteur }}
+                    {{ form.prenomDirecteur.errors }}
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label for="{{ form.nomEnseignant.id_for_label }}" class="col-md-2 col-form-label">Nom Enseignant</label>
+                <div class="col-md-10">
+                    {{ form.nomEnseignant }}
+                    {{ form.nomEnseignant.errors }}
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label for="{{ form.prenomEnseignant.id_for_label }}" class="col-md-2 col-form-label">Prénom Enseignant</label>
+                <div class="col-md-10">
+                    {{ form.prenomEnseignant }}
+                    {{ form.prenomEnseignant.errors }}
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label for="{{ form.numeroSecurite.id_for_label }}" class="col-md-2 col-form-label">Numero Securite social</label>
+                <div class="col-md-10">
+                    {{ form.numeroSecurite }}
+                    {{ form.numeroSecurite.errors }}
+                </div>
+            </div>
+
+            <!-- <div class="form-group row">
+                <label for="{{ form.discipline.id_for_label }}" class="col-md-2 col-form-label">Discipline</label>
+                <div class="col-md-10">
+                    {{ form.discipline }}
+                    {{ form.discipline.errors }}
+                </div>
+            </div> -->
+
+            <!--Ecrire une liste de discipline séparé par des virgules-->
+            <div class="form-group row">
+                <label for="{{ form.discipline.id_for_label }}" class="col-md-2 col-form-label">Discipline</label>
+                <div class="col-md-10">
+                    <input type="text" class="form-control" id="{{ form.discipline.id_for_label }}" name="{{ form.discipline.id_for_label }}" placeholder="Discipline">
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label for="{{ form.niveau.id_for_label }}" class="col-md-2 col-form-label">Niveau </label>
+                <select class="form-control col-md-10" id="{{ form.niveau.id_for_label }}" name="{{ form.niveau.id_for_label }}">
+                    <option value="première">Première</option>
+                    <option value="deuxième">Deuxième</option>
+                    <option value="troisième">Troisième</option>
+                
+                </select>
+            </div>
+
+           <div class="form-group row">
+                <label for="dateDebut" class="col-md-2 col-form-label">Date Debut</label>
+                <div class="col-md-10">
+                    <input type="date" class="form-control" id="dateDebut" name="dateDebut" placeholder="Date Debut">
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label for="dateFin" class="col-md-2 col-form-label">Date Fin</label>
+                <div class="col-md-10">
+                    <input type="date" class="form-control" id="dateFin" name="dateFin" placeholder="Date Fin">
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label for="{{ form.duree.id_for_label }}" class="col-md-2 col-form-label">Durée</label>
+                <div class="col-md-10">
+                    {{ form.duree }}
+                    {{ form.duree.errors }}
+                </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Enregistrer</button>
+        </form>
+      </div>
+      </div>
+      
+     </div>
+      
+  </div>
+{% endblock %}
