@@ -7,10 +7,26 @@ urlpatterns = [
     path('', views.index, name='index'),
     
     
-    path('dashboard', views.dashboard, name='dashboard'),
-    path('prof', views.liste_matieres_professeur, name='liste_matieres_professeur'),
-    path('retirer_prof/<int:pk>', views.retirer_prof, name='retirer_prof'),
     
+    path('dashboard', views.dashboard, name='dashboard'),
+    path('affecter_matieres_prof', views.affectation_matieres_professeur, name='affectation_matieres_professeur'),
+    path('liste_matieres_professeur',views.liste_matieres_professeur,name='liste_matieres_professeur'),
+    path('retirer_professeur/<int:id>', views.retirer_professeur, name='retirer_professeur'),
+    path('modifier_ponderation/<int:matiere_id>/<int:nouvelle_ponderation>/', views.modifier_ponderation, name='modifier_ponderation'),
+    path('cahier_de_text/', views.cahier_de_text, name='cahier_de_text'),
+    path('enregistrer_seance/', views.enregistrer_seance, name='enregistrer_seance'),
+    path('modifier_seance/<int:seance_id>/', views.modifier_seance, name='modifier_seance'),
+    path('liste_seance/', views.liste_seance, name='liste_seance'),
+    path('liste_seance_etudiant/', views.liste_seance_etudiant, name='liste_seance_etudiant'),
+    path('info_seance/<int:seance_id>/', views.info_seance, name='info_seance'),
+    path('valider_seance/<int:seance_id>/', views.valider_seance, name='valider_seance'),
+    path('connexion',views.login_view,name='connexion'),
+    path('reminder',views.recuperation_mdp,name='reminder'),
+    path('deconnexion',views.logout_view,name='deconnexion'),
+    path('changer_secretaire',views.changer_secretaire,name='changer_secretaire'),
+    path('gestion_classe',views.gestion_classe,name='gestion_classe'),
+
+
 
     # touré-ydaou urls templates latex 30-04-2023
 

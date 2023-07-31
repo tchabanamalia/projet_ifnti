@@ -1,0 +1,111 @@
+{% extends '../index.html' %}
+
+{% load static %}
+
+{% block content %}
+<script src="{% static 'index.global.js'%}"></script>
+
+<script>
+
+document.addEventListener('DOMContentLoaded', function() {
+  var calendarEl = document.getElementById('calendar');
+  var event_data = JSON.parse('{{ event_data|safe }}');
+
+  var calendar = new FullCalendar.Calendar(calendarEl, {
+    headerToolbar: {
+      left: 'prev,next today',
+      center: 'title',
+      right: 'dayGridMonth,timeGridWeek,timeGridDay'
+    },
+    initialDate: new Date(), // Le calendrier commencera à la date actuelle
+    navLinks: true, // Permet de cliquer sur les noms des jours/semaines pour naviguer entre les vues
+    selectable: true, // Permet de sélectionner les événements
+    eventClick: function(arg) {
+      window.location.href = arg.event.url; // Redirige vers l'URL de l'événement
+    },
+    editable: false, // Désactive la modification des événements par glisser-déposer
+    dayMaxEvents: true, // Affiche le lien "plus" lorsqu'il y a trop d'événements dans une journée
+    slotDuration: '00:15:00',
+    scrollTime: '06:00:00', // Défilement initial à partir de 6h
+    slotMinTime: '06:00:00', // Commence la grille à partir de 6h
+    slotMaxTime: '20:00:00',
+    events: event_data,
+  });
+
+  calendar.render();
+});
+
+</script>
+
+
+<style>
+
+  body {
+    margin: 40px 10px;
+    padding: 0;
+    font-family: Arial, Helvetica Neue, Helvetica, sans-serif;
+    font-size: 14px;
+  }
+.fc-event {
+    background-color: green;
+    border-color: green;
+    color: black;
+  }
+
+  #calendar {
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+</style>
+ <main id="main-container">
+                <!-- Hero -->
+
+                <div class="bg-body-light">
+                    <div class="content content-full">
+                        <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center">
+                            <h1 class="flex-sm-fill h3 my-2">
+                                Cahier de Text 
+                            </h1>
+                            
+                                {% if user.is_staff%}
+                                <div class="dropdown">
+                                        <button type="button" class="btn btn-primary dropdown-toggle" id="dropdown-default-primary" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            Dropdown
+                                        </button>
+                                        <div class="dropdown-menu font-size-sm" aria-labelledby="dropdown-default-primary">
+                                            <form id="dropdown-form" action="{% url 'main:cahier_de_text' %}" method="post">
+                                                 {% csrf_token %}
+                                                <input type="hidden" name="niveau" id="niveau-input" value="">
+                                                <a class="dropdown-item" href="#" onclick="selectNiveau('L1')">Cahier de texte L1</a>
+                                                <a class="dropdown-item" href="#" onclick="selectNiveau('L2')">Cahier de texte L2</a>
+                                                <a class="dropdown-item" href="#" onclick="selectNiveau('L3')">Cahier de texte L3</a>
+                                            </form>
+                                        </div>
+                                    </div>
+
+                                    <script>
+                                        function selectNiveau(niveau) {
+                                            document.getElementById('niveau-input').value = niveau;
+                                            document.getElementById('dropdown-form').submit();
+                                        }
+                                    </script>
+                                {% endif %}
+                       
+
+                            
+                        </div>
+                    </div>
+                    <div class="content">
+                   <div id='calendar'></div>
+                    <!-- END Calendar -->
+                </div>
+                </div>
+                <!-- END Hero -->
+
+                <!-- Page Content -->
+                
+                <!-- END Page Content -->
+            </main>
+
+{% endblock %}

@@ -1,0 +1,297 @@
+{% extends '../index.html' %}
+
+{% block content %}
+
+<div class="block block-rounded md-5">
+    <div class="block-header">
+        <h3 class="block-title">Ajouter une fiche de paie</h3>
+        <a href="{% url 'paiement:fiche_de_paie_list'%}">
+            <button type="button" class="btn btn-secondary float-right" id="dropdown-default-secondary" aria-haspopup="true" aria-expanded="false">
+                Retour
+            </button>
+        </a>
+    </div>
+   <div class="block-content block-content-full">
+    <div class="card mb-3 border border-primary rounded shadow">
+    <div class="card-body text-dark text-center rounded-top shadow" style="background-color: #f2f4f4;">
+        <form method="POST" action="{% url 'paiement:create_fiche_de_paie' %}">
+            {% csrf_token %}
+            
+            <div class="form-group row">
+                <label for="{{ form.bp.id_for_label }}" class="col-md-2 col-form-label">BP</label>
+                <div class="col-md-10">
+                    {{ form.bp }}
+                    {{ form.bp.errors }}
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label for="{{ form.telephone.id_for_label }}" class="col-md-2 col-form-label">Niveau 2</label>
+                <div class="col-md-10">
+                    {{ form.telephone }}
+                    {{ form.telephone.errors }}
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label for="{{ form.niveau1.id_for_label }}" class="col-md-2 col-form-label">Niveau 1</label>
+                <div class="col-md-10">
+                    {{ form.niveau1 }}
+                    {{ form.niveau1.errors }}
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label for="{{ form.niveau2.id_for_label }}" class="col-md-2 col-form-label">Niveau 2</label>
+                <div class="col-md-10">
+                    {{ form.niveau2 }}
+                    {{ form.niveau2.errors }}
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label for="{{ form.niveau3.id_for_label }}" class="col-md-2 col-form-label">Niveau 3</label>
+                <div class="col-md-10">
+                    {{ form.niveau3 }}
+                    {{ form.niveau3.errors }}
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label for="{{ form.dateDebut.id_for_label }}" class="col-md-2 col-form-label">Date de début</label>
+                <div class="col-md-10">
+                    {{ form.dateDebut }}
+                    {{ form.dateDebut.errors }}
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label for="{{ form.dateFin.id_for_label }}" class="col-md-2 col-form-label">Date de fin</label>
+                <div class="col-md-10">
+                    {{ form.dateFin }}
+                    {{ form.dateFin.errors }}
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label for="{{ form.matiere.id_for_label }}" class="col-md-2 col-form-label">Matière</label>
+                <div class="col-md-10">
+                    {{ form.matiere }}
+                    {{ form.matiere.errors }}
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label for="{{ form.enseignant.id_for_label }}" class="col-md-2 col-form-label">Enseignant</label>
+                <div class="col-md-10">
+                    {{ form.enseignant }}
+                    {{ form.enseignant.errors }}
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label for="{{ form.heureL1.id_for_label }}" class="col-md-2 col-form-label">Heure L1</label>
+                <div class="col-md-10">
+                    {{ form.heureL1 }}
+                    {{ form.heureL1.errors }}
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label for="{{ form.heureL2.id_for_label }}" class="col-md-2 col-form-label">Heure L2</label>
+                <div class="col-md-10">
+                    {{ form.heureL2 }}
+                    {{ form.heureL2.errors }}
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label for="{{ form.heureL3.id_for_label }}" class="col-md-2 col-form-label">Heure L3</label>
+                <div class="col-md-10">
+                    {{ form.heureL3 }}
+                    {{ form.heureL3.errors }}
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label for="{{ form.nombreHeure.id_for_label }}" class="col-md-2 col-form-label">Nombre d'heure total</label>
+                <div class="col-md-10">
+                    <input type="number" class="form-control" id="{{ form.nombreHeure.id_for_label }}" name="{{ form.nombreHeure.name }}" value="{{ form.nombreHeure.value }}" readonly>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label for="{{ form.prixUnitaire.id_for_label }}" class="col-md-2 col-form-label">Prix unitaire</label>
+                <div class="col-md-10">
+                    {{ form.prixUnitaire }}
+                    {{ form.prixUnitaire.errors }}
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label for="{{ form.montantL1.id_for_label }}" class="col-md-2 col-form-label">Montant L1</label>
+                <div class="col-md-10">
+                    <input type="number" class="form-control" id="{{ form.montantL1.id_for_label }}" name="{{ form.montantL1.name }}" value="{{ form.montantL1.value }}" readonly>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label for="{{ form.montantL2.id_for_label }}" class="col-md-2 col-form-label">Montant L1</label>
+                <div class="col-md-10">
+                    <input type="number" class="form-control" id="{{ form.montantL2.id_for_label }}" name="{{ form.montantL2.name }}" value="{{ form.montantL2.value }}" readonly>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label for="{{ form.montantL3.id_for_label }}" class="col-md-2 col-form-label">Montant L1</label>
+                <div class="col-md-10">
+                    <input type="number" class="form-control" id="{{ form.montantL3.id_for_label }}" name="{{ form.montantL3.name }}" value="{{ form.montantL3.value }}" readonly>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label for="{{ form.montantTotal.id_for_label }}" class="col-md-2 col-form-label">Montant total</label>
+                <div class="col-md-10">
+                    <input type="number" class="form-control" id="{{ form.montantTotal.id_for_label }}" name="montantTotal" value="{{ form.montantTotal.value }}" readonly>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label for="{{ form.montantAvance.id_for_label }}" class="col-md-2 col-form-label">Montant avance</label>
+                <div class="col-md-10">
+                    {{ form.montantAvance }}
+                    {{ form.montantAvance.errors }}
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label for="{{ form.montantAPayer.id_for_label }}" class="col-md-2 col-form-label">Montant à payer</label>
+                <div class="col-md-10">
+                    {{ form.montantAPayer }}
+                    {{ form.montantAPayer.errors }}
+                </div>
+            </div>
+            
+            <div class="form-group row">
+                <label for="{{ form.montantEnLettre.id_for_label }}" class="col-md-2 col-form-label">Montant en lettre</label>
+                <div class="col-md-10">
+                    {{ form.montantEnLettre }}
+                    {{ form.montantEnLettre.errors }}
+                </div>
+            </div>          
+
+            <div class="form-group row">
+                <label for="{{ form.numero.id_for_label }}" class="col-md-2 col-form-label">Numéro</label>
+                <div class="col-md-10">
+                    {{ form.numero }}
+                    {{ form.numero.errors }}
+                </div>
+            </div>
+        
+            <button type="submit" class="btn btn-primary">Enregistrer</button>
+        </form>
+    </div>
+    </div>
+   </div>
+</div>
+
+
+<script>
+    // Fonction pour mettre à jour le champ "Nombre d'heure total" avec la somme des heures L1, L2, et L3
+    function updateNombreHeureTotal() {
+        var heureL1 = parseInt(document.getElementById("id_heureL1").value) || 0;
+        var heureL2 = parseInt(document.getElementById("id_heureL2").value) || 0;
+        var heureL3 = parseInt(document.getElementById("id_heureL3").value) || 0;
+        var nombreHeureTotal = heureL1 + heureL2 + heureL3;
+        document.getElementById("id_nombreHeure").value = nombreHeureTotal;
+    }
+
+    // Écouter les événements de saisie dans les champs Heure L1, L2, et L3 pour mettre à jour automatiquement le champ Nombre d'heure total
+    document.getElementById("id_heureL1").addEventListener("input", updateNombreHeureTotal);
+    document.getElementById("id_heureL2").addEventListener("input", updateNombreHeureTotal);
+    document.getElementById("id_heureL3").addEventListener("input", updateNombreHeureTotal);
+
+     // Fonction pour mettre à jour le champ "Montant L1" avec la multiplication de Heure L1 par Prix unitaire
+     function updateMontantL1() {
+        var heureL1 = parseInt(document.getElementById("id_heureL1").value) || 0;
+        var prixUnitaire = parseInt(document.getElementById("id_prixUnitaire").value) || 0;
+        var montantL1 = heureL1 * prixUnitaire;
+        document.getElementById("id_montantL1").value = montantL1;
+    }
+
+    // Écouter l'événement de saisie dans le champ Heure L1 pour mettre à jour automatiquement le champ Montant L1
+    document.getElementById("id_heureL1").addEventListener("input", updateMontantL1);
+    document.getElementById("id_prixUnitaire").addEventListener("input", updateMontantL1);
+
+    // Fonction pour mettre à jour le champ "Montant L2" avec la multiplication de Heure L2 par Prix unitaire
+    function updateMontantL2() {
+        var heureL2 = parseInt(document.getElementById("id_heureL2").value) || 0;
+        var prixUnitaire = parseInt(document.getElementById("id_prixUnitaire").value) || 0;
+        var montantL2 = heureL2 * prixUnitaire;
+        document.getElementById("id_montantL2").value = montantL2;
+    }
+
+    // Écouter l'événement de saisie dans le champ Heure L2 pour mettre à jour automatiquement le champ Montant L2
+    document.getElementById("id_heureL2").addEventListener("input", updateMontantL2);
+    document.getElementById("id_prixUnitaire").addEventListener("input", updateMontantL2);
+
+    // Fonction pour mettre à jour le champ "Montant L3" avec la multiplication de Heure L3 par Prix unitaire
+    function updateMontantL3() {
+        var heureL3 = parseInt(document.getElementById("id_heureL3").value) || 0;
+        var prixUnitaire = parseInt(document.getElementById("id_prixUnitaire").value) || 0;
+        var montantL3 = heureL3 * prixUnitaire;
+        document.getElementById("id_montantL3").value = montantL3;
+    }
+
+    // Écouter l'événement de saisie dans le champ Heure L3 pour mettre à jour automatiquement le champ Montant L3
+    document.getElementById("id_heureL3").addEventListener("input", updateMontantL3);
+    document.getElementById("id_prixUnitaire").addEventListener("input", updateMontantL3);
+
+
+    // Fonction pour mettre à jour le champ "Montant total" avec l'addition de Montant L1, Montant L2 et Montant L3
+    function updateMontantTotal() {
+
+        var heureL1 = parseInt(document.getElementById("id_heureL1").value) || 0;
+        var prixUnitaire = parseInt(document.getElementById("id_prixUnitaire").value) || 0;
+        var montantL1 = heureL1 * prixUnitaire;
+
+        var heureL2 = parseInt(document.getElementById("id_heureL2").value) || 0;
+        var prixUnitaire = parseInt(document.getElementById("id_prixUnitaire").value) || 0;
+        var montantL2 = heureL2 * prixUnitaire;
+
+        var heureL3 = parseInt(document.getElementById("id_heureL3").value) || 0;
+        var prixUnitaire = parseInt(document.getElementById("id_prixUnitaire").value) || 0;
+        var montantL3 = heureL3 * prixUnitaire;
+
+        var montantTotal = montantL1 + montantL2+ montantL3;
+        document.getElementById("id_montantTotal").value = montantTotal;
+
+
+    }    
+
+    // Écouter l'événement de saisie dans les champs Montant L1, Montant L2 et Montant L3 pour mettre à jour automatiquement le champ Montant total
+    document.getElementById("id_heureL1").addEventListener("input", updateMontantTotal);
+    document.getElementById("id_heureL2").addEventListener("input", updateMontantTotal);
+    document.getElementById("id_heureL3").addEventListener("input", updateMontantTotal);
+    document.getElementById("id_prixUnitaire").addEventListener("input", updateMontantTotal);
+
+
+
+    // Fonction pour mettre à jour le champ "Montant en lettre" avec la conversion du montant à payer
+    {% comment %} function updateMontantEnLettre() {
+        var montantAPayer = parseFloat(document.getElementById("id_montantAPayer").value) || 0;
+        var montantEnLettre = convertNumberToWords(montantAPayer);
+        document.getElementById("id_montantEnLettre").value = montantEnLettre;
+    }
+
+    // Écouter l'événement de saisie dans le champ "Montant à payer" pour mettre à jour automatiquement le champ "Montant en lettre"
+    document.getElementById("id_montantAPayer").addEventListener("input", updateMontantEnLettre); {% endcomment %}
+
+
+
+
+
+
+</script>
+
+{% endblock %}

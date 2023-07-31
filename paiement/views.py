@@ -7,7 +7,7 @@ from django.http import FileResponse, HttpResponse
 from django.shortcuts import render
 
 from django import forms
-from paiement.forms import ComptableForm, PaiementForm
+from paiement.forms import ComptableForm, FicheDePaieForm, PaiementForm
 
 import datetime
 from main.pdfMaker import generate_pdf
@@ -106,3 +106,55 @@ def edit_paiement(request, id):
     return render(request, 'paiements/edit_paiement.html', {'form': form})
 
 
+def fiche_de_paie_list(request):
+    fiches = FicheDePaie.objects.all()
+    return render(request, 'fichePaies/fiche_de_paie_list.html', {'fiches': fiches})
+
+def fiche_de_paie_detail(request, id):
+    fiche_de_paie = get_object_or_404(FicheDePaie, id=id)
+    return render(request, 'fichePaies/fiche_de_paie_detail.html', {'fiche_de_paie': fiche_de_paie})
+
+def create_fiche_de_paie(request):
+    if request.method == "POST":
+        form = FicheDePaieForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('/paiement/fiche_de_paie_list')
+    else:
+        form = FicheDePaieForm()
+
+    return render(request, 'fichePaies/create_fiche_de_paie.html', {'form': form})
+
+def update_fiche_de_paie(request, id):
+    fiche_de_paie = get_object_or_404(FicheDePaie, id=id)
+
+    if request.method == "POST":
+        form = FicheDePaieForm(request.POST, instance=fiche_de_paie)
+        if form.is_valid():
+            form.save()
+            return redirect('/paiement/fiche_de_paie_list')
+    else:
+        form = FicheDePaieForm(instance=fiche_de_paie)
+
+    return render(request, 'fichePaies/update_fiche_de_paie.html', {'form': form})
+
+
+
+def fiche_paie(request, id):
+    fiche_paie = get_object_or_404(FicheDePaie, id=id)
+    context = {'fiche_paie': fiche_paie}
+
+    # nom des fichiers d'entrée et de sortie
+    latex_input = 'fiche_paie'
+    latex_ouput = 'generated_fiche_paie'
+    pdf_file = 'pdf_fiche_paie'
+
+    # génération du pdf
+    generate_pdf(context, latex_input, latex_ouput, pdf_file)
+
+    #visualisation du pdf dans le navigateur
+    with open('media/pdf/' + str(pdf_file) + '.pdf', 'rb') as f:
+        pdf_preview = f.read()
+        response = HttpResponse(pdf_preview, content_type='application/pdf')
+        response['Content-Disposition'] = 'inline;filename=pdf_file.pdf'
+        return response
