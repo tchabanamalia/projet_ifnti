@@ -21,6 +21,8 @@ from django.shortcuts import get_list_or_404
 from django.core.exceptions import ObjectDoesNotExist
 from django.contrib import messages
 from main.helpers import *
+from django.contrib.auth.decorators import login_required
+
 """
 from main import factory
 """
