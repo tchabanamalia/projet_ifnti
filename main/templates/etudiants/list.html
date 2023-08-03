@@ -57,6 +57,8 @@
     <div class="block-header p-4">
         <h3 class="block-title">Etudiants de {{niveau}}</h3>
 
+        {% if etudiants %}
+
         <button type="button" class="btn btn-secondary dropdown-toggle float-right" id="dropdown-default-secondary" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             Action groupées
         </button>
@@ -103,6 +105,8 @@
 
         </div>
 
+        {% endif %}
+
     </div>
     <div class="block-content block-content-full">
 
@@ -119,6 +123,9 @@
                 </tr>
             </thead>
             <tbody>
+
+
+                {% if etudiants %}
 
                 {% for etudiant in etudiants %}
                 <tr>
@@ -163,16 +170,23 @@
                                             <span class="nav-main-link-name">Relevé synthétique</span>
                                         </a>
                                         <ul class="nav-main-submenu">
+                                            
+                                            {% if s1 %}
                                             <li class="nav-main-item">
                                                 <a class="nav-main-link" href= "{% url 'main:releve_notes' etudiant.id s1.id %}">
                                                     <span class="nav-main-link-name">{{s1.libelle}}</span>
                                                 </a>
                                             </li>
+                                            {% endif %}
+
+                                            {% if s2 %}
                                             <li class="nav-main-item">
                                                 <a class="nav-main-link" href="#">
                                                     <span class="nav-main-link-name">{{s2.libelle}}</span>
                                                 </a>
                                             </li>
+                                            {% endif %}
+
                                         </ul>
                                     </li>
 
@@ -181,16 +195,22 @@
                                             <span class="nav-main-link-name">Relevé détaillé</span>
                                         </a>
                                         <ul class="nav-main-submenu">
+                                            
+                                            {% if s1 %}
                                             <li class="nav-main-item">
-                                                <a class="nav-main-link" href="#">
+                                                <a class="nav-main-link" href= "{% url 'main:releve_notes_detail' etudiant.id s1.id %}">
                                                     <span class="nav-main-link-name">{{s1.libelle}}</span>
                                                 </a>
                                             </li>
+                                            {% endif %}
+
+                                            {% if s2 %}
                                             <li class="nav-main-item">
                                                 <a class="nav-main-link" href="#">
                                                     <span class="nav-main-link-name">{{s2.libelle}}</span>
                                                 </a>
                                             </li>
+                                            {% endif %}
                                         </ul>
                                     </li>
 
@@ -230,6 +250,8 @@
                     </td>
                 </tr>
                 {% endfor %}
+
+                {% endif %}
 
             </tbody>
         </table>

@@ -43,9 +43,9 @@
 #2\end{Bflushleft}}}}
 
 
-\BLOCK{for etudiant in etudiants}
+\BLOCK{for releve_note in releves_notes}
 
-\vspace{5cm}
+\vspace{12cm}
 \begin{center}
 {\LARGE \uuline{\textbf{RELEVÉ DE NOTES}}}
 \end{center}
@@ -54,12 +54,14 @@
 
 \AddToShipoutPicture{\BackgroundPic}
 
-\hspace{12cm}\begin{minipage}{0.3\textwidth}
-	\vspace{-11cm}
+\hspace{11.5cm}\begin{minipage}{0.3\textwidth}
+	\vspace{-9.5cm}
 	
 	\begin{center}
 	REPUBLIQUE TOGOLAISE \\
-	Travail-Liberté-Patrie
+	Travail-Liberté-Patrie \\
+	\vspace{0.5cm}
+	MINISTÉRE DE l'ENSEIGNEMENT \\ SUPÉRIEUR ET DE LA RECHERCHE
 	\end{center}
 \end{minipage}
 
@@ -67,13 +69,13 @@
 
 \Col{Identité de l'étudiant}%
 {
-\textbf{Matricule:} \VAR{etudiant.id}\\
-\textbf{Nom:}   \VAR{etudiant.nom}  \\
-\textbf{Prénom:} \VAR{etudiant.prenom} \\
-\textbf{Sexe:} \VAR{etudiant.sexe}\\
-\textbf{Date de naissance :} \VAR{etudiant.datenaissance}\\
-\textbf{Lieu de naissance :} \VAR{etudiant.lieunaissance}\\
-\textbf{Téléphone: } \VAR{etudiant.contact}\\
+
+\textbf{Nom:}   \VAR{releve_note['etudiant'].nom}  \\
+\textbf{Prénom:} \VAR{releve_note['etudiant'].prenom} \\
+\textbf{Sexe:} \VAR{releve_note['etudiant'].sexe}\\
+\textbf{Téléphone: } \VAR{releve_note['etudiant'].contact}\\
+\textbf{Date de naissance :} \VAR{releve_note['etudiant'].datenaissance}\\
+\textbf{Lieu de naissance :} \VAR{releve_note['etudiant'].lieunaissance}\\
 }
 \hfill
 \Col{Période}%
@@ -83,31 +85,25 @@
 }
 
 
-
 \vspace{1cm}
 \begin{center}
+
 \begin{tabular}{|>{\raggedright}p{9cm}|P{1.1cm}|P{1.6cm}|P{2.4cm}|}
-	\hline
-	\textbf{Unité d'enseignement} & \textbf{Note} & \textbf{Crédits} & \textbf{Année d'obtention}\\
-	\hline
-Réseaux & 18,3 & 4 & 2017-2018\\
 \hline
-Programmation Web & 13 & 5 & 2016-2017\\
+\textbf{Unité d'enseignement} & \textbf{Note} & \textbf{Crédits} & \textbf{Année d'obtention}\\
 \hline
-Programmation Java & 14,2 & 5 & 2017-2018\\
+\BLOCK{for ue in releve_note['ues']}
+\VAR{ue['libelle']} & \VAR{ue['moyenne']} & \BLOCK{if ue['validation'] == 'Validé'} \VAR{ue['nbreCredits']} \BLOCK{else} 0  \BLOCK{endif} & 2022-2023\\
 \hline
-Mathématiques & 10 &   3 & 2017-2018\\
-\hline
-Base de données 5 & 12 &   5 & 2016-2017\\
-\hline
-Insertion et responsabilité sociale & 17 & 3 & 2016-2017\\
-\hline
-Projet CHR-Sokodé & 12 & 5 & 2016-2017\\
-\hline
-\multicolumn{2}{|l|}{\textbf{Total crédits obtenus}} & \textbf{\VAR{semestre.credits}} & \multicolumn{1}{c}{}\\\cline{1-3}
+\BLOCK{endfor}
+
+\multicolumn{2}{|l|}{\textbf{Total crédits obtenus}} & \textbf{\VAR{releve_note['credits_obtenus']}} & \multicolumn{1}{c}{}\\\cline{1-3}
 \end{tabular}
+
 \end{center}
+
 \vspace{1cm}
+
 \null\hfill Fait à Sokodé, le \today\\
 \null\hfill Le Responsable d'établissement\\
 

@@ -39,6 +39,7 @@ urlpatterns = [
     path('diplome/<str:id>', views.diplome_etudiant, name='diplome_etudiant'),
     path('certificat_scolaire/<str:id>/<str:niveau>', views.certificat_scolaire, name='certificat_scolaire'),
     path('releve_notes/<str:id>/<str:id_semestre>', views.releve_notes, name='releve_notes'),
+    path('releve_note_detail/<str:id>/<str:id_semestre>', views.releve_notes_detail, name="releve_notes_detail"),
 
     # urls permettant de générer les documents de manière groupée (pour un ensemble d'étudiants)
     path('releve_notes/<str:id_semestre>', views.releve_notes_semestre, name='releve_notes'),

@@ -295,7 +295,7 @@ class Evaluation(models.Model):
     date = models.DateField(verbose_name="Date")
     matiere = models.ForeignKey(Matiere, on_delete=models.CASCADE, verbose_name='Matiere')
     etudiants = models.ManyToManyField(Etudiant, through='Note',verbose_name="Étudiants")
-    
+
 
 class Competence(models.Model):
     id = models.CharField(primary_key=True, blank=True, max_length=30)
@@ -310,8 +310,8 @@ class Semestre(models.Model):
     CHOIX_SEMESTRE = [('S1', 'Semestre1'), ('S2', 'Semestre2'), ('S3', 'Semestre3'), ('S4', 'Semestre4'), ('S5', 'Semestre5'), ('S6', 'Semestre6')]
     libelle = models.CharField(max_length=30, choices=CHOIX_SEMESTRE)
     credits = models.IntegerField(default=30) 
-    semestreCourant = models.BooleanField(default=False, verbose_name="Semestre acutuelle", null=True)
-   
+    #semestreCourant = models.BooleanField(default=False, verbose_name="Semestre actuel", null=True)
+
     """clef Semestre"""
 
     def save(self):
@@ -359,7 +359,7 @@ class Parcours(models.Model):
 
 class AnneeUniversitaire(models.Model):
     anneeUniv = models.CharField(max_length=300, verbose_name="Année universitaire")
-    anneeUnivCourante = models.BooleanField(default=False, verbose_name="Année universitaire acutuelle", null=True)
+    #anneeUnivCourante = models.BooleanField(default=False, verbose_name="Année universitaire acutuelle", null=True)
     
     def __str__(self):
         return str(self.anneeUniv)

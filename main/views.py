@@ -209,20 +209,25 @@ def ues_semestre(request, semestre):
 # methode qui normalement doit retourner sur le template affichant l'ensemble des élèves de L1
 def etudiants_l1(request):
     # pour récupérer les étudiants de l1 il faut récupérer les étudiant en S1 et S2
-    semestres = Semestre.objects.filter(libelle="S1") | Semestre.objects.filter(libelle="S2") 
+    semestres = Semestre.objects.filter(libelle="S1") | Semestre.objects.filter(libelle="S2")
     
-    etudiants = {'etudiants': [], 'niveau': 'L1', 's1' : semestres[0], 's2' : semestres[1]}
-    temp=[]
+    # si les deux semestres existent retourner la liste des étudiants sinon retourner une liste vide
+    if len(semestres) == 2:
+        etudiants = {'etudiants': [], 'niveau': 'L1', 's1' : semestres[0], 's2' : semestres[1]}
+        temp=[]
 
-    # récupération des étudiants de chaque semestres
-    for semestre in semestres:
-        for etudiant in semestre.etudiant_set.all():
-            #ajout de tout les étudiant du semestre dans un tableau temporaire
-            temp.append(etudiant)
+        # récupération des étudiants de chaque semestres
+        for semestre in semestres:
+            for etudiant in semestre.etudiant_set.all():
+                #ajout de tout les étudiant du semestre dans un tableau temporaire
+                temp.append(etudiant)
 
-    # ajout des étudiants dans le dictionnaire
-    etudiants['etudiants'] = temp
+        # ajout des étudiants dans le dictionnaire
+        etudiants['etudiants'] = temp
 
+        return render(request, 'etudiants/list.html', etudiants)
+    
+    etudiants = {'niveau': 'L1'}
     return render(request, 'etudiants/list.html', etudiants)
 
 
@@ -235,20 +240,28 @@ def etudiants_l2(request):
     # pour récupérer les étudiants de l1 il faut récupérer les étudiant en S3 et S4
     semestres = Semestre.objects.filter(libelle="S3") | Semestre.objects.filter(libelle="S4") 
     
-    etudiants = {'etudiants': [], 'niveau': 'L2', 's1' : semestres[0], 's2' : semestres[1]}
-    temp=[]
+    if len(semestres) == 2:
+        etudiants = {'etudiants': [], 'niveau': 'L2', 's1' : semestres[0], 's2' : semestres[1]}
+        temp=[]
 
-    # récupération des étudiants de chaque semestres
-    for semestre in semestres:
-        print(semestre.etudiant_set.all())
-        for etudiant in semestre.etudiant_set.all():
-            #ajout de tout les étudiant du semestre dans un tableau temporaire
-            temp.append(etudiant)
+        # récupération des étudiants de chaque semestres
+        for semestre in semestres:
+            
+            for etudiant in semestre.etudiant_set.all():
+                #ajout de tout les étudiant du semestre dans un tableau temporaire
+                temp.append(etudiant)
 
-    # ajout des étudiants dans le dictionnaire
-    etudiants['etudiants'] = temp
+        # ajout des étudiants dans le dictionnaire
+        etudiants['etudiants'] = temp
 
+        return render(request, 'etudiants/list.html', etudiants)
+    
+    etudiants = {'niveau': 'L2'}
     return render(request, 'etudiants/list.html', etudiants)
+
+
+
+
 
 
 # methode qui normalement doit retourner sur le template affichant l'ensemble des élèves de L3
@@ -257,22 +270,23 @@ def etudiants_l3(request):
     semestres = Semestre.objects.filter(libelle="S5") | Semestre.objects.filter(libelle="S6") 
 
 
+    if len(semestres) == 2:
+        etudiants = {'etudiants': [], 'niveau': 'L3', 's1' : semestres[0], 's2' : semestres[1]}
+        temp=[]
+
+        # récupération des étudiants de chaque semestres
+        for semestre in semestres:
+            for etudiant in semestre.etudiant_set.all():
+                #ajout de tout les étudiant du semestre dans un tableau temporaire
+                temp.append(etudiant)
+
+        # ajout des étudiants dans le dictionnaire
+        etudiants['etudiants'] = temp
+
+        return render(request, 'etudiants/list.html', etudiants)
     
-    etudiants = {'etudiants': [], 'niveau': 'L3', 's1' : semestres[0], 's2' : semestres[1]}
-    temp=[]
-
-    # récupération des étudiants de chaque semestres
-    for semestre in semestres:
-        print(semestre.etudiant_set.all())
-        for etudiant in semestre.etudiant_set.all():
-            #ajout de tout les étudiant du semestre dans un tableau temporaire
-            temp.append(etudiant)
-
-    # ajout des étudiants dans le dictionnaire
-    etudiants['etudiants'] = temp
-
+    etudiants = {'niveau': 'L3'}
     return render(request, 'etudiants/list.html', etudiants)
-
 
 
 
@@ -291,8 +305,7 @@ def etudiants_l3(request):
 def carte_etudiant(request, id, niveau):
     etudiant = get_object_or_404(Etudiant, id=id)
 
-    print(etudiant.tuteur_set.all())
-
+   
     context = {'etudiant' : etudiant, 'niveau' : niveau}
 
 
@@ -323,7 +336,7 @@ def carte_etudiant_all(request, niveau):
 
         # récupération des étudiants de chaque semestres
         for semestre in semestres:
-            print(semestre.etudiant_set.all())
+            
             for etudiant in semestre.etudiant_set.all():
                 #ajout de tout les étudiant du semestre dans un tableau temporaire
                 temp.append(etudiant)
@@ -460,15 +473,19 @@ def releve_notes(request, id, id_semestre):
     # calcul de la moyenne de chaque UE
     for ue in ues_matieres:
         get_ue_moy(ue)
-    
+
     # vérification de la validation des ue par l'étudiant
     for ue in ues_matieres:
         if valid_UE(ue):
             ue['validation'] = 'Validé'
         else:
             ue['validation'] =  'Échec'
-        
-        
+
+    # calcul du nombre de crédits validés au cours du semestre
+    etudiant_credits = 0
+    for ue in ues_matieres:
+        if ue['validation'] == 'Validé':
+            etudiant_credits += ue['nbreCredits']
 
 
     # #récupération et assignation des notes de chacune des évaluations d'une matière
@@ -481,7 +498,7 @@ def releve_notes(request, id, id_semestre):
     #             evaluation['note'] = get_evaluation_note(temp_evalution,etudiant)
 
 
-    context = {'etudiant': etudiant, 'semestre' : semestre, 'ues' : ues_matieres}
+    context = {'etudiant': etudiant, 'semestre' : semestre, 'ues' : ues_matieres, 'credits_obtenus' : etudiant_credits}
 
     # nom des fichiers d'entrée et de sortie
 
@@ -498,7 +515,9 @@ def releve_notes(request, id, id_semestre):
         response = HttpResponse(pdf_preview, content_type='application/pdf')
         response['Content-Disposition'] = 'inline;filename=pdf_file.pdf'
         return response
-    
+
+
+
 
 
 
@@ -506,7 +525,21 @@ def releve_notes(request, id, id_semestre):
 def releve_notes_semestre(request, id_semestre):
     semestre = get_object_or_404(Semestre, id=id_semestre)
     etudiants = semestre.etudiant_set.all()
-    context = {'etudiants': etudiants, 'semestre' : semestre}
+
+
+    # tableau contenant l'ensemble des relevés de notes
+    releves_notes_tab = []
+
+
+    # parcours de l'ensemble des étudiant pour formattage des données de leur relevés
+    for etudiant in etudiants:
+
+        # récupération d'un dictionnaire de données pour le relevé de l'étudiant
+        # ajout de ce dictionnaire formatté au tableau contenant l'ensemble des relevés
+        releves_notes_tab.append(make_releve_note_data(etudiant, semestre))
+
+
+    context = {'releves_notes': releves_notes_tab, 'semestre' : semestre}
 
     # nom des fichiers d'entrée et de sortie
 
@@ -523,6 +556,43 @@ def releve_notes_semestre(request, id_semestre):
         response = HttpResponse(pdf_preview, content_type='application/pdf')
         response['Content-Disposition'] = 'inline;filename=pdf_file.pdf'
         return response
+
+
+
+
+# methode générant le relevé détaillé d'un étudiant
+def releve_notes_detail(request, id, id_semestre):
+    etudiant = get_object_or_404(Etudiant, id=id)
+    semestre = get_object_or_404(Semestre, id=id_semestre)
+
+    releve_notes_details = make_releve_note_data(etudiant, semestre)
+    # jai besoin dun dictionnaire qui pour chaque etudiant , regroupe son prenom , son nom et chacune des moyennes de chacune de ses matieres
+    # un dictionnaire qui qui a le nombre de matiere par ue et le libelle de cette ue
+    # un tableau des libelle de chacune des matiere
+    #une donnee longueur tableau qui est le nombre de matiere total pour les ue + 2 
+    
+    context = {'releves_notes': releve_notes_details, 'semestre' : semestre, 'nbreUes' : len(releve_notes_details)}
+
+    print(releve_notes_details)
+
+    # nom des fichiers d'entrée et de sortie
+
+    latex_input = 'synthese_semestre'
+    latex_ouput = 'generated_synthese_semestre'
+    pdf_file = 'pdf_synthese_semestre'
+
+    #génération du pdf
+    generate_pdf(context, latex_input, latex_ouput, pdf_file)
+
+    #visualisation du pdf dans le navigateur
+    with open('media/pdf/' + str(pdf_file) + '.pdf', 'rb') as f:
+        pdf_preview = f.read()
+        response = HttpResponse(pdf_preview, content_type='application/pdf')
+        response['Content-Disposition'] = 'inline;filename=pdf_file.pdf'
+        return response
+
+
+
 
 
 def evaluations(request, id_matiere):

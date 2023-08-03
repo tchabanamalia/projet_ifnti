@@ -1,5 +1,5 @@
 from django.shortcuts import get_object_or_404
-from main.models import Etudiant, Evaluation, Note, Ue
+from main.models import Etudiant, Evaluation, Matiere, Note, Ue
 
 
 
@@ -125,11 +125,6 @@ def get_matiere_moy(matiere, etudiant):
             notes.append(temp_dict_note)
     else:
         return 0
-    
-    # print(" ------------" + str(etudiant.nom) + '-----------')
-    # print('matiere  ' + matiere.libelle)
-    
-
 
     # calcul de la moyenne
     somme_notes = 0
@@ -173,6 +168,61 @@ def get_ue_moy(ue):
     somme_moyenne = 0
     somme_coef = 0
     for matiere in ue['matieres']:
-        somme_moyenne += matiere['moyenne'] * matiere['coefficient']
+        somme_moyenne += float(matiere['moyenne']) * matiere['coefficient']
         somme_coef += matiere['coefficient']
     ue['moyenne'] = round(somme_moyenne / somme_coef, 2)
+
+
+
+
+
+
+# fonction formattant les données du relevé de notes d'un élève
+
+"""
+    paramètre(s) : etudiant, ues du semestre
+    retour : dictionnaire formaté {étudiant, dictionnaire d'UE avec leurs moyennes}
+"""
+
+
+def make_releve_note_data(etudiant, semestre):
+
+    # récupération de toutes les UEs du semestre
+    semestre_ues = get_semester_ues(semestre)
+
+    # récupération et assignation des matières à chacune des UEs
+    ues = get_all_ues_matieres(semestre_ues)
+
+    # parcours des ues du semestre pour calcul de la moyenne de l'etudiant dans chacune de leurs matières
+    for ue in ues:
+        matieres = ue['matieres']
+        # parcours des matières de chaque UEs
+        for ue_matieres in matieres:
+            matiere = get_object_or_404(Matiere, id=ue_matieres['id'])
+            #assignation des evaluations à chaque 
+            ue_matieres['evaluations'] = get_all_matiere_evaluations(matiere)
+            # calcul des moyennes dans chaque matières
+            ue_matieres['moyenne'] = get_matiere_moy(matiere, etudiant)
+
+
+
+    # calcul de la moyenne de chaque UE
+    for ue in ues:
+        get_ue_moy(ue)
+
+    # vérification de la validation des ue par l'étudiant
+    for ue in ues:
+        if valid_UE(ue):
+            ue['validation'] = 'Validé'
+        else:
+            ue['validation'] =  'Échec'
+
+    # calcul du nombre de crédits validés au cours du semestre
+    etudiant_credits = 0
+    for ue in ues:
+        if ue['validation'] == 'Validé':
+            etudiant_credits += ue['nbreCredits']
+
+    
+
+    return {'etudiant' : etudiant, 'ues' : ues, 'credits_obtenus': etudiant_credits}
