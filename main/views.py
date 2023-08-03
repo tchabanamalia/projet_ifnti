@@ -21,6 +21,8 @@ from django.shortcuts import get_list_or_404
 from django.core.exceptions import ObjectDoesNotExist
 from django.contrib import messages
 from main.helpers import *
+from django.contrib.auth.decorators import login_required
+
 """
 from main import factory
 """
@@ -613,8 +615,6 @@ def evaluations(request, id_matiere):
     
     return render(request, 'evaluations/index.html', data)
 
-
-
 def createNotesByEvaluation(request, id_matiere):
     """
     Affiche un formulaire de création d'une évaluation et ensuite d'une note :model:`main.Note` selon la matière.
@@ -667,8 +667,6 @@ def createNotesByEvaluation(request, id_matiere):
     }
     return render(request, 'notes/create_or_edit_note.html', context=data)
 
-
-
 def editeNoteByEvaluation(request, id):
     """
     Affiche un formulaire d'édition d'une note :model:`main.Note`.
@@ -711,6 +709,7 @@ def editeNoteByEvaluation(request, id):
         'matiere' : matiere,
         'ponderation_possible' : matiere.ponderation_restante()+evaluation.ponderation,
     }
+    
     return render(request, 'notes/create_or_edit_note.html', context=data)
 
 def deleteEvaluation(request, id):

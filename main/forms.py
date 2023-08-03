@@ -6,7 +6,6 @@ from .models import Evaluation, Information, Note, Utilisateur, Personnel, Ensei
 from django.core.exceptions import ValidationError
 from django.forms import DateField
 from django.forms.utils import ErrorList,ErrorDict
-from django.forms.utils import ErrorList,ErrorDict
 from django.utils.translation import gettext_lazy as _
 
 
@@ -406,8 +405,10 @@ class InformationForm(forms.ModelForm):
             'prenomEnseignant': forms.TextInput(attrs={'class': 'form-control'}),
             'numeroSecurite': forms.TextInput(attrs={'class': 'form-control'}),
             'discipline': forms.TextInput(attrs={'class': 'form-control'}),
-            'niveau': forms.TextInput(attrs={'class': 'form-control'}),
+            'niveau': forms.Select(choices=Information.TYPE_CHOISE, attrs={'class': 'form-control'}),
             'duree': forms.TextInput(attrs={'class': 'form-control'}),
+            'dateDebut': forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}),
+            'dateFin': forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}),
         }
 
 

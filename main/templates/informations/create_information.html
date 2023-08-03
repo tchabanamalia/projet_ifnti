@@ -15,6 +15,7 @@
     <div class="card mb-3 border border-primary rounded shadow">
     <div class="card-body text-dark text-center rounded-top shadow" style="background-color: #f2f4f4;">
         <form method="post" enctype="multipart/form-data">
+
             {% csrf_token %}
             <div class="form-group row">
                 <label for="{{ form.nomDirecteur.id_for_label }}" class="col-md-2 col-form-label">Nom Directeur</label>
@@ -56,43 +57,36 @@
                 </div>
             </div>
 
-            <!-- <div class="form-group row">
+            
+            <div class="form-group row">
                 <label for="{{ form.discipline.id_for_label }}" class="col-md-2 col-form-label">Discipline</label>
                 <div class="col-md-10">
                     {{ form.discipline }}
                     {{ form.discipline.errors }}
                 </div>
-            </div> -->
-
-            <!--Ecrire une liste de discipline séparé par des virgules-->
-            <div class="form-group row">
-                <label for="{{ form.discipline.id_for_label }}" class="col-md-2 col-form-label">Discipline</label>
-                <div class="col-md-10">
-                    <input type="text" class="form-control" id="{{ form.discipline.id_for_label }}" name="{{ form.discipline.id_for_label }}" placeholder="Discipline">
-                </div>
             </div>
 
             <div class="form-group row">
                 <label for="{{ form.niveau.id_for_label }}" class="col-md-2 col-form-label">Niveau </label>
-                <select class="form-control col-md-10" id="{{ form.niveau.id_for_label }}" name="{{ form.niveau.id_for_label }}">
-                    <option value="première">Première</option>
-                    <option value="deuxième">Deuxième</option>
-                    <option value="troisième">Troisième</option>
-                
-                </select>
+                <div class="col-md-10">
+                    {{ form.niveau }}
+                    {{ form.niveau.errors }}
+                </div>
             </div>
 
            <div class="form-group row">
                 <label for="dateDebut" class="col-md-2 col-form-label">Date Debut</label>
                 <div class="col-md-10">
-                    <input type="date" class="form-control" id="dateDebut" name="dateDebut" placeholder="Date Debut">
+                    {{ form.dateDebut }}
+                    {{ form.dateDebut.errors }}
                 </div>
             </div>
 
             <div class="form-group row">
                 <label for="dateFin" class="col-md-2 col-form-label">Date Fin</label>
                 <div class="col-md-10">
-                    <input type="date" class="form-control" id="dateFin" name="dateFin" placeholder="Date Fin">
+                    {{ form.dateFin }}
+                    {{ form.dateFin.errors }}
                 </div>
             </div>
 

@@ -456,13 +456,18 @@ class Paiement(models.Model):
         super(Paiement, self).save(*args, **kwargs)
 
 class Information(models.Model):
+    TYPE_CHOISE = [
+        ('Premier','Niveau 1'),
+        ('Deuxième','Niveau 2'),
+        ('Troisième','Niveau 3'),
+    ]
     nomDirecteur = models.CharField(max_length=100, verbose_name="Nom du directeur")
     prenomDirecteur = models.CharField(max_length=100, verbose_name="Prénom du directeur")
     nomEnseignant = models.CharField(max_length=100, verbose_name="Nom de l'enseignant")
     prenomEnseignant = models.CharField(max_length=100, verbose_name="Prénom de l'enseignant")
     numeroSecurite = models.IntegerField(verbose_name="Numéro de sécurité sociale")
     discipline = models.CharField(max_length=100, verbose_name="Discipline")
-    niveau = models.CharField(max_length=100, verbose_name="Niveau")
+    niveau = models.CharField(max_length=100, choices=TYPE_CHOISE, verbose_name="Niveau")
     dateDebut = models.DateField(verbose_name="Date de début")
     dateFin = models.DateField(verbose_name="Date de fin")
     duree = models.CharField(max_length=100, verbose_name="Durée")

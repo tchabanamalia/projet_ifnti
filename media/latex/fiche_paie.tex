@@ -11,6 +11,7 @@
 \usepackage{tikz}
 \usepackage{lipsum}
 \usepackage{amssymb}
+\usepackage{latexsym}
 \begin{document}
 
 \begin{tikzpicture}[remember picture,overlay]
@@ -46,7 +47,7 @@
 \hline 
 \VAR{fiche_paie.niveau3} & \VAR{fiche_paie.heureL3} & \VAR{fiche_paie.prixUnitaire} & \VAR{fiche_paie.montantL1} \\ 
 \hline 
-TOTAL & \VAR{fiche_paie.nombreHeure} & • & \VAR{fiche_paie.montant} \\ 
+TOTAL & \VAR{fiche_paie.nombreHeure} & \VAR{fiche_paie.prixUnitaire} & \VAR{fiche_paie.montantTotal} \\ 
 \hline 
 AVANCE &\multicolumn{3}{|c|}{\VAR{fiche_paie.montantAvance}}\\ 
 \hline 
@@ -56,9 +57,11 @@ VALEUR EN LETTRE &\multicolumn{3}{|c|}{\VAR{fiche_paie.montantEnLettre}}\\
 \hline 
 \end{tabular} 
 \end{flushleft}
-\textbf{MODE DE PAIEMENT} \textbf{CHÈQUE} \hspace{2cm} \textbf{Numéro : \VAR{fiche_paie.numero}} \hspace{3cm}   \textbf{Espèces}
-\vspace{1cm}
-
+\textbf{MODE DE PAIEMENT : \hspace{4.5cm} \textbf{Numéro : \VAR{fiche_paie.numero}} 
+\begin{itemize}
+  \item \textbf{Chèque : $\square$}
+  \item \textbf{Espèces : $\square$}
+\end{itemize}} 
 
 \begin{flushright}
 Sokodé le \today
